@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: hello | Yucchiy's blog]]></title>
+  <link href="http://blog.yucchiy.com/blog/categories/hello/atom.xml" rel="self"/>
+  <link href="http://blog.yucchiy.com/"/>
+  <updated>2014-07-17T23:23:56+09:00</updated>
+  <id>http://blog.yucchiy.com/</id>
+  <author>
+    <name><![CDATA[yucchiy]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Octpress]]></title>
+    <link href="http://blog.yucchiy.com/blog/2014/06/23/hello-octopress/"/>
+    <updated>2014-06-23T01:39:12+09:00</updated>
+    <id>http://blog.yucchiy.com/blog/2014/06/23/hello-octopress</id>
+    <content type="html"><![CDATA[<p>なんとなくOctopressに引っ越ししてみた. これからはこちらでブログを書く.</p>
+]]></content>
+  </entry>
+  
+</feed>
