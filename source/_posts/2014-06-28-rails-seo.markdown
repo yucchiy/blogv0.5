@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "RailsでそこそこまじめにSEOする"
-date: 2014-07-17 23:05:06 +0900
+title: Railsでそこそこ真面目にSEO対策する
+date: 2014-06-28 19:07:49 +0900
 comments: true
-categories: ruby rails gem seo
+categories: [ruby rails seo]
 ---
-
-# Railsでそこそこ真面目にSEO対策する #
 
 個人でRailsで開発しているサービスのSEOを少しまじめに調べたので,
 ブログにもアウトプットしてみた. 基本, 有名そうなGemを拾って対応した.
+
+<!-- more -->
 
 ## MetaTags ##
 
@@ -25,13 +25,13 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 
 Bundleでインストールを行う. Gemfileに以下を記述する.
 
-```ruby:Gemfile
+``` ruby
 gem 'meta-tags'
 ```
 
 次に, メタタグを仕込みたいビューファイルに以下を記述する.
 
-```erb
+``` erb
 <%= display_meta_tags %>
 ```
 
@@ -41,7 +41,7 @@ gem 'meta-tags'
 例えば, `:site`などは全ページで共通のものを利用することが多いはずなので,
 以下の様に設定しておくと毎回設定しなくて良くて便利.
 
-```erb
+``` erb
 <%= display_meta_tags({
   :site => 'HogePiyoSite',
   :reverse => true,
@@ -52,7 +52,7 @@ gem 'meta-tags'
 メタタグを設定するには`set_meta_tags`をコントローラ内またはビューファイルで利用する.
 例えばビューファイル内で設定するには以下のようにする.
 
-```erb
+``` erb
 <% set_meta_tags :title => 'HogePiyoTitle' %>
 ```
 
@@ -86,13 +86,13 @@ gem 'meta-tags'
 
 MetaTagsと同様Bundleでインストールを行う.
 
-```ruby:Gemfile
+``` ruby
 gem 'sitemap_generator'
 ```
 
 次に, `config/sitemap.rb`を作成する. 以下のコマンドを実行する.
 
-```sh
+```
 bundle exec rake sitemap:install
 ```
 
@@ -100,7 +100,7 @@ bundle exec rake sitemap:install
 
 `config/sitemap.rb`以下に追加したいURLを`add`メソッドで行う.
 
-```ruby:config/sitemap.rb
+``` ruby config/sitemap.rb
 SitemapGenerator::Sitemap.create do
   Article.all.each do |article|
     add article_show_path(article), :priority => 0.7, :changefreq => 'weekly', :astmod => article.updated_at
@@ -113,7 +113,7 @@ end
 詳細は[https://github.com/kjvarga/sitemap_generator#sitemap-configuration](https://github.com/kjvarga/sitemap_generator#sitemap-configuration)のSitemap Optionsより確認できる.
 
 
-```ruby
+``` ruby
 # ホストを設定する
 SitemapGenerator::Sitemap.default_host = "http://example.com"
 # サイトマップを配置するディレクトリを設定する
@@ -124,10 +124,9 @@ SitemapGenerator::Sitemap.create_index = :auto
 
 サイトマップの生成は, Rakeコマンドより行う.
 
-```sh
+```
 rake sitemap:clean                      # サイトマップを削除する
 rake sitemap:create                     # サイトマップを作成する(検索エンジンにpingを送らない)
 rake sitemap:refresh                    # サイトマップを作成し, 検索エンジンにpingを送る
 rake sitemap:refresh:no_ping            # サイトマップを作成する(検索エンジンにpingを送らない, たぶんsitemap:createと一緒?)
 ```
-
