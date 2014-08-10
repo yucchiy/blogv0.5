@@ -1,10 +1,34 @@
-<br>
-<br>
-<br>
-<br>
-&copy; {{ site.time | date: "%Y" }}
-{% if site.author %}
-    {{ site.author }}
-{% else %}
-    {{ site.title }}
-{% endif %}
+<footer>
+  <div class="about">
+    <a href="https://twitter.com/yucchiy_"><img src="https://s.gravatar.com/avatar/f218bd83250eeb22337db1ee6a45cccb?s=300"></img></a>
+    <h4>yucchiy</h4>
+    <p>和歌山大学でWebエンジニアとコンピュータビジョンの研究をしています.</p>
+    <ul class="social">
+      <li>
+        <a href="https://twitter.com/yucchiy_" target="_blank">
+          <i class="fa fa-twitter-square"></i>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.facebook.com/yucchiy" target="_blank">
+          <i class="fa fa-facebook-square"></i>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/yucchiy" target="_blank">
+          <i class="fa fa-github-square"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="copy">
+    &copy; {{ site.time | date: "%Y" }}
+    <a href="http://yucchiy.com" target="_blank">
+      {% if site.author %}
+      {{ site.author }}
+      {% else %}
+      {{ site.title }}
+      {% endif %}
+    </a>
+  </div>
+</footer>
