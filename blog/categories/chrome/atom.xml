@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: chrome | Yucchiy's blog]]></title>
+  <link href="http://blog.yucchiy.com/blog/categories/chrome/atom.xml" rel="self"/>
+  <link href="http://blog.yucchiy.com/"/>
+  <updated>2014-08-11T09:09:10+09:00</updated>
+  <id>http://blog.yucchiy.com/</id>
+  <author>
+    <name><![CDATA[yucchiy]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Chrome Extension generatorを使ってChrome Extensionを開発する]]></title>
+    <link href="http://blog.yucchiy.com/blog/2014/08/11/chrome-extension-yaoman/"/>
+    <updated>2014-08-11T08:59:50+09:00</updated>
+    <id>http://blog.yucchiy.com/blog/2014/08/11/chrome-extension-yaoman</id>
+    <content type="html"><![CDATA[<p>Chrome Extensionの開発について今っぽくgruntとかbowerとか使って開発しようと思って調べていたら,
+Yaomanに<a href="https://github.com/yeoman/generator-chrome-extension">generator-chrome-extension</a>というgeneratorがあって, これを使うとサクッとChrome Extension
+のテンプレートが作れたので, メモ代わりにブログに書いてみた.</p>
+
+<h2>インストール</h2>
+
+<p>インストールする前に, 当然yaomanが必要なので, yaomanをインストールする. node.js, npmがインストールされていれば
+以下のコマンドでyaomanをインストールする.</p>
+
+<pre><code>npm install -g yo mocha
+</code></pre>
+
+<p><code>generator-chrome-extension</code>では, デフォルトのテストフレームワークとして<code>mocha</code>を採用しているので, ついでにインストールしておくと良い.
+次に, <code>generator-chrome-extension</code>をインストールする. インストールは至って簡単で, 以下のコマンドでインストールする.</p>
+
+<pre><code>npm install -g generator-chrome-extension
+</code></pre>
+
+<h2>使い方</h2>
+
+<p>まず, アプリのひな形を作成する. yaomanのコマンドを用いて作成する.</p>
+
+<pre><code>mkdir path-to-my-chrome-extension
+cd  path-to-my-chrome-extension
+yo chrome-extension
+</code></pre>
+
+<p>この時, アプリ名や初期アプリの構成を聞かれるので, 必要に応じてチェックをいれる.</p>
+
+<h3>ディレクトリ構成</h3>
+
+<p>ひな形作成時にすべてのチェックを外すと, 概ね以下のディレクトリ構成となる.</p>
+
+<pre><code>.
+├── Gruntfile.js
+├── app
+│   ├── _locales
+│   │   └── en
+│   │       └── messages.json
+│   ├── bower_components
+│   ├── images
+│   │   ├── icon-128.png
+│   │   ├── icon-16.png
+│   │   ├── icon-19.png
+│   │   └── icon-38.png
+│   ├── manifest.json
+│   ├── popup.html
+│   ├── scripts
+│   │   ├── background.coffee
+│   │   ├── background.js
+│   │   ├── chromereload.coffee
+│   │   ├── chromereload.js
+│   │   ├── popup.coffee
+│   │   └── popup.js
+│   └── styles
+│       └── main.scss
+├── bower.json
+├── dist
+│   ├── _locales
+│   │   └── en
+│   │       └── messages.json
+│   ├── images
+│   │   ├── icon-128.png
+│   │   ├── icon-16.png
+│   │   ├── icon-19.png
+│   │   └── icon-38.png
+│   ├── manifest.json
+│   ├── popup.html
+│   ├── scripts
+│   │   ├── background.js
+│   │   ├── popup.js
+│   │   └── vendor.js
+│   └── styles
+│       └── main.css
+├── package
+│   └── password generator-0.0.4.zip
+├─node_modules
+├── package.json
+└── test
+    ├── bower.json
+    ├── index.html
+    └── spec
+        └── test.js
+</code></pre>
+
+<h3>Gruntタスク</h3>
+
+<p>ひな形作成時に, 様々なタスクが追加されているが, 主に開発で利用するタスクを紹介する.</p>
+
+<h4>debug</h4>
+
+<p>debugタスクは<code>grunt-contrib-watch</code>を用いて, 各ファイルの変更を監視し,
+bowerでインストールした外部ライブラリの自動ロード, SassやCoffeeScriptのコンパイル,
+エクステンションのリロードまで自動で行ってくれる.
+開発中はずっと起動しっぱなしになると思う.</p>
+
+<p>また, <code>http://localhost:4000</code>に<code>/app</code>ディレクトリの内容を配信するローカルのサーバーが立ち上がるため,
+そちらでデバッグすることもできる. (もちろんlivereloadも行ってくれる)</p>
+
+<h4>build</h4>
+
+<p>buildタスクは<code>/app</code>ディレクトリから, エクステンションをリリースするときに必要なzipの生成を行うタスク.
+この時, 各種ファイルのコンパイルやjs・cssの結合と圧縮など, 静的ファイルの最適化は自動で行ってくれる.</p>
+
+<p>生成されたzipファイルは<code>/package</code>に, <code>{appname}-{version}.zip</code>という名前で保存される.
+ちなみにバージョンは, その時の<code>manifest.json</code>のバージョンに, ビルドバージョンがインクリメントされたものとなる(同時に<code>manifest.json</code>も更新される).</p>
+
+<p>zip圧縮前のアプリは<code>/dist</code>に保存されている. リリース前には, 念の為にこちらのディレクトリをエクステンションとして読み込んで動作確認をした方がいいかもしれない.</p>
+
+<h2>Tips</h2>
+
+<p>エクステンションを開発していて気づいたTipsを上げていく.</p>
+
+<h3>外部ライブラリの読み込み</h3>
+
+<p>外部ライブラリの読み込みは, <code>bower</code>を通じて行う. 例えば<a href="http://underscorejs.org/">underscore.js</a>を利用したい場合は以下のようにする.</p>
+
+<pre><code>bower install --save underscore
+</code></pre>
+
+<p>すると<code>/app</code>ディレクトリにライブラリがインストールされ, 同時にライブラリを自動でロードされる.
+具体的には, <code>bower install</code>後に, <code>/app</code>ディレクトリ直下にあるHTMLファイルの, <code>&lt;!-- bower:css --&gt; &lt;!-- endbower --&gt;</code>, または<code>&lt;!-- bower:js --&gt; &lt;!-- endbower --&gt;</code>と記述された場所に追記が行われる.
+なので自分でHTMLファイルを追加する際には, <code>&lt;!-- bower:css --&gt;</code>と<code>&lt;!-- bower:js --&gt;</code>を適切な箇所に記述しておく必要がある.
+だいたいyaomanが作ったHTMLファイルを参考に(というかコピペ)すれば良い.</p>
+
+<p>ちなみにこれは<code>grunt-bower-install</code>を用いてgruntが処理を行っている.</p>
+
+<h3>HTMLファイルの手動追加</h3>
+
+<p>HTMLファイルを<code>/app</code>内に作成したら, <code>Gruntfile.js</code>の<code>userminPrepare</code>タスクの<code>html</code>の配列に, 作成したHTMLファイルを追記しておく.
+こうしないと, <code>/dist</code>ディレクトリにコピーが行われなく, パッケージ時にこまる.</p>
+
+<h3>Chromeに読み込んだエクステンションのデバッグ</h3>
+
+<p>Chromeに読み込んだエクステンションのコンソールは, 設定画面の<code>Extensions &gt; デバッグしたいエクステンション &gt; Inspect views</code>から確認できる.</p>
+
+<h2>参考リンク</h2>
+
+<ul>
+<li><a href="https://developer.chrome.com/devtools/docs/integrating">DevTools Extensions API</a></li>
+<li><a href="http://kazu69.net/blog/tec/1969">YeomanをつかったChrome extension開発のメモ</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
