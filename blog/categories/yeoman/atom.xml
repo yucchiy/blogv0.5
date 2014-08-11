@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: yaoman | Yucchiy's blog]]></title>
-  <link href="http://blog.yucchiy.com/blog/categories/yaoman/atom.xml" rel="self"/>
+  <title><![CDATA[Category: yeoman | Yucchiy's blog]]></title>
+  <link href="http://blog.yucchiy.com/blog/categories/yeoman/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-11T19:17:13+09:00</updated>
+  <updated>2014-08-11T19:19:27+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -24,8 +24,8 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 
 <h2>インストール</h2>
 
-<p>インストールする前に, 当然yaomanが必要なので, yaomanをインストールする. node.js, npmがインストールされていれば
-以下のコマンドでyaomanをインストールする.</p>
+<p>インストールする前に, 当然yeomanが必要なので, yeomanをインストールする. node.js, npmがインストールされていれば
+以下のコマンドでyeomanをインストールする.</p>
 
 <pre><code>npm install -g yo mocha
 </code></pre>
@@ -38,7 +38,7 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 
 <h2>使い方</h2>
 
-<p>まず, アプリのひな形を作成する. yaomanのコマンドを用いて作成する.</p>
+<p>まず, アプリのひな形を作成する. yeomanのコマンドを用いて作成する.</p>
 
 <pre><code>mkdir path-to-my-chrome-extension
 cd  path-to-my-chrome-extension
@@ -141,7 +141,7 @@ bowerでインストールした外部ライブラリの自動ロード, Sassや
 <p>すると<code>/app</code>ディレクトリにライブラリがインストールされ, 同時にライブラリを自動でロードされる.
 具体的には, <code>bower install</code>後に, <code>/app</code>ディレクトリ直下にあるHTMLファイルの, <code>&lt;!-- bower:css --&gt; &lt;!-- endbower --&gt;</code>, または<code>&lt;!-- bower:js --&gt; &lt;!-- endbower --&gt;</code>と記述された場所に追記が行われる.
 なので自分でHTMLファイルを追加する際には, <code>&lt;!-- bower:css --&gt;</code>と<code>&lt;!-- bower:js --&gt;</code>を適切な箇所に記述しておく必要がある.
-だいたいyaomanが作ったHTMLファイルを参考に(というかコピペ)すれば良い.</p>
+だいたいyeomanが作ったHTMLファイルを参考に(というかコピペ)すれば良い.</p>
 
 <p>ちなみにこれは<code>grunt-bower-install</code>を用いてgruntが処理を行っている.</p>
 
