@@ -7,7 +7,7 @@ categories: coffeescript yaoman chrome extension
 ---
 
 Chrome Extensionの開発について今っぽくgruntとかbowerとか使って開発しようと思って調べていたら,
-Yaomanに[generator-chrome-extension](https://github.com/yeoman/generator-chrome-extension)というgeneratorがあって, これを使うとサクッとChrome Extension
+Yeomanに[generator-chrome-extension](https://github.com/yeoman/generator-chrome-extension)というgeneratorがあって, これを使うとサクッとChrome Extension
 のテンプレートが作れたので, メモ代わりにブログに書いてみた.
 
 インストール
