@@ -3,7 +3,7 @@ layout: post
 title: "Chrome Extension generatorを使ってChrome Extensionを開発する"
 date: 2014-08-11 08:59:50 +0900
 comments: true
-categories: coffeescript yaoman chrome extension
+categories: coffeescript yeoman chrome extension
 ---
 
 Chrome Extensionの開発について今っぽくgruntとかbowerとか使って開発しようと思って調べていたら,
@@ -13,8 +13,8 @@ Yeomanに[generator-chrome-extension](https://github.com/yeoman/generator-chrome
 インストール
 ------------
 
-インストールする前に, 当然yaomanが必要なので, yaomanをインストールする. node.js, npmがインストールされていれば
-以下のコマンドでyaomanをインストールする.
+インストールする前に, 当然yeomanが必要なので, yeomanをインストールする. node.js, npmがインストールされていれば
+以下のコマンドでyeomanをインストールする.
 
 ```
 npm install -g yo mocha
@@ -30,7 +30,7 @@ npm install -g generator-chrome-extension
 使い方
 ------
 
-まず, アプリのひな形を作成する. yaomanのコマンドを用いて作成する.
+まず, アプリのひな形を作成する. yeomanのコマンドを用いて作成する.
 
 ```
 mkdir path-to-my-chrome-extension
@@ -142,7 +142,7 @@ bower install --save underscore
 すると`/app`ディレクトリにライブラリがインストールされ, 同時にライブラリを自動でロードされる.
 具体的には, `bower install`後に, `/app`ディレクトリ直下にあるHTMLファイルの, `<!-- bower:css --> <!-- endbower -->`, または`<!-- bower:js --> <!-- endbower -->`と記述された場所に追記が行われる.
 なので自分でHTMLファイルを追加する際には, `<!-- bower:css -->`と`<!-- bower:js -->`を適切な箇所に記述しておく必要がある.
-だいたいyaomanが作ったHTMLファイルを参考に(というかコピペ)すれば良い.
+だいたいyeomanが作ったHTMLファイルを参考に(というかコピペ)すれば良い.
 
 ちなみにこれは`grunt-bower-install`を用いてgruntが処理を行っている.
 
