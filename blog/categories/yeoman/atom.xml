@@ -4,7 +4,7 @@
   <title><![CDATA[Category: yeoman | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/yeoman/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-11T19:19:27+09:00</updated>
+  <updated>2014-08-14T23:39:13+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Chrome Extension generatorを使ってChrome Extensionを開発する]]></title>
-    <link href="http://blog.yucchiy.com/blog/2014/08/11/chrome-extension-yaoman/"/>
+    <link href="http://blog.yucchiy.com/2014/08/11/chrome-extension-yaoman/"/>
     <updated>2014-08-11T08:59:50+09:00</updated>
-    <id>http://blog.yucchiy.com/blog/2014/08/11/chrome-extension-yaoman</id>
+    <id>http://blog.yucchiy.com/2014/08/11/chrome-extension-yaoman</id>
     <content type="html"><![CDATA[<p>Chrome Extensionの開発について今っぽくgruntとかbowerとか使って開発しようと思って調べていたら,
 Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generator-chrome-extension</a>というgeneratorがあって, これを使うとサクッとChrome Extension
 のテンプレートが作れたので, メモ代わりにブログに書いてみた.</p>

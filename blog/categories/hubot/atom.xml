@@ -4,7 +4,7 @@
   <title><![CDATA[Category: hubot | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/hubot/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-11T19:19:27+09:00</updated>
+  <updated>2014-08-14T23:39:13+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hubot+Herokuでbot入門+Slack連携]]></title>
-    <link href="http://blog.yucchiy.com/blog/2014/07/17/tutorial-hubot-slack-heroku/"/>
+    <link href="http://blog.yucchiy.com/2014/07/17/tutorial-hubot-slack-heroku/"/>
     <updated>2014-07-17T22:49:05+09:00</updated>
-    <id>http://blog.yucchiy.com/blog/2014/07/17/tutorial-hubot-slack-heroku</id>
+    <id>http://blog.yucchiy.com/2014/07/17/tutorial-hubot-slack-heroku</id>
     <content type="html"><![CDATA[<p>業務関係で少しHubotを触ったので, 備忘録代わりにブログに書いてみた.</p>
 
 <h2>インストール</h2>

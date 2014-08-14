@@ -3,25 +3,25 @@
   
   
   <url>
-    <loc>http://blog.yucchiy.com/blog/2014/08/11/chrome-extension-yaoman/</loc>
+    <loc>http://blog.yucchiy.com/2014/08/11/chrome-extension-yaoman/</loc>
     <lastmod>2014-08-11T08:59:50+09:00</lastmod>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>http://blog.yucchiy.com/blog/2014/07/17/tutorial-hubot-slack-heroku/</loc>
+    <loc>http://blog.yucchiy.com/2014/07/17/tutorial-hubot-slack-heroku/</loc>
     <lastmod>2014-07-17T22:49:05+09:00</lastmod>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>http://blog.yucchiy.com/blog/2014/06/28/rails-seo/</loc>
+    <loc>http://blog.yucchiy.com/2014/06/28/rails-seo/</loc>
     <lastmod>2014-06-28T19:07:49+09:00</lastmod>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>http://blog.yucchiy.com/blog/2014/06/23/hello-octopress/</loc>
+    <loc>http://blog.yucchiy.com/2014/06/23/hello-octopress/</loc>
     <lastmod>2014-06-23T01:39:12+09:00</lastmod>
     <priority>0.8</priority>
   </url>
@@ -29,21 +29,21 @@
   
   <url>
     <loc>http://blog.yucchiy.com/blog/archives/</loc>
-    <lastmod>2014-08-11T19:19:27+09:00</lastmod>
+    <lastmod>2014-08-14T23:39:13+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/blog/</loc>
-    <lastmod>2014-08-11T19:19:27+09:00</lastmod>
+    <lastmod>2014-08-14T23:39:13+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/</loc>
-    <lastmod>2014-08-11T19:19:27+09:00</lastmod>
+    <lastmod>2014-08-14T23:39:13+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

@@ -4,7 +4,7 @@
   <title><![CDATA[Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-11T19:19:27+09:00</updated>
+  <updated>2014-08-14T23:39:13+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -14,9 +14,9 @@
   
   <entry>
     <title type="html"><![CDATA[Chrome Extension generatorを使ってChrome Extensionを開発する]]></title>
-    <link href="http://blog.yucchiy.com/blog/2014/08/11/chrome-extension-yaoman/"/>
+    <link href="http://blog.yucchiy.com/2014/08/11/chrome-extension-yaoman/"/>
     <updated>2014-08-11T08:59:50+09:00</updated>
-    <id>http://blog.yucchiy.com/blog/2014/08/11/chrome-extension-yaoman</id>
+    <id>http://blog.yucchiy.com/2014/08/11/chrome-extension-yaoman</id>
     <content type="html"><![CDATA[<p>Chrome Extensionの開発について今っぽくgruntとかbowerとか使って開発しようと思って調べていたら,
 Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generator-chrome-extension</a>というgeneratorがあって, これを使うとサクッとChrome Extension
 のテンプレートが作れたので, メモ代わりにブログに書いてみた.</p>
@@ -221,9 +221,9 @@ bowerでインストールした外部ライブラリの自動ロード, Sassや
   
   <entry>
     <title type="html"><![CDATA[Hubot+Herokuでbot入門+Slack連携]]></title>
-    <link href="http://blog.yucchiy.com/blog/2014/07/17/tutorial-hubot-slack-heroku/"/>
+    <link href="http://blog.yucchiy.com/2014/07/17/tutorial-hubot-slack-heroku/"/>
     <updated>2014-07-17T22:49:05+09:00</updated>
-    <id>http://blog.yucchiy.com/blog/2014/07/17/tutorial-hubot-slack-heroku</id>
+    <id>http://blog.yucchiy.com/2014/07/17/tutorial-hubot-slack-heroku</id>
     <content type="html"><![CDATA[<p>業務関係で少しHubotを触ったので, 備忘録代わりにブログに書いてみた.</p>
 
 <h2>インストール</h2>
@@ -433,9 +433,9 @@ Herokuが気軽で良いと判断し, Herokuをホスティングサーバーと
   
   <entry>
     <title type="html"><![CDATA[Railsでそこそこ真面目にSEO対策する]]></title>
-    <link href="http://blog.yucchiy.com/blog/2014/06/28/rails-seo/"/>
+    <link href="http://blog.yucchiy.com/2014/06/28/rails-seo/"/>
     <updated>2014-06-28T19:07:49+09:00</updated>
-    <id>http://blog.yucchiy.com/blog/2014/06/28/rails-seo</id>
+    <id>http://blog.yucchiy.com/2014/06/28/rails-seo</id>
     <content type="html"><![CDATA[<p>個人でRailsで開発しているサービスのSEOを少しまじめに調べたので,
 ブログにもアウトプットしてみた. 基本, 有名そうなGemを拾って対応した.</p>
 
@@ -605,9 +605,9 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
   
   <entry>
     <title type="html"><![CDATA[Hello Octpress]]></title>
-    <link href="http://blog.yucchiy.com/blog/2014/06/23/hello-octopress/"/>
+    <link href="http://blog.yucchiy.com/2014/06/23/hello-octopress/"/>
     <updated>2014-06-23T01:39:12+09:00</updated>
-    <id>http://blog.yucchiy.com/blog/2014/06/23/hello-octopress</id>
+    <id>http://blog.yucchiy.com/2014/06/23/hello-octopress</id>
     <content type="html"><![CDATA[<p>なんとなくOctopressに引っ越ししてみた. これからはこちらでブログを書く.</p>
 ]]></content>
   </entry>

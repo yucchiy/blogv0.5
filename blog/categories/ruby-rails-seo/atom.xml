@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby rails seo | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/ruby-rails-seo/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-11T19:19:27+09:00</updated>
+  <updated>2014-08-14T23:39:13+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Railsでそこそこ真面目にSEO対策する]]></title>
-    <link href="http://blog.yucchiy.com/blog/2014/06/28/rails-seo/"/>
+    <link href="http://blog.yucchiy.com/2014/06/28/rails-seo/"/>
     <updated>2014-06-28T19:07:49+09:00</updated>
-    <id>http://blog.yucchiy.com/blog/2014/06/28/rails-seo</id>
+    <id>http://blog.yucchiy.com/2014/06/28/rails-seo</id>
     <content type="html"><![CDATA[<p>個人でRailsで開発しているサービスのSEOを少しまじめに調べたので,
 ブログにもアウトプットしてみた. 基本, 有名そうなGemを拾って対応した.</p>
 
