@@ -1,0 +1,288 @@
+
+<!DOCTYPE HTML>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8">
+	<title>Androidエンジニアになった僕の開発環境と学習法  | Yucchiy's blog</title>
+
+	<meta name="author" content="yucchiy">
+
+<meta name="description" content="ゆっち〜の個人技術ブログです。日々学んだことについて書きます。"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yucchiy's blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	
+
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Yucchiy's blog</a></h1>
+<span class="tagline">日々学んだことについて書きます。</span>
+<!-- <nav id="main-nav"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</nav> -->
+<!-- <nav id="mobile-nav"> -->
+<!-- 	<div class="alignleft menu"> -->
+<!-- 		<a class="button">Menu</a> -->
+<!-- 		<div class="container"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</div> -->
+<!-- 	</div> -->
+<!-- </nav> -->
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+  <header>
+    
+      <h1 class="entry-title">Androidエンジニアになった僕の開発環境と学習法</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-14T23:43:33+09:00" pubdate data-updated="true">Aug 08/14/14, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>3,4年ウェッブエンジニアだった僕が, Androidエンジニアにジョブチェンして1週間経った(もちろん今まで通りウェブエンジニアは続けるけど). そんな僕がどうやってAndroid開発についてどういうふうに学習してるか記事にしてみた.</p>
+
+<p>まだAndroidエンジニアになってから間もないので, この記事を見た方で, これは間違ってるよとか, このやり方が良いよって意見がある方は, ぜひコメントとか<a href="https://twitter.com/yucchiy_">@yucchiy_</a>までリプライとかしてもらえると嬉しいです.</p>
+
+<h2>開発環境</h2>
+
+<p>まず学習法とかの前に環境どうしてるかについて. 結論は<strong>Android Studio</strong>をベースとして開発環境を整えるのがしっくりきてる.</p>
+
+<h3>Eclipse vs Android Studio</h3>
+
+<p>Eclipse vs Android Studioだけど, 普段からWebStormとかPHPStormを使うことが多かったのでInteliJ PlatformなAndroid Studioを開発環境として選択した.</p>
+
+<h4>Android Studioのインストール</h4>
+
+<p>Android Studioは, Caskからコマンド一つでインストールできる.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew cask install android-studio</span></code></pre></td></tr></table></div></figure>
+
+
+<p>またAndroid SDKは, Android Studioに入ってるものもあるが, スタンドアロンなSDKを用意しておく方が検証が楽そう. Homebrewを使ってる場合は, 以下のコマンドでインストールできる.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install android-studio</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Android StudioからスタンドアロンなSDKにパスを通すには<code>Project Structure</code>(多分<code>Cmd +</code>で立ち上がるやつ)から,SDK Location > Android SDK Locationで設定できる. BrewでインストールしたSDKは<code>/user/local/Cellar/android-studio</code>に配置されている.</p>
+
+<h4>Android Studioの便利なショートカット</h4>
+
+<p>多分Eclipseにもあるんだろうけど<strong>便利なショートカットが豊富</strong>で, <code>Cmd + b</code>でクラスの定義元に飛んだり, Can&rsquo;t resolve errorが出てて, importするだけで解決するような場合は, 該当行に移動して<code>Alt + Shift</code>すると勝手にimportを行ってくれたり, クラスとかゲッター・セッターを自動で定義したかったら<code>Cmd + n</code>でいい感じにやってくれる. 多分他にもいろんな便利ショートカットが存在すると思うのでどんどん調べていきたい.</p>
+
+<h3>動作確認</h3>
+
+<p>手元に端末があったら, 特にこだわりがない限りは実機に転送して検証した方が良い. Androidデフォルトの端末は重たいし, 起動に時間がかかってストレスフルだった.</p>
+
+<p>複数端末検証でエミュレータ使うなら<a href="http://www.genymotion.com/">Genymotion</a>一択だと思う. しかし手元の環境ではまだ動かせてない.</p>
+
+<h2>学習法</h2>
+
+<p>前提として僕はJavaのコーディング経験が半年弱くらい(?)有り, 主に<a href="https://gist.github.com/yucchiy/2885090">プログラミングコンテストでJavaを利用していた</a>. なので, Javaの基本的なコーティングとCollectionの使い方はなんとなく分かる. このへんの基本的な文法をしっかり抑えておかないと, Android開発は難しいと思うので, まず先にその辺をおさえておくのが良さそう.</p>
+
+<h3>MixiのAndroidTrainingの基礎編を流し読み</h3>
+
+<p>何もわからない状態だと簡単な画面遷移さえもままならないので, 軽く参考資料を流し読みした. ウェブの資料では, Mixiの<a href="https://github.com/mixi-inc/AndroidTraining">Androidのテキスト</a>が情報がまとまっていてよかった. ただし<strong>全部理解しようとするのではなく</strong>, どんなことをするのにこういうものを使えばいい, くらいを抑えておくので十分そう. ActivityとFragmentがどうなってるとか, Intent使うと画面遷移できるとか, Viewの作り方とかどうするかとか, その辺を抑えるだけでも十分だと思う.</p>
+
+<p>特にAndroidは覚えることが多そうで, それらをちゃんと把握しきるのは大変なので, 作りながら<strong>困ったときやリファクタリング時に</strong>はじめて詳しく調べるのが効率が良さそう.</p>
+
+<h3>作りたいものを決めてGithubを漁る</h3>
+
+<p>僕がAndroidアプリで作ろうものは, とあるウェブサービスからOAuth連携して, APIからデータを引っ張ってきてデータを表示するビュワーアプリである. まずやったこととして, 「android oauth」でGithubで調べて, なんとなく<strong>スターが多いライブラリ</strong>を見つけてその<strong>サンプルのソースを写経</strong>することをした.</p>
+
+<p>具体的には, <a href="https://github.com/wuman/android-oauth-client">wuman/android-oauth-client</a>というライブラリがあって, その<a href="https://github.com/wuman/android-oauth-client/tree/master/samples">サンプル</a>がかなり充実していたので, それを写経したり, さらにサンプルをいじって遊んだした.</p>
+
+<p>この時<strong>動作検証のサイクルをこまめに行なう</strong>ということを注意して行った.</p>
+
+<p>というのも, まだ慣れてない状態でまとめて写経して検証を行うと, 写経をミスっていたり, そのサンプルを更にいじったりするときに, 問題の切り分けが難しくなる. そのため, こまめに動作検証を行なったほうが学習効率が良い. 細かく動作検証を行うには, そのサンプルがどの順番で動くかをちゃんと把握しないといけないので, <strong>Androidのライフサイクルの理解が深まったり</strong>とか一石二鳥だと思う.</p>
+
+<p>このように学習することで, APIの連携にはどういうライブラリを使えばいいとか, <a href="https://github.com/wuman/android-oauth-client/blob/master/samples/src/main/java/com/wuman/oauth/samples/twitter/api/model/Tweet.java">APIとクラスのインスタンスの紐付け</a>をどうするとか, AsyncTaskLoaderは<a href="https://github.com/wuman/android-oauth-client/blob/master/samples/src/main/java/com/wuman/oauth/samples/twitter/TwitterActivity.java#L137">独自のローダを定義しておく</a>と何かと便利そうだとか, ListViewへアダプタ渡すときは<a href="https://github.com/wuman/android-oauth-client/blob/master/samples/src/main/java/com/wuman/oauth/samples/twitter/TwitterActivity.java#L206">Decoratorパターン用意してアダプタとローダをセットで渡す</a>とスッキリかけて良いし再利用しやすそうだとか, 様々な知見が得られるし, アプリを作る上で必要な知見を効率よく学習できると思う.</p>
+
+<h3>復習として作ったあとに情報整理</h3>
+
+<p>作りたいものがある程度作れたら, 使ったクラスを詳しく調べなおしたり, Mixiのテキストで使った箇所を詳しく読んでみたり, 冗長になってしまった箇所をリファクタリングしてみたりすると, やったことを深く理解できると思うし忘れにくい知識が身につくと思う.</p>
+
+<h2>まとめ</h2>
+
+<p>ざっくり, Androidエンジニアになって1週間の僕の実践している学習法について書いてみた. まとめると, Githubとかで先人の知恵を得ることと, 必要になったクラスとか機能を学ぶことで, 効率的に実践的なコーディングができるんではということを長々と書いた.</p>
+
+<p>冒頭にも書いたけどもっと良いやり方があるとか, これはおかしいと思うことがアレば, コメントとか<a href="https://twitter.com/yucchiy_">@yucchiy_</a>へどうぞ.</p>
+</div>
+
+</article>
+
+  
+<div class="share">
+  <ul>
+    <li>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.yucchiy.com/2014/08/14/android-beginner-how-to-studying/" data-via="yucchiy_" data-counturl="http://blog.yucchiy.com/2014/08/14/android-beginner-how-to-studying/" >Tweet</a>
+</li>
+
+    <li>
+  <div class="g-plusone" data-size="medium"></div>
+</li>
+
+    <li>
+  <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="simple-balloon" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</li>
+
+    <li>
+  <div class="fb-like" data-href="http://blog.yucchiy.com/2014/08/14/android-beginner-how-to-studying/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+</li>
+
+  </ul>
+</div>
+
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+	<footer id="footer" class="inner"><div class="about">
+  <a href="https://twitter.com/yucchiy_"><img src="https://s.gravatar.com/avatar/f218bd83250eeb22337db1ee6a45cccb?s=300"></img></a>
+  <h4>yucchiy</h4>
+  <p>和歌山大学でWebエンジニアとコンピュータビジョンの研究をしています.</p>
+  <ul class="social">
+    <li>
+      <a href="https://twitter.com/yucchiy_" target="_blank">
+        <i class="fa fa-twitter-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/yucchiy" target="_blank">
+        <i class="fa fa-facebook-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/yucchiy" target="_blank">
+        <i class="fa fa-github-square"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="copy">
+  &copy; 2014
+  <a href="http://yucchiy.com" target="_blank">
+    
+    yucchiy
+    
+  </a>
+</div>
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/hyphenator.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'yucchiysblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.yucchiy.com/2014/08/14/android-beginner-how-to-studying/';
+        var disqus_url = 'http://blog.yucchiy.com/2014/08/14/android-beginner-how-to-studying/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-36940311-7']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+</body>
+<script>
+  $(document).ready(function() {
+  // Make images center
+  $('p:has(img)').css('text-align', 'center');
+  });
+</script>
+
+
+<script type="text/javascript">
+(function(){
+  var twitterWidgets = document.createElement('script');
+  twitterWidgets.type = 'text/javascript';
+  twitterWidgets.async = true;
+  twitterWidgets.src = '//platform.twitter.com/widgets.js';
+  document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+})();
+</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</html>
