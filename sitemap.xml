@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://blog.yucchiy.com/2014/08/23/kyoto-android-201408/</loc>
+    <lastmod>2014-08-23T15:02:20+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.yucchiy.com/2014/08/20/delivery-api-with-rails/</loc>
     <lastmod>2014-08-20T15:35:23+09:00</lastmod>
     <priority>0.8</priority>
@@ -41,21 +47,21 @@
   
   <url>
     <loc>http://blog.yucchiy.com/blog/archives/</loc>
-    <lastmod>2014-08-20T17:43:47+09:00</lastmod>
+    <lastmod>2014-08-23T22:09:14+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/blog/</loc>
-    <lastmod>2014-08-20T17:43:47+09:00</lastmod>
+    <lastmod>2014-08-23T22:09:14+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/</loc>
-    <lastmod>2014-08-20T17:43:47+09:00</lastmod>
+    <lastmod>2014-08-23T22:09:14+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
