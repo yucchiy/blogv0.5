@@ -67,7 +67,7 @@
   
 
 
-<time datetime="2014-08-20T15:35:23+09:00" pubdate data-updated="true">Aug 08/20/14, 2014</time>
+<time datetime="2014-08-20T15:35:23+09:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -93,7 +93,7 @@
 
 <p>例えば, ビューで</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -103,12 +103,12 @@
 </span><span class='line'><span class="n">attributes</span> <span class="ss">:id</span><span class="p">,</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:subject</span>
 </span><span class='line'><span class="n">child</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="n">attributes</span> <span class="ss">:full_name</span> <span class="p">}</span>
 </span><span class='line'><span class="n">node</span><span class="p">(</span><span class="ss">:read</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span> <span class="n">post</span><span class="o">.</span><span class="n">read_by?</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>って書くと</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -122,7 +122,7 @@
 </span><span class='line'>    <span class="s2">&quot;read&quot;</span> <span class="o">:</span> <span class="kc">true</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">}]</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>って出力される(公式丸パクリ). 便利.</p>
@@ -135,7 +135,7 @@
 
 <p>APIリクエストの場合, CSRF対策が特に必要ないので, <code>ApplicationController</code>に以下のように記述することで, CSRFを回避する.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -149,31 +149,31 @@
 </span><span class='line'><span class="k">def</span> <span class="nf">json_request?</span>
 </span><span class='line'>  <span class="n">request</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">json?</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h3>Strong Parameters</h3>
 
 <p>RailsのForm+Strong Parametersだと, よく以下のような記述を見る.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">article_params</span>
 </span><span class='line'>   <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:article</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:headline</span><span class="p">,</span> <span class="ss">:content</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>ただAPIのクエリは, <code>{article:{ headline: "hoge", content: "piyo" }}</code>みたいなネストした感じでクエリ送ることってあんまりないと思う. ということでStrong Parametersを利用するために以下のように書いた.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">article_params</span>
 </span><span class='line'>  <span class="no">ActionController</span><span class="o">::</span><span class="no">Parameters</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:headline</span><span class="p">,</span> <span class="ss">:content</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h3>基底コントローラの活用</h3>
@@ -196,7 +196,7 @@
 
 <p>最初に書いたEnvelopeの対応は<a href="https://github.com/nesquena/rabl/wiki/Using-Layouts">RablのLayouts</a>を使うと綺麗にかけて良さそうだけど, 以下のサンプルのソースを書いてもうまくいかなかった. 具体的には<code>yield</code>の部分が<code>nil</code>になってしまった.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -218,7 +218,7 @@
 </span><span class='line'>    <span class="no">Nori</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="k">yield</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>直し方募集中.</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 勉強会 | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/mian-qiang-hui/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-23T22:09:14+09:00</updated>
+  <updated>2014-08-29T11:13:20+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -172,6 +172,8 @@
 
 <p>XMLをデザイナが書くといろいろ開発が幸せになる話.</p>
 
+<p><script async="true" class="speakerdeck-embed" data-id="dd195b300fbd0132c8492abbbf00bf60" src="//speakerdeck.com/assets/embed.js"> </script></p>
+
 <h3>UIをつくる</h3>
 
 <ul>
@@ -225,7 +227,7 @@
 
 <p>Javaの黒魔術: Annotationについて</p>
 
-<p><a href="https://speakerdeck.com/kaiinui/hei-mo-shu-to-annotation-to-aspectj">資料</a></p>
+<p><script async="true" class="speakerdeck-embed" data-id="45f2eb000cd301321e865e226fb19d76" src="//speakerdeck.com/assets/embed.js"> </script></p>
 
 <h3>良さ</h3>
 
@@ -253,6 +255,10 @@
 
 
 <h2>Android アプリ開発における Gradle ビルドシステム @nobuoka さん</h2>
+
+<p>Gradleについての知見.</p>
+
+<p><iframe src="http://www.slideshare.net/slideshow/embed_code/38432268 " width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="margin-top: 0px !important; border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen></iframe> </p>
 
 <h3>GradleとAndroid アプリ開発</h3>
 
@@ -316,6 +322,14 @@
 <p><a href="https://twitter.com/_kaiinui">@_kaiinui</a>さんのJava Annnotaion, 黒魔術だ〜全く便利じゃないって言っておられたけど普通に便利だなとおもった.</p>
 
 <p>Android勉強会, 関西で定期的に開催されるらしいし次も是非参加したい. 今度は是非<a href="https://twitter.com/yucchiy_/status/503061258065547264">この夏もっとおしゃれなTシャツ</a>をゲットしたい.</p>
+
+<h2>参考資料</h2>
+
+<ul>
+<li><a href="http://yulily100.hatenablog.jp/entry/2014/08/27/112604">デザイナーがandroidのXMLコーディングをやる利点について発表しました - yulily100&rsquo;s blog</a></li>
+<li><a href="http://vividcode.hatenablog.com/entry/study-meeting/kyoto-android-2014-08">発表資料: Android アプリ開発における Gradle ビルドシステム (京都 Android 勉強会 2014.08) - ひだまりソケットは壊れない</a></li>
+</ul>
+
 ]]></content>
   </entry>
   

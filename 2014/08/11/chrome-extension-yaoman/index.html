@@ -67,7 +67,7 @@
   
 
 
-<time datetime="2014-08-11T08:59:50+09:00" pubdate data-updated="true">Aug 08/11/14, 2014</time>
+<time datetime="2014-08-11T08:59:50+09:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -83,27 +83,27 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 <p>インストールする前に, 当然yeomanが必要なので, yeomanをインストールする. node.js, npmがインストールされていれば
 以下のコマンドでyeomanをインストールする.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g yo mocha</span></code></pre></td></tr></table></div></figure>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g yo mocha</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p><code>generator-chrome-extension</code>では, デフォルトのテストフレームワークとして<code>mocha</code>を採用しているので, ついでにインストールしておくと良い.
 次に, <code>generator-chrome-extension</code>をインストールする. インストールは至って簡単で, 以下のコマンドでインストールする.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g generator-chrome-extension</span></code></pre></td></tr></table></div></figure>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g generator-chrome-extension</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h2>使い方</h2>
 
 <p>まず, アプリのひな形を作成する. yeomanのコマンドを用いて作成する.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>mkdir path-to-my-chrome-extension
 </span><span class='line'>cd  path-to-my-chrome-extension
-</span><span class='line'>yo chrome-extension</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>yo chrome-extension</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>この時, アプリ名や初期アプリの構成を聞かれるので, 必要に応じてチェックをいれる.</p>
@@ -112,7 +112,7 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 
 <p>ひな形作成時にすべてのチェックを外すと, 概ね以下のディレクトリ構成となる.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -211,7 +211,7 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 </span><span class='line'>    ├── bower.json
 </span><span class='line'>    ├── index.html
 </span><span class='line'>    └── spec
-</span><span class='line'>        └── test.js</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>        └── test.js</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h3>Gruntタスク</h3>
@@ -246,8 +246,8 @@ bowerでインストールした外部ライブラリの自動ロード, Sassや
 
 <p>外部ライブラリの読み込みは, <code>bower</code>を通じて行う. 例えば<a href="http://underscorejs.org/">underscore.js</a>を利用したい場合は以下のようにする.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>bower install --save underscore</span></code></pre></td></tr></table></div></figure>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bower install --save underscore</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>すると<code>/app</code>ディレクトリにライブラリがインストールされ, 同時にライブラリを自動でロードされる.
