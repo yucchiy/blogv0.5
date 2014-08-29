@@ -89,6 +89,8 @@ XML BY DESIGN デザイナがコードを書くとちょっと良いこと @yuli
 
 XMLをデザイナが書くといろいろ開発が幸せになる話.
 
+{% speakerdeck dd195b300fbd0132c8492abbbf00bf60 %}
+
 ### UIをつくる
 
 - ペーパープロトタイピング
@@ -124,7 +126,7 @@ XMLをデザイナが書くといろいろ開発が幸せになる話.
 
 Javaの黒魔術: Annotationについて
 
-[資料](https://speakerdeck.com/kaiinui/hei-mo-shu-to-annotation-to-aspectj)
+{% speakerdeck 45f2eb000cd301321e865e226fb19d76 %}
 
 ### 良さ
 
@@ -147,6 +149,10 @@ AspectJを使うと作れる
 
 Android アプリ開発における Gradle ビルドシステム @nobuoka さん
 -------------------------------------------------------------
+
+Gradleについての知見.
+
+{% slideshare 38432268 %}
 
 ### GradleとAndroid アプリ開発
 
@@ -192,4 +198,11 @@ Android アプリ開発における Gradle ビルドシステム @nobuoka さん
 [@\_kaiinui](https://twitter.com/_kaiinui)さんのJava Annnotaion, 黒魔術だ〜全く便利じゃないって言っておられたけど普通に便利だなとおもった.
 
 Android勉強会, 関西で定期的に開催されるらしいし次も是非参加したい. 今度は是非[この夏もっとおしゃれなTシャツ](https://twitter.com/yucchiy_/status/503061258065547264)をゲットしたい.
+
+
+参考資料
+--------
+
+- [デザイナーがandroidのXMLコーディングをやる利点について発表しました - yulily100's blog](http://yulily100.hatenablog.jp/entry/2014/08/27/112604)
+- [発表資料: Android アプリ開発における Gradle ビルドシステム (京都 Android 勉強会 2014.08) - ひだまりソケットは壊れない](http://vividcode.hatenablog.com/entry/study-meeting/kyoto-android-2014-08)
 
