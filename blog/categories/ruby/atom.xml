@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: api | Yucchiy's blog]]></title>
-  <link href="http://blog.yucchiy.com/blog/categories/api/atom.xml" rel="self"/>
+  <title><![CDATA[Category: ruby | Yucchiy's blog]]></title>
+  <link href="http://blog.yucchiy.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
   <updated>2014-08-31T20:42:13+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
@@ -145,124 +145,6 @@ end
 <h2>まとめ</h2>
 
 <p>ApplicationControllerで<code>Api::ErrorHandlers</code>を定義し, <code>rescue_exception</code>で例外処理することで, 開発速度が上がって良さそうだという個人的なエラー処理のまとめを書いてみた.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RailsでAPIを書いたときの雑な感想]]></title>
-    <link href="http://blog.yucchiy.com/2014/08/20/delivery-api-with-rails/"/>
-    <updated>2014-08-20T15:35:23+09:00</updated>
-    <id>http://blog.yucchiy.com/2014/08/20/delivery-api-with-rails</id>
-    <content type="html"><![CDATA[<p>某インターンのメンターをしながら, メンターたちと空いてる時間を使ってネイティブアプリを書いていた.
-その時バックエンドをRailsで書いて思ったことを夏休みの感想文としてまとめてみた.</p>
-
-<h2>ライブラリの選定</h2>
-
-<h3>Grape</h3>
-
-<p>RailsでAPIといえば, <a href="https://github.com/intridea/grape">Grape</a>というライブラリが有名だけど, 特にRailsのデフォルトのコントローラで困ることが少なかったのと, Railsとの記法の違いっぽいところがあって, 導入しなかった.</p>
-
-<p>ただいま考えてみれば, <a href="https://github.com/intridea/grape#parameter-validation-and-coercion">パラメータのバリデーション</a>や, (どう管理するのかしらんけど)<a href="https://github.com/intridea/grape#cookies">Cookie</a>をサポートしていたり, <a href="https://github.com/intridea/grape#exception-handling">エラーハンドリング</a>もいい感じだし, 導入してみたら楽だったかもしれない.</p>
-
-<p>各アクションに<code>desc</code>を書いておけば, ドキュメントの自動生成とかできたりするし. 実はとても便利かもしれない.(反省終わり)</p>
-
-<h3>Rabl</h3>
-
-<p>Grapeのかわりに<a href="https://github.com/nesquena/rabl">Rabl</a>というJSONとかの記述を楽にするDSLを提供するテンプレートエンジンを導入した. 単純にRailsの<code>render :json</code>とかで出力してしまってもいいのだが, コントローラでJSONの構造を構築するのはスマートではないし, InstagramやTwitterのAPIでは, すべてのAPIレスポンスに<a href="http://instagram.com/developer/endpoints/">Envelope</a>と呼ばれる, APIのコールにステータスコードやメッセージをのせるケースが多く, そういうのに対応させようと思うとRablがいいかな, と思って導入した.</p>
-
-<p>例えば, ビューで</p>
-
-<pre><code class="ruby"># app/views/posts/index.rabl
-collection @posts
-attributes :id, :title, :subject
-child(:user) { attributes :full_name }
-node(:read) { |post| post.read_by?(@user) }
-</code></pre>
-
-<p>って書くと</p>
-
-<pre><code class="javascript">[{  "post" :
-  {
-    "id" : 5, "title": "...", "subject": "...",
-    "user" : { "full_name" : "..." },
-    "read" : true
-  }
-}]
-</code></pre>
-
-<p>って出力される(公式丸パクリ). 便利.</p>
-
-<h2>RailsでAPIを書くときの知見</h2>
-
-<p>Rails+RablでAPI書いてたまった知見を書いていく.</p>
-
-<h3>CSRF対策</h3>
-
-<p>APIリクエストの場合, CSRF対策が特に必要ないので, <code>ApplicationController</code>に以下のように記述することで, CSRFを回避する.</p>
-
-<pre><code class="ruby">skip_before_action :verify_authenticity_token, if: :json_request?
-
-protected
-
-def json_request?
-  request.format.json?
-end
-</code></pre>
-
-<h3>Strong Parameters</h3>
-
-<p>RailsのForm+Strong Parametersだと, よく以下のような記述を見る.</p>
-
-<pre><code class="ruby">def article_params
-   params.require(:article).permit(:headline, :content)
-end
-</code></pre>
-
-<p>ただAPIのクエリは, <code>{article:{ headline: "hoge", content: "piyo" }}</code>みたいなネストした感じでクエリ送ることってあんまりないと思う. ということでStrong Parametersを利用するために以下のように書いた.</p>
-
-<pre><code class="ruby">def article_params
-  ActionController::Parameters.new(params).permit(:headline, :content)
-end
-</code></pre>
-
-<h3>基底コントローラの活用</h3>
-
-<p>RailsでAPI書いてると, 多分<code>/api</code>以下はデフォルトでJSONで返したいニーズとかあると思う. そういう場合は, <code>ApplicationController</code>を継承した<code>Api::ApplicationController</code>とか定義して<code>/app/controllers/api/application_controller.rb</code>とし, そこに<code>respond_to :json</code>とか, <code>default_format :json</code>とかしておくと何かと便利.</p>
-
-<h2>不満点とか</h2>
-
-<p>不便だと思った点とか上げていく.</p>
-
-<h3>例外の扱い</h3>
-
-<p>Railsのコントローラ内で投げられる例外は, すべてそのステータスコードをもってほしいと思った. またコントローラ内でモデルのCRUDを行って失敗した時は, 直ちに例外を投げるように実装を行うべきだと思った.</p>
-
-<p>明示的にキャッチしなかった例外は, <code>ApplicationController</code>でハンドルし, 例外が持っているメッセージとステータスコードを出力することで, 一貫したエラー処理が行えるし, 各コントローラでは基本例外を投げるので, 分岐が減り, 読みやすいコントローラが書けるのではと思った.</p>
-
-<p>あと, No route errorは例外でキャッチしたい.</p>
-
-<h3>RablのLayoutsがうまく動かない</h3>
-
-<p>最初に書いたEnvelopeの対応は<a href="https://github.com/nesquena/rabl/wiki/Using-Layouts">RablのLayouts</a>を使うと綺麗にかけて良さそうだけど, 以下のサンプルのソースを書いてもうまくいかなかった. 具体的には<code>yield</code>の部分が<code>nil</code>になってしまった.</p>
-
-<pre><code class="ruby">node(:status) { response.status }
-node(:error)  { @error.to_json.html_safe }
-
-node(:result) do
-  case content_type
-  when :json
-    Yajl::Parser.parse(yield)
-  when :xml
-    Nori.new.parse(yield)
-  end
-end
-</code></pre>
-
-<p>直し方募集中.</p>
-
-<h2>まとめ</h2>
-
-<p>Railsで雑にAPIを納品した時の感想として, 概ねRailsでいい感じにかけていいけど, 多少不満とかあったのでまとめてみた. たぶんGrape導入したら解決しそうだし皆さんGrape使いましょう(完).</p>
 ]]></content>
   </entry>
   

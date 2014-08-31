@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-29T11:13:20+09:00</updated>
+  <updated>2014-08-31T20:42:13+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -12,6 +12,141 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RailsでAPIを作るときのエラー処理について]]></title>
+    <link href="http://blog.yucchiy.com/2014/08/31/error-rails-api/"/>
+    <updated>2014-08-31T20:20:27+09:00</updated>
+    <id>http://blog.yucchiy.com/2014/08/31/error-rails-api</id>
+    <content type="html"><![CDATA[<p><a href="http://blog.yucchiy.com/2014/08/20/delivery-api-with-rails/">RailsでAPIを雑に書いていたんだけど</a>, コントローラとかをどう書くとエラー処理しやすくなっていいかなーと考えていて, 個人的に考えがまとまったのでブログ書いた.</p>
+
+<h2>良いエラー処理について</h2>
+
+<p>個人的にAPIを書く上で(API書くに限らない気はするけど)どういうふうにエラー処理を行うと良いかなーと考えてみると</p>
+
+<ul>
+<li>コントローラ内では基本的に, <strong>ある関数の処理が失敗して, 次の処理が行えない場合はすべて例外を投げる</strong></li>
+<li>例外は各々のコントローラ内で例外のキャッチは行わず, すべてApplicationControllerなど, <strong>親コントローラ内の1メソッドで完結させる</strong></li>
+</ul>
+
+
+<p>かなーと思う. APIのエラー処理は, <a href="http://instagram.com/developer/endpoints/">Envelopeにステータスコードとエラーメッセージを書いて</a>, APIのフォーマットを統一するほうがクライアントが作りやすそうだし, またこのように処理することで, <strong>エラー処理での条件分岐の必要がなくなり</strong>, コントローラの可読性の向上にもつながる.</p>
+
+<h2>Grape vs Rails</h2>
+
+<p>APIつくるんだったら, <a href="https://www.google.co.jp/search?q=rails+api&amp;oq=rails+api+&amp;aqs=chrome..69i57j69i60l3j69i59j69i61.9488j0j1&amp;sourceid=chrome&amp;es_sm=119&amp;ie=UTF-8">Grapeサイコー</a>という意見が多い.</p>
+
+<p>確かにGrapeのDSLは直感的に書けるし, バリデーションなど便利メソッドが多いけど, 個人的には素のRailsでAPIを書くほうがセンスが良いと感じる. というのもRackベースなので, ルーティングなど独自のものが多く, せっかくRailsが提供してるRakeのタスクや, ジェネレータがそのまま使えないからである.</p>
+
+<p>SinatraとかでAPI納品するんだったら, Grapeとかいれるのはすごい良さそう.</p>
+
+<p>ただ, そのままのRailsではJSONやXMLをいい感じの構造で返す仕組みが貧弱なので, <a href="https://github.com/nesquena/rabl">RABL</a>を導入するのが便利. これはJSONやXMLをいい感じに生成するためのテンプレートエンジンで, DSLを用いて直感的にAPI出力を定義できる.</p>
+
+<p>また, <a href="https://github.com/nesquena/rabl/wiki/Using-Layouts">RailsのLayoutsにも対応しており</a>, <code>views/layouts/application.rabl</code>とかを定義しておくことで, <a href="http://instagram.com/developer/endpoints/">Envelope</a>みたいなのを簡単に実現できる.</p>
+
+<h2>コントローラ内でのエラー処理</h2>
+
+<p>上記に上げたとおり, コントローラ内でモデルのCRUDなどの<strong>処理が失敗した場合</strong>は例外を投げてApplicationControllerに処理を渡す.</p>
+
+<p>例えば<code>show</code>メソッドでは以下のように処理する.</p>
+
+<pre><code class="ruby">def show
+  @piyo = Piyo.find_by!(:id, params[:id])
+end
+</code></pre>
+
+<h2>ApplicationControllerでのエラー処理</h2>
+
+<p>以下のようなConcernを定義し, ApplicationControllerから読み込むことでエラー処理を行う.</p>
+
+<pre><code class="ruby">module Api::ErrorHandlers
+  extend ActiveSupport::Concern
+
+  attr_accessor :status, :message
+
+  included do
+    before_filter :setup
+    rescue_from StandardError, :with =&gt; :rescue_exception
+  end
+
+  private
+
+  def rescue_exception(e)
+    @message = e.message
+    if rescuable?(e)
+      re = e.is_a?(Api::Exceptions::RescuableException) ? e : RESCUABLE_EXCEPTIONS[e.to_s.to_sym]
+      @status = re.status
+    else
+      @status = 500
+      @message = e.message
+    end
+
+    render 'api/errors/base'
+  end
+
+  def rescuable?(e)
+    return e.is_a?(Api::Exceptions::RescuableException) || RESCUABLE_EXCEPTIONS.has_key?(e.to_s.to_sym)
+  end
+
+  def setup
+    @status = 200
+    @message = "OK"
+  end
+end
+</code></pre>
+
+<p>ポイントはすべての例外処理を<code>rescue_exception</code>で受け取るところである. この<code>rescue_exception</code>は投げられた例外によって, 適切なステータスコードとエラーメッセージをビューに渡すメソッドで, それらはEnvelopeとして出力される. 例えばRablのLayoutsで以下のように定義することでエラー出力する.</p>
+
+<pre><code class="erb">{
+  "status": &lt;%= @status.to_json.html_safe %&gt;,
+  "message": &lt;%= @message.to_json.html_safe %&gt;,
+  "data": &lt;%= yield %&gt;
+}
+</code></pre>
+
+<p>ここで, 例外に対応するステータスコードを以下のように引く.</p>
+
+<ol>
+<li>独自の例外の場合は, その<strong>例外クラスにステータスを保持させる</strong></li>
+<li>組み込みの例外（例えばActiveRecordのNotFoundException）の場合は, 例外に対応する<strong>ステータスコードの対応表から</strong>引く</li>
+<li>それ以外の例外の場合は500を返す</li>
+</ol>
+
+
+<p>1の場合は, <code>Api::Exceptions::RescuableException</code>を作成して, それを継承した独自の例外クラスを投げて対応する.</p>
+
+<pre><code class="ruby">module Api::Exceptions
+  class RescuableException &lt; StandardError
+    attr_accessor :status
+
+    def initialize(status = 500, message = "Error")
+      super(message)
+      @status = status
+    end
+  end
+
+  class UnAuthenticationException &lt; RescuableException
+    def initialize(message = "Unauthorized")
+      super(401, message)
+    end
+  end
+end
+</code></pre>
+
+<p>2の場合は, <code>RESCUEABLE_EXCEPTIONS</code>みたいなハッシュを作って対応する.</p>
+
+<pre><code class="ruby">RESCUABLE_EXCEPTIONS = {
+  ActiveRecord::RecordNotFound.to_s.to_sym =&gt; Api::Exceptions::RescuableException.new(404, "Record Not Found")
+}
+</code></pre>
+
+<p>3の場合は, 上に2つの条件を満たさない場合に500を返すように<code>rescue_exception</code>メソッドを書くことで対応する.</p>
+
+<h2>まとめ</h2>
+
+<p>ApplicationControllerで<code>Api::ErrorHandlers</code>を定義し, <code>rescue_exception</code>で例外処理することで, 開発速度が上がって良さそうだという個人的なエラー処理のまとめを書いてみた.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RailsでAPIを書いたときの雑な感想]]></title>
