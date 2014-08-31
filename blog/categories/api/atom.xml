@@ -4,7 +4,7 @@
   <title><![CDATA[Category: api | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/api/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-08-31T20:42:13+09:00</updated>
+  <updated>2014-09-01T06:35:17+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -19,6 +19,8 @@
     <updated>2014-08-31T20:20:27+09:00</updated>
     <id>http://blog.yucchiy.com/2014/08/31/error-rails-api</id>
     <content type="html"><![CDATA[<p><a href="http://blog.yucchiy.com/2014/08/20/delivery-api-with-rails/">RailsでAPIを雑に書いていたんだけど</a>, コントローラとかをどう書くとエラー処理しやすくなっていいかなーと考えていて, 個人的に考えがまとまったのでブログ書いた.</p>
+
+<p>※9/1に追記書いた.</p>
 
 <h2>良いエラー処理について</h2>
 
@@ -145,6 +147,28 @@ end
 <h2>まとめ</h2>
 
 <p>ApplicationControllerで<code>Api::ErrorHandlers</code>を定義し, <code>rescue_exception</code>で例外処理することで, 開発速度が上がって良さそうだという個人的なエラー処理のまとめを書いてみた.</p>
+
+<h2>追記</h2>
+
+<p><a href="https://twitter.com/r7kamura">@r7kamura</a>さんに, 以下のリプライを頂いて</p>
+
+<blockquote class="twitter-tweet"><p><a href="https://twitter.com/yucchiy_">@yucchiy_</a> Rack middlewareの中で例外発生したらどうしますか</p>&mdash; いもり手 (@r7kamura) <a href="https://twitter.com/r7kamura/statuses/506088448566915072">2014, 8月 31</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" lang="ja"><p><a href="https://twitter.com/yucchiy_">@yucchiy_</a> 例えばありがちな問題として、RailsにContent-Type: application/jsonを指定しながら誤ったJSONを送ると、パース部分はRack middlewareで実装されているので、例外が発生して500が返ります (400とかにしたい)</p>&mdash; いもり手 (@r7kamura) <a href="https://twitter.com/r7kamura/statuses/506094476809367552">2014, 8月 31</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>確かに, <strong>Rack middlewareのこととか全く考慮できてなくてダメダメ</strong>って感じだった.</p>
+
+<p>そして起きたら<a href="http://qiita.com/r7kamura/items/2e88adbdd1782277b2e7">RailsでAPIをつくるときのエラー処理</a>っていうすごい知見がまとめられていた.</p>
 ]]></content>
   </entry>
   
