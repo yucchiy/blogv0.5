@@ -105,7 +105,6 @@
 </span><span class='line'><span class="n">node</span><span class="p">(</span><span class="ss">:read</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span> <span class="n">post</span><span class="o">.</span><span class="n">read_by?</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>って書くと</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -123,7 +122,6 @@
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">}]</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <p>って出力される(公式丸パクリ). 便利.</p>
 
@@ -151,7 +149,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <h3>Strong Parameters</h3>
 
 <p>RailsのForm+Strong Parametersだと, よく以下のような記述を見る.</p>
@@ -164,8 +161,7 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<p>ただAPIのクエリは, <code>{article:{ headline: "hoge", content: "piyo" }}</code>みたいなネストした感じでクエリ送ることってあんまりないと思う. ということでStrong Parametersを利用するために以下のように書いた.</p>
+<p>ただAPIのクエリは, <code>{article:{ headline: &quot;hoge&quot;, content: &quot;piyo&quot; }}</code>みたいなネストした感じでクエリ送ることってあんまりないと思う. ということでStrong Parametersを利用するために以下のように書いた.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -174,7 +170,6 @@
 </span><span class='line'>  <span class="no">ActionController</span><span class="o">::</span><span class="no">Parameters</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:headline</span><span class="p">,</span> <span class="ss">:content</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <h3>基底コントローラの活用</h3>
 
@@ -219,7 +214,6 @@
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <p>直し方募集中.</p>
 

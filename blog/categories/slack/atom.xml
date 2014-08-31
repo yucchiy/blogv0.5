@@ -4,7 +4,7 @@
   <title><![CDATA[Category: slack | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/slack/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-01T06:35:17+09:00</updated>
+  <updated>2014-09-01T06:39:08+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -30,42 +30,31 @@
 <li>Redis(データ永続化に必要. 必要に応じてインストールする)</li>
 </ul>
 
-
 <p>Macの場合は, HomeBrewでインストールするのが楽.</p>
-
-<pre><code>brew install node redis-server
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew install node redis-server
+</code></pre></div>
 <p><code>Hubot</code>は, npmからインストールできる.</p>
-
-<pre><code>npm install -g coffee-script hubot
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">npm install -g coffee-script hubot
+</code></pre></div>
 <h2>Botを作成してみる</h2>
-
-<pre><code>hubot --create mybot
+<div class="highlight"><pre><code class="language-text" data-lang="text">hubot --create mybot
 cd mybot
 npm install --save
-</code></pre>
-
+</code></pre></div>
 <h3>Gitでバージョン管理</h3>
 
 <p>はじめから<code>.gitignore</code>が用意されているので, おもむろにInitial commit.</p>
-
-<pre><code>cd mybot
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd mybot
 git init
 git add .
-git commit -m "Initial commit."
-</code></pre>
-
+git commit -m &quot;Initial commit.&quot;
+</code></pre></div>
 <h3>動作確認</h3>
-
-<pre><code>./bin/hubot
+<div class="highlight"><pre><code class="language-text" data-lang="text">./bin/hubot
 Hubot&gt; hubot hi
 Hubot&gt; hi
 Hubot&gt; exit
-</code></pre>
-
+</code></pre></div>
 <h2>自作スクリプトを書く</h2>
 
 <p><code>scripts</code>ディレクトリ以下にスクリプトを設置する.</p>
@@ -76,35 +65,29 @@ Hubot&gt; exit
 この時関数に, <code>msg</code>オブジェクトが渡ってくるので, <code>msg.send</code>でBotを喋らせることができる.</p>
 
 <p>以下, <code>hoge</code>とつぶやいたら<code>piyo</code>とつぶやくBotの例.</p>
-
-<pre><code class="coffee">util = require 'util'↲
-↲
-module.exports = (robot) -&gt;↲
-  robot.hear /hoge/i, (msg) -&gt;↲
-    msg.send 'piyo'
-</code></pre>
-
+<div class="highlight"><pre><code class="language-coffee" data-lang="coffee"><span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span><span class="err">↲</span>
+<span class="err">↲</span>
+<span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span><span class="err">↲</span>
+  <span class="nx">robot</span><span class="p">.</span><span class="nx">hear</span> <span class="sr">/hoge/i</span><span class="p">,</span> <span class="nf">(msg) -&gt;</span><span class="err">↲</span>
+    <span class="nx">msg</span><span class="p">.</span><span class="nx">send</span> <span class="s">&#39;piyo&#39;</span>
+</code></pre></div>
 <h3>特定の時間につぶやく(Cron)</h3>
 
 <p>node-cronモジュールを用いると, 簡単に定期実行処理をHubotに行わせることができる.
 node-cronはnpmからインストールできる.</p>
-
-<pre><code>npm install cron --save
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">npm install cron --save
+</code></pre></div>
 <p>以下, 日本時間の8時に, <code>おはよう朝だYo</code>とつぶやくスクリプト例.</p>
-
-<pre><code class="coffee">cron = require('cron').CronJob
-module.exports = (robot) -&gt;
-  robot.enter -&gt;
-  new cron
-    cronTime: "0 0 8 * * *"
-    start: true
-    timeZone: "Asia/Tokyo"
-    onTick: -&gt;
-      robot.send {room: "#hogechannel"}, "おはよう朝だYo"
-</code></pre>
-
+<div class="highlight"><pre><code class="language-coffee" data-lang="coffee"><span class="nv">cron = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;cron&#39;</span><span class="p">).</span><span class="nx">CronJob</span>
+<span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
+  <span class="nx">robot</span><span class="p">.</span><span class="nx">enter</span> <span class="nf">-&gt;</span>
+  <span class="k">new</span> <span class="nx">cron</span>
+    <span class="nv">cronTime: </span><span class="s">&quot;0 0 8 * * *&quot;</span>
+    <span class="nv">start: </span><span class="kc">true</span>
+    <span class="nv">timeZone: </span><span class="s">&quot;Asia/Tokyo&quot;</span>
+    <span class="nv">onTick: </span><span class="nf">-&gt;</span>
+      <span class="nx">robot</span><span class="p">.</span><span class="nx">send</span> <span class="p">{</span><span class="nv">room: </span><span class="s">&quot;#hogechannel&quot;</span><span class="p">},</span> <span class="s">&quot;おはよう朝だYo&quot;</span>
+</code></pre></div>
 <h3>環境変数の受け取り方</h3>
 
 <p><code>process.env</code>を使う</p>
@@ -115,31 +98,25 @@ module.exports = (robot) -&gt;
 Herokuが気軽で良いと判断し, Herokuをホスティングサーバーとしてみた.</p>
 
 <p>まずHerokuを利用するの必要なツールをbrewインストールする.</p>
-
-<pre><code>brew install heroku-toolbelt
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew install heroku-toolbelt
+</code></pre></div>
 <h4>HerokuにHubotをデプロイ</h4>
 
 <p><code>git push</code>でデプロイを行う.</p>
-
-<pre><code>heroku create --stack cedar
+<div class="highlight"><pre><code class="language-text" data-lang="text">heroku create --stack cedar
 git push heroku master
 heroku addons:add rediscloud # Heroku上でVerifyしていないとエラー
 heroku ps:scale web=1
-</code></pre>
-
+</code></pre></div>
 <h4>Herokuで運用してるHubotとSlackを連携</h4>
 
 <p>まず, SlackのIntegrationsからHubot連携して, <code>HUBOT_SLACK_TOKEN</code>を控えておく.
 次に, herokuコマンドで設定.</p>
-
-<pre><code>heroku config:add HUBOT_SLACK_TOKEN=xxxx
+<div class="highlight"><pre><code class="language-text" data-lang="text">heroku config:add HUBOT_SLACK_TOKEN=xxxx
 heroku config:add HUBOT_SLACK_TEAM=yucchiy
 heroku config:add HUBOT_SLACK_BOTNAME=yucchiy-bot
 heroku config:add HEROKU_URL=http://yucchiy.herokuapp.com/
-</code></pre>
-
+</code></pre></div>
 <p>他にも, 監視チャンネルを制御する設定もある.</p>
 
 <ul>
@@ -147,25 +124,20 @@ heroku config:add HEROKU_URL=http://yucchiy.herokuapp.com/
 
 <ul>
 <li>後述する, <code>HUBOT_SLACK_CHANNELS</code>と併用する. <code>whitelist</code>と<code>blacklist</code>が選択できる.</li>
-</ul>
-</li>
+</ul></li>
 <li><code>HUBOT_SLACK_CHANNELMODE</code>
 
 <ul>
 <li>カンマ区切りでチャンネル名を指定する.</li>
 <li><code>HUBOT_SLACK_CHANNELS</code>に<code>whiltelist</code>と指定すると, 指定したチャンネルのみを監視し, <code>blacklist</code>を指定すると, 指定したチャンネルは監視しないようになる</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <p>詳細は<a href="https://github.com/tinyspeck/hubot-slack">https://github.com/tinyspeck/hubot-slack</a>より確認できる.</p>
 
 <p>次に, <code>Procfile</code>をslackのアダプタをロードするように変更する.</p>
-
-<pre><code>web: bin/hubot --adapter slack
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">web: bin/hubot --adapter slack
+</code></pre></div>
 <p>上記を設定の上, herokuのmasterブランチにデプロイすることで, slack連携が行われるようになる.</p>
 
 <h2>参考URL</h2>
@@ -176,7 +148,6 @@ heroku config:add HEROKU_URL=http://yucchiy.herokuapp.com/
 <li><a href="http://d.hatena.ne.jp/anatoo/20120204/1328368042">github社製ボットフレームワーク、hubotをIRCボットとして導入した話(修正あり</a></li>
 <li><a href="http://nanapi.co.jp/blog/2014/06/04/slack_with_hubot/">Slack上のボットをHubotで作ってHerokuにデプロイしてみた</a></li>
 </ul>
-
 ]]></content>
   </entry>
   

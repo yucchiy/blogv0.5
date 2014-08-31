@@ -79,7 +79,6 @@
 
 <!-- more -->
 
-
 <h2>MetaTags</h2>
 
 <p><a href="https://github.com/kpumuk/meta-tags">https://github.com/kpumuk/meta-tags</a></p>
@@ -98,13 +97,11 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;meta-tags&#39;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>次に, メタタグを仕込みたいビューファイルに以下を記述する.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">display_meta_tags</span> <span class="cp">%&gt;</span><span class="x"></span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <p><code>display_meta_tags</code>には引数が渡せて, デフォルトで埋め込むメタタグを設定できる.
 ただし, <code>set_meta_tags</code>で設定するとそのメタタグは上書きされる.</p>
@@ -124,14 +121,12 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 </span><span class='line'><span class="cp">%&gt;</span><span class="x"></span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>メタタグを設定するには<code>set_meta_tags</code>をコントローラ内またはビューファイルで利用する.
 例えばビューファイル内で設定するには以下のようにする.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%</span> <span class="n">set_meta_tags</span> <span class="ss">:title</span> <span class="o">=&gt;</span> <span class="s1">&#39;HogePiyoTitle&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <h3>設定しておくと良さそうなメタタグ</h3>
 
@@ -146,8 +141,7 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 <li>description (<code>:description</code>)</li>
 <li>keywords (<code>:keywords</code>)</li>
 <li>Canonical URL (<code>:canonical</code>)</li>
-</ul>
-</li>
+</ul></li>
 <li>Open Graph (<code>:og</code>)</li>
 <li>Twiter Cards (<code>:twitter</code>)</li>
 <li>Google Plus (Author Rank)
@@ -155,17 +149,14 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 <ul>
 <li>Author links (<code>:author</code>)</li>
 <li>Publisher links (<code>:publisher</code>)</li>
-</ul>
-</li>
+</ul></li>
 <li>必要に応じて
 
 <ul>
 <li>Pagination links (<code>:prev</code>, <code>:next</code>)</li>
 <li>Noindex, Nofollow</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <h2>SitemapGenerator</h2>
 
@@ -182,13 +173,11 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;sitemap_generator&#39;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>次に, <code>config/sitemap.rb</code>を作成する. 以下のコマンドを実行する.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="ss">sitemap</span><span class="p">:</span><span class="n">install</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <h3>使い方</h3>
 
@@ -205,7 +194,6 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <p>また, いろんな設定ができる.</p>
 
@@ -225,7 +213,6 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 </span><span class='line'><span class="no">SitemapGenerator</span><span class="o">::</span><span class="no">Sitemap</span><span class="o">.</span><span class="n">create_index</span> <span class="o">=</span> <span class="ss">:auto</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>サイトマップの生成は, Rakeコマンドより行う.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -237,7 +224,6 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 </span><span class='line'><span class="n">rake</span> <span class="ss">sitemap</span><span class="p">:</span><span class="n">refresh</span>                    <span class="c1"># サイトマップを作成し, 検索エンジンにpingを送る</span>
 </span><span class='line'><span class="n">rake</span> <span class="ss">sitemap</span><span class="p">:</span><span class="ss">refresh</span><span class="p">:</span><span class="n">no_ping</span>            <span class="c1"># サイトマップを作成する(検索エンジンにpingを送らない, たぶんsitemap:createと一緒?)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 </div>
 
 </article>

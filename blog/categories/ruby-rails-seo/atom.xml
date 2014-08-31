@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby rails seo | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/ruby-rails-seo/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-01T06:35:17+09:00</updated>
+  <updated>2014-09-01T06:39:08+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -23,7 +23,6 @@
 
 <!-- more -->
 
-
 <h2>MetaTags</h2>
 
 <p><a href="https://github.com/kpumuk/meta-tags">https://github.com/kpumuk/meta-tags</a></p>
@@ -37,34 +36,26 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 <h3>使い方</h3>
 
 <p>Bundleでインストールを行う. Gemfileに以下を記述する.</p>
-
-<pre><code class="ruby">gem 'meta-tags'
-</code></pre>
-
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s1">&#39;meta-tags&#39;</span>
+</code></pre></div>
 <p>次に, メタタグを仕込みたいビューファイルに以下を記述する.</p>
-
-<pre><code class="erb">&lt;%= display_meta_tags %&gt;
-</code></pre>
-
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="cp">&lt;%=</span> <span class="n">display_meta_tags</span> <span class="cp">%&gt;</span><span class="x"></span>
+</code></pre></div>
 <p><code>display_meta_tags</code>には引数が渡せて, デフォルトで埋め込むメタタグを設定できる.
 ただし, <code>set_meta_tags</code>で設定するとそのメタタグは上書きされる.</p>
 
 <p>例えば, <code>:site</code>などは全ページで共通のものを利用することが多いはずなので,
 以下の様に設定しておくと毎回設定しなくて良くて便利.</p>
-
-<pre><code class="erb">&lt;%= display_meta_tags({
-  :site =&gt; 'HogePiyoSite',
-  :reverse =&gt; true,
-})
-%&gt;
-</code></pre>
-
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="cp">&lt;%=</span> <span class="n">display_meta_tags</span><span class="p">({</span>
+  <span class="ss">:site</span> <span class="o">=&gt;</span> <span class="s1">&#39;HogePiyoSite&#39;</span><span class="p">,</span>
+  <span class="ss">:reverse</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="cp">%&gt;</span><span class="x"></span>
+</code></pre></div>
 <p>メタタグを設定するには<code>set_meta_tags</code>をコントローラ内またはビューファイルで利用する.
 例えばビューファイル内で設定するには以下のようにする.</p>
-
-<pre><code class="erb">&lt;% set_meta_tags :title =&gt; 'HogePiyoTitle' %&gt;
-</code></pre>
-
+<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="cp">&lt;%</span> <span class="n">set_meta_tags</span> <span class="ss">:title</span> <span class="o">=&gt;</span> <span class="s1">&#39;HogePiyoTitle&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</code></pre></div>
 <h3>設定しておくと良さそうなメタタグ</h3>
 
 <p>この辺は, テストでちゃんと設定されているかチェックしておけば
@@ -78,8 +69,7 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 <li>description (<code>:description</code>)</li>
 <li>keywords (<code>:keywords</code>)</li>
 <li>Canonical URL (<code>:canonical</code>)</li>
-</ul>
-</li>
+</ul></li>
 <li>Open Graph (<code>:og</code>)</li>
 <li>Twiter Cards (<code>:twitter</code>)</li>
 <li>Google Plus (Author Rank)
@@ -87,17 +77,14 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 <ul>
 <li>Author links (<code>:author</code>)</li>
 <li>Publisher links (<code>:publisher</code>)</li>
-</ul>
-</li>
+</ul></li>
 <li>必要に応じて
 
 <ul>
 <li>Pagination links (<code>:prev</code>, <code>:next</code>)</li>
 <li>Noindex, Nofollow</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <h2>SitemapGenerator</h2>
 
@@ -109,46 +96,39 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
 <h3>インストール</h3>
 
 <p>MetaTagsと同様Bundleでインストールを行う.</p>
-
-<pre><code class="ruby">gem 'sitemap_generator'
-</code></pre>
-
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s1">&#39;sitemap_generator&#39;</span>
+</code></pre></div>
 <p>次に, <code>config/sitemap.rb</code>を作成する. 以下のコマンドを実行する.</p>
-
-<pre><code>bundle exec rake sitemap:install
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">bundle exec rake sitemap:install
+</code></pre></div>
 <h3>使い方</h3>
 
 <p><code>config/sitemap.rb</code>以下に追加したいURLを<code>add</code>メソッドで行う.</p>
 
-<pre><code class="ruby config/sitemap.rb">SitemapGenerator::Sitemap.create do
+<p><code>ruby config/sitemap.rb
+SitemapGenerator::Sitemap.create do
   Article.all.each do |article|
-    add article_show_path(article), :priority =&gt; 0.7, :changefreq =&gt; 'weekly', :astmod =&gt; article.updated_at
+    add article_show_path(article), :priority =&gt; 0.7, :changefreq =&gt; &#39;weekly&#39;, :astmod =&gt; article.updated_at
   end
 end
-</code></pre>
+</code></p>
 
 <p>また, いろんな設定ができる.</p>
 
 <p>詳細は<a href="https://github.com/kjvarga/sitemap_generator#sitemap-configuration">https://github.com/kjvarga/sitemap_generator#sitemap-configuration</a>のSitemap Optionsより確認できる.</p>
-
-<pre><code class="ruby"># ホストを設定する
-SitemapGenerator::Sitemap.default_host = "http://example.com"
-# サイトマップを配置するディレクトリを設定する
-SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
-# インデックスサイトマップを作成するかどうか設定する
-SitemapGenerator::Sitemap.create_index = :auto
-</code></pre>
-
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># ホストを設定する</span>
+<span class="no">SitemapGenerator</span><span class="o">::</span><span class="no">Sitemap</span><span class="o">.</span><span class="n">default_host</span> <span class="o">=</span> <span class="s2">&quot;http://example.com&quot;</span>
+<span class="c1"># サイトマップを配置するディレクトリを設定する</span>
+<span class="no">SitemapGenerator</span><span class="o">::</span><span class="no">Sitemap</span><span class="o">.</span><span class="n">sitemaps_path</span> <span class="o">=</span> <span class="s1">&#39;sitemaps/&#39;</span>
+<span class="c1"># インデックスサイトマップを作成するかどうか設定する</span>
+<span class="no">SitemapGenerator</span><span class="o">::</span><span class="no">Sitemap</span><span class="o">.</span><span class="n">create_index</span> <span class="o">=</span> <span class="ss">:auto</span>
+</code></pre></div>
 <p>サイトマップの生成は, Rakeコマンドより行う.</p>
-
-<pre><code>rake sitemap:clean                      # サイトマップを削除する
+<div class="highlight"><pre><code class="language-text" data-lang="text">rake sitemap:clean                      # サイトマップを削除する
 rake sitemap:create                     # サイトマップを作成する(検索エンジンにpingを送らない)
 rake sitemap:refresh                    # サイトマップを作成し, 検索エンジンにpingを送る
 rake sitemap:refresh:no_ping            # サイトマップを作成する(検索エンジンにpingを送らない, たぶんsitemap:createと一緒?)
-</code></pre>
-]]></content>
+</code></pre></div>]]></content>
   </entry>
   
 </feed>

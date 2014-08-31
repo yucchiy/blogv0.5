@@ -4,7 +4,7 @@
   <title><![CDATA[Category: android | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-01T06:35:17+09:00</updated>
+  <updated>2014-09-01T06:39:08+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -32,17 +32,14 @@
 
 <ul>
 <li>iOSにないおもしろい機能</li>
-</ul>
-</li>
+</ul></li>
 <li>アプリ間での共有</li>
 <li>認証トークンを暗黙的に取得
 
 <ul>
 <li>無効化されるまでキャッシュ・自動的に取得</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <h3>使い方</h3>
 
@@ -51,22 +48,18 @@
 
 <ul>
 <li>account-authenticator という項目を追加</li>
-</ul>
-</li>
+</ul></li>
 <li><code>Service</code>を継承した, <code>AuthenticationService</code>
 
 <ul>
 <li>コピペで一瞬で書ける</li>
-</ul>
-</li>
+</ul></li>
 <li><code>AbstractAccountAuthenticaticator</code>を継承したクラスを作成
 
 <ul>
 <li><code>addAccount</code>, <code>getAuthToken</code>メソッドが重要</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <p>サンプルコードは, <a href="https://github.com/android/platform_development/tree/master/samples/SampleSyncAdapter">SampleSyncAdapter</a>にあるのでこれを見たらよい.</p>
 
@@ -77,7 +70,6 @@
 <li>認証失敗時にはAuthFailureError</li>
 <li>AuthenticatorをMockしてテストが可能</li>
 </ul>
-
 
 <h2>クックパッドの業務の話 @rejasupotaro さん</h2>
 
@@ -91,11 +83,9 @@
 
 <ul>
 <li>リリースエンジニアリングをコマンド一つでやったりできるっぽい</li>
-</ul>
-</li>
+</ul></li>
 <li>Android Frontier</li>
 </ul>
-
 
 <h3>イテレーション</h3>
 
@@ -104,10 +94,8 @@
 
 <ul>
 <li>だいたい100個くらい消化してる</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <h3>レビュー</h3>
 
@@ -117,16 +105,13 @@
 
 <ul>
 <li>10時に手付かずのPRがチャットに流れる</li>
-</ul>
-</li>
+</ul></li>
 <li>レビュー系はBotでいろいろ自動化
 
 <ul>
 <li>過去の経験からレビューにチェックリストをつける. 障害系のチェックに便利</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <h4>UIテスト</h4>
 
@@ -135,7 +120,6 @@
 <li>iOSは<a href="http://appium.io/">Appium</a>でシナリオが100個ある</li>
 </ul>
 
-
 <h4>ドックフーディング</h4>
 
 <ul>
@@ -143,17 +127,14 @@
 
 <ul>
 <li>ただあんまりうまく行ってない</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <h3>エラー監視</h3>
 
 <ul>
 <li>クラッシュリティクスでクラッシュ数と推移とクラッシュ確認(Crash Free Usersを99.n%以上にする)</li>
 </ul>
-
 
 <h3>リリースしすぎ問題</h3>
 
@@ -162,11 +143,9 @@
 
 <ul>
 <li>レビューでディスられるっぽい</li>
-</ul>
-</li>
+</ul></li>
 <li>LINEとFacebookは一ヶ月サイクル(?)</li>
 </ul>
-
 
 <h2>XML BY DESIGN デザイナがコードを書くとちょっと良いこと @yulily100 さん</h2>
 
@@ -181,12 +160,10 @@
 
 <ul>
 <li>プログラマとも相談する. 実装とかの兼ね合い</li>
-</ul>
-</li>
+</ul></li>
 <li>ユーザビリティテスト</li>
 <li>プログラマと一緒にやって, 前提を共有する</li>
 </ul>
-
 
 <h3>コードを書く</h3>
 
@@ -196,12 +173,10 @@
 <ul>
 <li>細かい相談をコメントで</li>
 <li>スクショはれるし便利</li>
-</ul>
-</li>
+</ul></li>
 <li>出し分けが必要になった時点で, pushしてエンジニアにやってもらう.</li>
 <li>全部終わったらレビューをお願いする. 良かったらマージ.</li>
 </ul>
-
 
 <h3>なにが良いか</h3>
 
@@ -210,12 +185,10 @@
 
 <ul>
 <li>動かないとわからないこともある</li>
-</ul>
-</li>
+</ul></li>
 <li>カンプを作らなくてもいいから, 無駄な時間を削減</li>
 <li>エンジニアとワイワイ出来る</li>
 </ul>
-
 
 <h2>オブジェクト指向やめましょう @kis さん</h2>
 
@@ -237,7 +210,6 @@
 <li>ミスを防止できる</li>
 </ul>
 
-
 <h3>作り方</h3>
 
 <p>AspectJを使うと作れる</p>
@@ -252,7 +224,6 @@
 <li><a href="https://github.com/square/retrofit">Retrofit</a></li>
 <li><a href="https://github.com/JakeWharton/butterknife">Butter knife</a></li>
 </ul>
-
 
 <h2>Android アプリ開発における Gradle ビルドシステム @nobuoka さん</h2>
 
@@ -271,7 +242,6 @@
 <li>最近は C/C++/Objective-Cもサポートされ始めた</li>
 </ul>
 
-
 <h4>利点と欠点</h4>
 
 <ul>
@@ -281,10 +251,8 @@
 
 <ul>
 <li>デバッグとか難しい</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-
 
 <h3>GradleやAndroid Gradle pluginの便利機能</h3>
 
@@ -295,11 +263,9 @@
 <ul>
 <li>Build types</li>
 <li>Product Flavors: 同じアプリから複数アプリ</li>
-</ul>
-</li>
+</ul></li>
 <li>BuildConfigのプロパティをビルド時に決定</li>
 </ul>
-
 
 <h3>Gradleプラグインの作り方</h3>
 
@@ -311,7 +277,6 @@
 <li>再利用可能</li>
 <li>Groovyでもかけるし, JavaやScalaでも書ける</li>
 </ul>
-
 
 <h2>感想とか</h2>
 
@@ -326,10 +291,9 @@
 <h2>参考資料</h2>
 
 <ul>
-<li><a href="http://yulily100.hatenablog.jp/entry/2014/08/27/112604">デザイナーがandroidのXMLコーディングをやる利点について発表しました - yulily100&rsquo;s blog</a></li>
+<li><a href="http://yulily100.hatenablog.jp/entry/2014/08/27/112604">デザイナーがandroidのXMLコーディングをやる利点について発表しました - yulily100&#39;s blog</a></li>
 <li><a href="http://vividcode.hatenablog.com/entry/study-meeting/kyoto-android-2014-08">発表資料: Android アプリ開発における Gradle ビルドシステム (京都 Android 勉強会 2014.08) - ひだまりソケットは壊れない</a></li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -353,20 +317,16 @@
 <h4>Android Studioのインストール</h4>
 
 <p>Android Studioは, Caskからコマンド一つでインストールできる.</p>
-
-<pre><code>brew cask install android-studio
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew cask install android-studio
+</code></pre></div>
 <p>またAndroid SDKは, Android Studioに入ってるものもあるが, スタンドアロンなSDKを用意しておく方が検証が楽そう. Homebrewを使ってる場合は, 以下のコマンドでインストールできる.</p>
-
-<pre><code>brew install android-studio
-</code></pre>
-
-<p>Android StudioからスタンドアロンなSDKにパスを通すには<code>Project Structure</code>(多分<code>Cmd +</code>で立ち上がるやつ)から,SDK Location > Android SDK Locationで設定できる. BrewでインストールしたSDKは<code>/user/local/Cellar/android-studio</code>に配置されている.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew install android-studio
+</code></pre></div>
+<p>Android StudioからスタンドアロンなSDKにパスを通すには<code>Project Structure</code>(多分<code>Cmd +</code>で立ち上がるやつ)から,SDK Location &gt; Android SDK Locationで設定できる. BrewでインストールしたSDKは<code>/user/local/Cellar/android-studio</code>に配置されている.</p>
 
 <h4>Android Studioの便利なショートカット</h4>
 
-<p>多分Eclipseにもあるんだろうけど<strong>便利なショートカットが豊富</strong>で, <code>Cmd + b</code>でクラスの定義元に飛んだり, Can&rsquo;t resolve errorが出てて, importするだけで解決するような場合は, 該当行に移動して<code>Alt + Shift</code>すると勝手にimportを行ってくれたり, クラスとかゲッター・セッターを自動で定義したかったら<code>Cmd + n</code>でいい感じにやってくれる. 多分他にもいろんな便利ショートカットが存在すると思うのでどんどん調べていきたい.</p>
+<p>多分Eclipseにもあるんだろうけど<strong>便利なショートカットが豊富</strong>で, <code>Cmd + b</code>でクラスの定義元に飛んだり, Can&#39;t resolve errorが出てて, importするだけで解決するような場合は, 該当行に移動して<code>Alt + Shift</code>すると勝手にimportを行ってくれたり, クラスとかゲッター・セッターを自動で定義したかったら<code>Cmd + n</code>でいい感じにやってくれる. 多分他にもいろんな便利ショートカットが存在すると思うのでどんどん調べていきたい.</p>
 
 <h3>動作確認</h3>
 

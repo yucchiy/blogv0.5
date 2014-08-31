@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chrome | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/chrome/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-01T06:35:17+09:00</updated>
+  <updated>2014-09-01T06:39:08+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -26,32 +26,25 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 
 <p>インストールする前に, 当然yeomanが必要なので, yeomanをインストールする. node.js, npmがインストールされていれば
 以下のコマンドでyeomanをインストールする.</p>
-
-<pre><code>npm install -g yo mocha
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">npm install -g yo mocha
+</code></pre></div>
 <p><code>generator-chrome-extension</code>では, デフォルトのテストフレームワークとして<code>mocha</code>を採用しているので, ついでにインストールしておくと良い.
 次に, <code>generator-chrome-extension</code>をインストールする. インストールは至って簡単で, 以下のコマンドでインストールする.</p>
-
-<pre><code>npm install -g generator-chrome-extension
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">npm install -g generator-chrome-extension
+</code></pre></div>
 <h2>使い方</h2>
 
 <p>まず, アプリのひな形を作成する. yeomanのコマンドを用いて作成する.</p>
-
-<pre><code>mkdir path-to-my-chrome-extension
+<div class="highlight"><pre><code class="language-text" data-lang="text">mkdir path-to-my-chrome-extension
 cd  path-to-my-chrome-extension
 yo chrome-extension
-</code></pre>
-
+</code></pre></div>
 <p>この時, アプリ名や初期アプリの構成を聞かれるので, 必要に応じてチェックをいれる.</p>
 
 <h3>ディレクトリ構成</h3>
 
 <p>ひな形作成時にすべてのチェックを外すと, 概ね以下のディレクトリ構成となる.</p>
-
-<pre><code>.
+<div class="highlight"><pre><code class="language-text" data-lang="text">.
 ├── Gruntfile.js
 ├── app
 │   ├── _locales
@@ -101,8 +94,7 @@ yo chrome-extension
     ├── index.html
     └── spec
         └── test.js
-</code></pre>
-
+</code></pre></div>
 <h3>Gruntタスク</h3>
 
 <p>ひな形作成時に, 様々なタスクが追加されているが, 主に開発で利用するタスクを紹介する.</p>
@@ -134,10 +126,8 @@ bowerでインストールした外部ライブラリの自動ロード, Sassや
 <h3>外部ライブラリの読み込み</h3>
 
 <p>外部ライブラリの読み込みは, <code>bower</code>を通じて行う. 例えば<a href="http://underscorejs.org/">underscore.js</a>を利用したい場合は以下のようにする.</p>
-
-<pre><code>bower install --save underscore
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">bower install --save underscore
+</code></pre></div>
 <p>すると<code>/app</code>ディレクトリにライブラリがインストールされ, 同時にライブラリを自動でロードされる.
 具体的には, <code>bower install</code>後に, <code>/app</code>ディレクトリ直下にあるHTMLファイルの, <code>&lt;!-- bower:css --&gt; &lt;!-- endbower --&gt;</code>, または<code>&lt;!-- bower:js --&gt; &lt;!-- endbower --&gt;</code>と記述された場所に追記が行われる.
 なので自分でHTMLファイルを追加する際には, <code>&lt;!-- bower:css --&gt;</code>と<code>&lt;!-- bower:js --&gt;</code>を適切な箇所に記述しておく必要がある.
@@ -160,7 +150,6 @@ bowerでインストールした外部ライブラリの自動ロード, Sassや
 <li><a href="https://developer.chrome.com/devtools/docs/integrating">DevTools Extensions API</a></li>
 <li><a href="http://kazu69.net/blog/tec/1969">YeomanをつかったChrome extension開発のメモ</a></li>
 </ul>
-
 ]]></content>
   </entry>
   

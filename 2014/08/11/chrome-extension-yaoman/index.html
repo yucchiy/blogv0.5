@@ -86,13 +86,11 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g yo mocha</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p><code>generator-chrome-extension</code>では, デフォルトのテストフレームワークとして<code>mocha</code>を採用しているので, ついでにインストールしておくと良い.
 次に, <code>generator-chrome-extension</code>をインストールする. インストールは至って簡単で, 以下のコマンドでインストールする.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g generator-chrome-extension</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <h2>使い方</h2>
 
@@ -104,7 +102,6 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 </pre></td><td class='code'><pre><code class=''><span class='line'>mkdir path-to-my-chrome-extension
 </span><span class='line'>cd  path-to-my-chrome-extension
 </span><span class='line'>yo chrome-extension</span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <p>この時, アプリ名や初期アプリの構成を聞かれるので, 必要に応じてチェックをいれる.</p>
 
@@ -213,7 +210,6 @@ Yeomanに<a href="https://github.com/yeoman/generator-chrome-extension">generato
 </span><span class='line'>    └── spec
 </span><span class='line'>        └── test.js</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <h3>Gruntタスク</h3>
 
 <p>ひな形作成時に, 様々なタスクが追加されているが, 主に開発で利用するタスクを紹介する.</p>
@@ -249,7 +245,6 @@ bowerでインストールした外部ライブラリの自動ロード, Sassや
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>bower install --save underscore</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>すると<code>/app</code>ディレクトリにライブラリがインストールされ, 同時にライブラリを自動でロードされる.
 具体的には, <code>bower install</code>後に, <code>/app</code>ディレクトリ直下にあるHTMLファイルの, <code>&lt;!-- bower:css --&gt; &lt;!-- endbower --&gt;</code>, または<code>&lt;!-- bower:js --&gt; &lt;!-- endbower --&gt;</code>と記述された場所に追記が行われる.
 なので自分でHTMLファイルを追加する際には, <code>&lt;!-- bower:css --&gt;</code>と<code>&lt;!-- bower:js --&gt;</code>を適切な箇所に記述しておく必要がある.
@@ -272,7 +267,6 @@ bowerでインストールした外部ライブラリの自動ロード, Sassや
 <li><a href="https://developer.chrome.com/devtools/docs/integrating">DevTools Extensions API</a></li>
 <li><a href="http://kazu69.net/blog/tec/1969">YeomanをつかったChrome extension開発のメモ</a></li>
 </ul>
-
 </div>
 
 </article>

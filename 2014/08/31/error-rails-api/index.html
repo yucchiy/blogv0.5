@@ -87,8 +87,7 @@
 <li>例外は各々のコントローラ内で例外のキャッチは行わず, すべてApplicationControllerなど, <strong>親コントローラ内の1メソッドで完結させる</strong></li>
 </ul>
 
-
-<p>かなーと思う. APIのエラー処理は, <a href="http://instagram.com/developer/endpoints/">Envelopeにステータスコードとエラーメッセージを書いて</a>, APIのフォーマットを統一するほうがクライアントが作りやすそうだし, またこのように処理することで, <strong>エラー処理での条件分岐の必要がなくなり</strong>, コントローラの可読性の向上にもつながる.</p>
+<p>かなーと思う. APIのエラー処理は, <a href="http://instagram.com/developer/endpoints/">Envelopeにステータスコードとエラーメッセージを書いて</a>, APIのフォーマットを統一するほうがクライアントが作りやすそうだし, またこのように処理することで, <strong>エラー処理での条件分岐の必要がなくなり</strong>, コントローラの可読性の向上にもつながる. </p>
 
 <h2>Grape vs Rails</h2>
 
@@ -115,7 +114,6 @@
 </span><span class='line'>  <span class="vi">@piyo</span> <span class="o">=</span> <span class="no">Piyo</span><span class="o">.</span><span class="n">find_by!</span><span class="p">(</span><span class="ss">:id</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <h2>ApplicationControllerでのエラー処理</h2>
 
@@ -191,7 +189,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>ポイントはすべての例外処理を<code>rescue_exception</code>で受け取るところである. この<code>rescue_exception</code>は投げられた例外によって, 適切なステータスコードとエラーメッセージをビューに渡すメソッドで, それらはEnvelopeとして出力される. 例えばRablのLayoutsで以下のように定義することでエラー出力する.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -206,7 +203,6 @@
 </span><span class='line'><span class="x">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>ここで, 例外に対応するステータスコードを以下のように引く.</p>
 
 <ol>
@@ -214,7 +210,6 @@
 <li>組み込みの例外（例えばActiveRecordのNotFoundException）の場合は, 例外に対応する<strong>ステータスコードの対応表から</strong>引く</li>
 <li>それ以外の例外の場合は500を返す</li>
 </ol>
-
 
 <p>1の場合は, <code>Api::Exceptions::RescuableException</code>を作成して, それを継承した独自の例外クラスを投げて対応する.</p>
 
@@ -252,7 +247,6 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
 <p>2の場合は, <code>RESCUEABLE_EXCEPTIONS</code>みたいなハッシュを作って対応する.</p>
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -262,7 +256,6 @@
 </span><span class='line'>  <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotFound</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span> <span class="o">=&gt;</span> <span class="no">Api</span><span class="o">::</span><span class="no">Exceptions</span><span class="o">::</span><span class="no">RescuableException</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Record Not Found&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
 
 <p>3の場合は, 上に2つの条件を満たさない場合に500を返すように<code>rescue_exception</code>メソッドを書くことで対応する.</p>
 
@@ -276,17 +269,11 @@
 
 <blockquote class="twitter-tweet"><p><a href="https://twitter.com/yucchiy_">@yucchiy_</a> Rack middlewareの中で例外発生したらどうしますか</p>&mdash; いもり手 (@r7kamura) <a href="https://twitter.com/r7kamura/statuses/506088448566915072">2014, 8月 31</a></blockquote>
 
-
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-
-
-
-<blockquote class="twitter-tweet" lang="ja"><p><a href="https://twitter.com/yucchiy_">@yucchiy_</a> 例えばありがちな問題として、RailsにContent-Type: application/jsonを指定しながら誤ったJSONを送ると、パース部分はRack middlewareで実装されているので、例外が発生して500が返ります (400とかにしたい)</p>&mdash; いもり手 (@r7kamura) <a href="https://twitter.com/r7kamura/statuses/506094476809367552">2014, 8月 31</a></blockquote>
-
+<blockquote class="twitter-tweet"><p><a href="https://twitter.com/yucchiy_">@yucchiy_</a> 例えばありがちな問題として、RailsにContent-Type: application/jsonを指定しながら誤ったJSONを送ると、パース部分はRack middlewareで実装されているので、例外が発生して500が返ります (400とかにしたい)</p>&mdash; いもり手 (@r7kamura) <a href="https://twitter.com/r7kamura/statuses/506094476809367552">2014, 8月 31</a></blockquote>
 
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-
 
 <p>確かに, <strong>Rack middlewareのこととか全く考慮できてなくてダメダメ</strong>って感じだった.</p>
 
