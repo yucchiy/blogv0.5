@@ -105,6 +105,7 @@ DEPENDENCIES
   rake (~> 10.0)
   rb-fsevent (~> 0.9)
   rdiscount (~> 2.0)
+  redcarpet
   ruby-oembed
   rubypants (~> 0.2.0)
   sass-globbing (~> 1.0.0)

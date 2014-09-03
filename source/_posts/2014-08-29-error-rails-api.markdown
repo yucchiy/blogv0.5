@@ -8,6 +8,9 @@ categories: api rails ruby
 
 [RailsでAPIを雑に書いていたんだけど](http://blog.yucchiy.com/2014/08/20/delivery-api-with-rails/), コントローラとかをどう書くとエラー処理しやすくなっていいかなーと考えていて, 個人的に考えがまとまったのでブログ書いた.
 
+
+※9/1に追記書いた.
+
 良いエラー処理について
 ----------------------
 
@@ -150,4 +153,20 @@ RESCUABLE_EXCEPTIONS = {
 
 ApplicationControllerで`Api::ErrorHandlers`を定義し, `rescue_exception`で例外処理することで, 開発速度が上がって良さそうだという個人的なエラー処理のまとめを書いてみた.
 
+追記
+----
+
+[@r7kamura](https://twitter.com/r7kamura)さんに, 以下のリプライを頂いて
+
+<blockquote class="twitter-tweet"><p><a href="https://twitter.com/yucchiy_">@yucchiy_</a> Rack middlewareの中で例外発生したらどうしますか</p>&mdash; いもり手 (@r7kamura) <a href="https://twitter.com/r7kamura/statuses/506088448566915072">2014, 8月 31</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet"><p><a href="https://twitter.com/yucchiy_">@yucchiy_</a> 例えばありがちな問題として、RailsにContent-Type: application/jsonを指定しながら誤ったJSONを送ると、パース部分はRack middlewareで実装されているので、例外が発生して500が返ります (400とかにしたい)</p>&mdash; いもり手 (@r7kamura) <a href="https://twitter.com/r7kamura/statuses/506094476809367552">2014, 8月 31</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+確かに, **Rack middlewareのこととか全く考慮できてなくてダメダメ**って感じだった.
+
+
+そして起きたら[RailsでAPIをつくるときのエラー処理](http://qiita.com/r7kamura/items/2e88adbdd1782277b2e7)っていうすごい知見がまとめられていた.
 
