@@ -4,13 +4,22 @@
   <title><![CDATA[Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-01T06:39:08+09:00</updated>
+  <updated>2014-09-04T08:54:00+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[unite-ghqとfile_recが便利]]></title>
+    <link href="http://blog.yucchiy.com/2014/09/04/unite-vim-ghq-filerec/"/>
+    <updated>2014-09-04T08:49:55+09:00</updated>
+    <id>http://blog.yucchiy.com/2014/09/04/unite-vim-ghq-filerec</id>
+    <content type="html"><![CDATA[<p>ソースコードの管理</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RailsでAPIを作るときのエラー処理について]]></title>

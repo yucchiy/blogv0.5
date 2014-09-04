@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://blog.yucchiy.com/2014/09/04/unite-vim-ghq-filerec/</loc>
+    <lastmod>2014-09-04T08:49:55+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.yucchiy.com/2014/08/31/error-rails-api/</loc>
     <lastmod>2014-08-31T20:20:27+09:00</lastmod>
     <priority>0.8</priority>
@@ -53,21 +59,21 @@
   
   <url>
     <loc>http://blog.yucchiy.com/blog/archives/</loc>
-    <lastmod>2014-09-01T06:39:08+09:00</lastmod>
+    <lastmod>2014-09-04T08:54:00+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/blog/</loc>
-    <lastmod>2014-09-01T06:39:08+09:00</lastmod>
+    <lastmod>2014-09-04T08:54:00+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/</loc>
-    <lastmod>2014-09-01T06:39:08+09:00</lastmod>
+    <lastmod>2014-09-04T08:54:00+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
