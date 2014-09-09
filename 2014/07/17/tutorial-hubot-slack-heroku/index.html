@@ -168,19 +168,11 @@ node-cronはnpmからインストールできる.</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nv">cron = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;cron&#39;</span><span class="p">).</span><span class="nx">CronJob</span>
 </span><span class='line'><span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
-</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">enter</span> <span class="nf">-&gt;</span>
-</span><span class='line'>  <span class="k">new</span> <span class="nx">cron</span>
-</span><span class='line'>    <span class="nv">cronTime: </span><span class="s">&quot;0 0 8 * * *&quot;</span>
-</span><span class='line'>    <span class="nv">start: </span><span class="kc">true</span>
-</span><span class='line'>    <span class="nv">timeZone: </span><span class="s">&quot;Asia/Tokyo&quot;</span>
-</span><span class='line'>    <span class="nv">onTick: </span><span class="nf">-&gt;</span>
-</span><span class='line'>      <span class="nx">robot</span><span class="p">.</span><span class="nx">messageRoom</span> <span class="s">&quot;#hogechannel&quot;</span><span class="p">,</span> <span class="s">&quot;おはよう朝だYo&quot;</span>
+</span><span class='line'>  <span class="k">new</span> <span class="nx">cron</span><span class="p">(</span><span class="s">&#39;0 0 8 * * *&#39;</span><span class="p">,</span> <span class="nf">() -&gt;</span>
+</span><span class='line'>    <span class="nx">robot</span><span class="p">.</span><span class="nx">messageRoom</span> <span class="s">&quot;#general&quot;</span><span class="p">,</span> <span class="s">&quot;おはよう朝だYo&quot;</span>
+</span><span class='line'>  <span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="s">&#39;Asia/Tokyo&#39;</span><span class="p">).</span><span class="nx">start</span><span class="p">()</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3>環境変数の受け取り方</h3>

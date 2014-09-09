@@ -4,7 +4,7 @@
   <title><![CDATA[Category: coffee | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/coffee/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-09T19:27:24+09:00</updated>
+  <updated>2014-09-09T19:38:43+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -80,13 +80,9 @@ node-cronはnpmからインストールできる.</p>
 <p>以下, 日本時間の8時に, <code>おはよう朝だYo</code>とつぶやくスクリプト例.</p>
 <div class="highlight"><pre><code class="language-coffee" data-lang="coffee"><span class="nv">cron = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;cron&#39;</span><span class="p">).</span><span class="nx">CronJob</span>
 <span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
-  <span class="nx">robot</span><span class="p">.</span><span class="nx">enter</span> <span class="nf">-&gt;</span>
-  <span class="k">new</span> <span class="nx">cron</span>
-    <span class="nv">cronTime: </span><span class="s">&quot;0 0 8 * * *&quot;</span>
-    <span class="nv">start: </span><span class="kc">true</span>
-    <span class="nv">timeZone: </span><span class="s">&quot;Asia/Tokyo&quot;</span>
-    <span class="nv">onTick: </span><span class="nf">-&gt;</span>
-      <span class="nx">robot</span><span class="p">.</span><span class="nx">messageRoom</span> <span class="s">&quot;#hogechannel&quot;</span><span class="p">,</span> <span class="s">&quot;おはよう朝だYo&quot;</span>
+  <span class="k">new</span> <span class="nx">cron</span><span class="p">(</span><span class="s">&#39;0 0 8 * * *&#39;</span><span class="p">,</span> <span class="nf">() -&gt;</span>
+    <span class="nx">robot</span><span class="p">.</span><span class="nx">messageRoom</span> <span class="s">&quot;#general&quot;</span><span class="p">,</span> <span class="s">&quot;おはよう朝だYo&quot;</span>
+  <span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="s">&#39;Asia/Tokyo&#39;</span><span class="p">).</span><span class="nx">start</span><span class="p">()</span>
 </code></pre></div>
 <h3>環境変数の受け取り方</h3>
 
