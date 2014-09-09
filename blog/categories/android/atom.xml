@@ -4,7 +4,7 @@
   <title><![CDATA[Category: android | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-04T08:54:00+09:00</updated>
+  <updated>2014-09-09T19:27:24+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -151,7 +151,7 @@
 
 <p>XMLをデザイナが書くといろいろ開発が幸せになる話.</p>
 
-<script async="true" class="speakerdeck-embed" data-id="dd195b300fbd0132c8492abbbf00bf60" src="//speakerdeck.com/assets/embed.js"> </script>
+<p><script async="true" class="speakerdeck-embed" data-id="dd195b300fbd0132c8492abbbf00bf60" src="//speakerdeck.com/assets/embed.js"> </script></p>
 
 <h3>UIをつくる</h3>
 
@@ -200,7 +200,7 @@
 
 <p>Javaの黒魔術: Annotationについて</p>
 
-<script async="true" class="speakerdeck-embed" data-id="45f2eb000cd301321e865e226fb19d76" src="//speakerdeck.com/assets/embed.js"> </script>
+<p><script async="true" class="speakerdeck-embed" data-id="45f2eb000cd301321e865e226fb19d76" src="//speakerdeck.com/assets/embed.js"> </script></p>
 
 <h3>良さ</h3>
 
@@ -229,7 +229,7 @@
 
 <p>Gradleについての知見.</p>
 
-<iframe src="http://www.slideshare.net/slideshow/embed_code/38432268 " width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="margin-top: 0px !important; border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen></iframe> 
+<p><iframe src="http://www.slideshare.net/slideshow/embed_code/38432268 " width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="margin-top: 0px !important; border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen></iframe> </p>
 
 <h3>GradleとAndroid アプリ開発</h3>
 
@@ -317,15 +317,11 @@
 <h4>Android Studioのインストール</h4>
 
 <p>Android Studioは, Caskからコマンド一つでインストールできる.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>brew cask install android-studio</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew cask install android-studio
+</code></pre></div>
 <p>またAndroid SDKは, Android Studioに入ってるものもあるが, スタンドアロンなSDKを用意しておく方が検証が楽そう. Homebrewを使ってる場合は, 以下のコマンドでインストールできる.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>brew install android-studio</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew install android-studio
+</code></pre></div>
 <p>Android StudioからスタンドアロンなSDKにパスを通すには<code>Project Structure</code>(多分<code>Cmd +</code>で立ち上がるやつ)から,SDK Location &gt; Android SDK Locationで設定できる. BrewでインストールしたSDKは<code>/user/local/Cellar/android-studio</code>に配置されている.</p>
 
 <h4>Android Studioの便利なショートカット</h4>
