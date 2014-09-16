@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: c++ | Yucchiy's blog]]></title>
+  <link href="http://blog.yucchiy.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="http://blog.yucchiy.com/"/>
+  <updated>2014-09-16T10:08:21+09:00</updated>
+  <id>http://blog.yucchiy.com/</id>
+  <author>
+    <name><![CDATA[yucchiy]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CLionでOpenCV]]></title>
+    <link href="http://blog.yucchiy.com/2014/09/16/clion-opencv/"/>
+    <updated>2014-09-16T01:00:23+09:00</updated>
+    <id>http://blog.yucchiy.com/2014/09/16/clion-opencv</id>
+    <content type="html"><![CDATA[<p>JetBrainsが最近C/C++用のIDEである<a href="http://www.jetbrains.com/clion/">CLion</a>をリリースしてて, いままでMac&amp;C++(主に研究でOpenCVを使う都合)の環境に困ってた僕に朗報だったので早速導入した.</p>
+
+<p>今回は, CLionでOpenCVを動かしてみたのでそのメモを備忘録代わりにブログに書いてみた.</p>
+
+<p>ちなみに動作環境は, Mac OS X Mavericks.</p>
+
+<h2>インストール</h2>
+
+<h3>OpenCVのインストール</h3>
+
+<p>OpenCVは, ビルドにCMakeを要するので, Homebrewとかでインストールしておく. 最近だと3.0.xが入るっぽい.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew install cmake
+</code></pre></div>
+<p>次にOpenCVをインストールする.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">mkdir tmp
+git clone git@github.com:Itseez/opencv.git
+cd opencv
+git checkout 2.4.9
+mkdir release
+cd release
+cmake  ../
+make
+make install
+</code></pre></div>
+<h2>CLionからOpenCVを利用する</h2>
+
+<p>まずおもむろにCLionからNew Projectを作成する. すると, <code>CMakeLists.txt</code>と<code>main.cpp</code>が作成される. OpenCVを上記の通りにビルドしている場合は,
+<code>CMakeLists.txt</code>で, <code>find_package(OpenCV)</code>を呼び出し, <code>target_link_libraries</code>で, OpenCVのライブラリを読み込むことで利用できる.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cmake_minimum_required(VERSION 3.0.0)
+project(sample_clion_opencv)
+
+find_package(OpenCV REQUIRED)
+
+set(SOURCE_FILES main.cpp)
+add_executable(sample_clion_opencv ${SOURCE_FILES})
+target_link_libraries(sample_clion_opencv ${OpenCV_LIBS})
+</code></pre></div>
+<p>試しに, SURF特徴を抽出して表示するサンプルを書いてみた.</p>
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;opencv2/opencv.hpp&gt;</span>
+<span class="cp">#include &lt;opencv2/nonfree/nonfree.hpp&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">image</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">imread</span><span class="p">(</span><span class="s">&quot;lena.png&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;No image data&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">initModule_features2d</span><span class="p">();</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">&gt;</span> <span class="n">detector</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">&gt;</span> <span class="n">extractor</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">KeyPoint</span><span class="o">&gt;</span> <span class="n">keypoints</span><span class="p">;</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">descriptor</span><span class="p">;</span>
+
+    <span class="n">detector</span><span class="o">-&gt;</span><span class="n">detect</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">);</span>
+    <span class="n">extractor</span><span class="o">-&gt;</span><span class="n">compute</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptor</span><span class="p">);</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">output</span><span class="p">;</span>
+    <span class="n">drawKeypoints</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+
+    <span class="n">imwrite</span><span class="p">(</span><span class="s">&quot;output.png&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>]]></content>
+  </entry>
+  
+</feed>
