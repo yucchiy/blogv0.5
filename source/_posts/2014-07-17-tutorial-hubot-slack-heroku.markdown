@@ -92,13 +92,9 @@ npm install cron --save
 ```coffee
 cron = require('cron').CronJob
 module.exports = (robot) ->
-  robot.enter ->
-  new cron
-    cronTime: "0 0 8 * * *"
-    start: true
-    timeZone: "Asia/Tokyo"
-    onTick: ->
-      robot.send {room: "#hogechannel"}, "おはよう朝だYo"
+  new cron('0 0 8 * * *', () ->
+    robot.messageRoom "#general", "おはよう朝だYo"
+  , null, true, 'Asia/Tokyo').start()
 ```
 
 ### 環境変数の受け取り方
