@@ -4,13 +4,70 @@
   <title><![CDATA[Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-09-16T10:08:21+09:00</updated>
+  <updated>2014-10-14T12:37:46+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyで簡単にバッチ処理の並列化を行う]]></title>
+    <link href="http://blog.yucchiy.com/2014/10/14/ruby-batch-parallel/"/>
+    <updated>2014-10-14T12:22:27+09:00</updated>
+    <id>http://blog.yucchiy.com/2014/10/14/ruby-batch-parallel</id>
+    <content type="html"><![CDATA[<p>研究のプログラムで, さくっと結果出したいけど, パラメータのチューニングも面倒なので,
+適当に指定したパラメータの組み合わせを与えて, プログラムを回したいことは結構多いと思う.</p>
+
+<p>その時に同じプログラムに異なるパラメータを投げて, そのバッチ実行を並列化したい, ということをRubyだと簡単にできるので紹介.
+ちなみに動作環境は, Mac OS X Mavericksで, Rubyは2.1.3を利用している.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;parallel&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">num_process</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">ps1</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
+</span><span class='line'><span class="n">ps2</span> <span class="o">=</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span>
+</span><span class='line'><span class="n">ps3</span> <span class="o">=</span> <span class="o">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Parallel</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">ps1</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">ps2</span><span class="p">,</span> <span class="n">ps3</span><span class="p">),</span> <span class="ss">:in_processes</span> <span class="o">=&gt;</span> <span class="n">num_thread</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">e</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">p1</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">p2</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">p3</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./hoge </span><span class="si">#{</span><span class="n">p1</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p2</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p3</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="n">cmd</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>ポイントは, <code>Parallel#each</code>に渡す配列を<code>Array#product</code>メソッドを用いて組み合わせを生成しているところで, こうすると, <code>ps1</code>, <code>ps2</code>, <code>ps3</code>のパラメータの組み合わせを簡単に列挙できる.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CLionでOpenCV]]></title>

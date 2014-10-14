@@ -1,0 +1,268 @@
+
+<!DOCTYPE HTML>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8">
+	<title>Rubyで簡単にバッチ処理の並列化を行う  | Yucchiy's blog</title>
+
+	<meta name="author" content="yucchiy">
+
+<meta name="description" content="ゆっち〜の個人技術ブログです。日々学んだことについて書きます。"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yucchiy's blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	
+
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Yucchiy's blog</a></h1>
+<span class="tagline">日々学んだことについて書きます。</span>
+<!-- <nav id="main-nav"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</nav> -->
+<!-- <nav id="mobile-nav"> -->
+<!-- 	<div class="alignleft menu"> -->
+<!-- 		<a class="button">Menu</a> -->
+<!-- 		<div class="container"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</div> -->
+<!-- 	</div> -->
+<!-- </nav> -->
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+  <header>
+    
+      <h1 class="entry-title">Rubyで簡単にバッチ処理の並列化を行う</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-14T12:22:27+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>研究のプログラムで, さくっと結果出したいけど, パラメータのチューニングも面倒なので,
+適当に指定したパラメータの組み合わせを与えて, プログラムを回したいことは結構多いと思う.</p>
+
+<p>その時に同じプログラムに異なるパラメータを投げて, そのバッチ実行を並列化したい, ということをRubyだと簡単にできるので紹介.
+ちなみに動作環境は, Mac OS X Mavericksで, Rubyは2.1.3を利用している.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;parallel&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">num_process</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">ps1</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
+</span><span class='line'><span class="n">ps2</span> <span class="o">=</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span>
+</span><span class='line'><span class="n">ps3</span> <span class="o">=</span> <span class="o">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Parallel</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">ps1</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">ps2</span><span class="p">,</span> <span class="n">ps3</span><span class="p">),</span> <span class="ss">:in_processes</span> <span class="o">=&gt;</span> <span class="n">num_thread</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">e</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">p1</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">p2</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">p3</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./hoge </span><span class="si">#{</span><span class="n">p1</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p2</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p3</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="n">cmd</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>ポイントは, <code>Parallel#each</code>に渡す配列を<code>Array#product</code>メソッドを用いて組み合わせを生成しているところで, こうすると, <code>ps1</code>, <code>ps2</code>, <code>ps3</code>のパラメータの組み合わせを簡単に列挙できる.</p>
+</div>
+
+</article>
+
+  
+<div class="share">
+  <ul>
+    <li>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.yucchiy.com/2014/10/14/ruby-batch-parallel/" data-via="yucchiy_" data-counturl="http://blog.yucchiy.com/2014/10/14/ruby-batch-parallel/" >Tweet</a>
+</li>
+
+    <li>
+  <div class="g-plusone" data-size="medium"></div>
+</li>
+
+    <li>
+  <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="simple-balloon" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</li>
+
+    <li>
+  <div class="fb-like" data-href="http://blog.yucchiy.com/2014/10/14/ruby-batch-parallel/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+</li>
+
+  </ul>
+</div>
+
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+	<footer id="footer" class="inner"><div class="about">
+  <a href="https://twitter.com/yucchiy_"><img src="https://s.gravatar.com/avatar/f218bd83250eeb22337db1ee6a45cccb?s=300"></img></a>
+  <h4>yucchiy</h4>
+  <p>和歌山大学でWebエンジニアとコンピュータビジョンの研究をしています.</p>
+  <ul class="social">
+    <li>
+      <a href="https://twitter.com/yucchiy_" target="_blank">
+        <i class="fa fa-twitter-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/yucchiy" target="_blank">
+        <i class="fa fa-facebook-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/yucchiy" target="_blank">
+        <i class="fa fa-github-square"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="copy">
+  &copy; 2014
+  <a href="http://yucchiy.com" target="_blank">
+    
+    yucchiy
+    
+  </a>
+</div>
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/hyphenator.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'yucchiysblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.yucchiy.com/2014/10/14/ruby-batch-parallel/';
+        var disqus_url = 'http://blog.yucchiy.com/2014/10/14/ruby-batch-parallel/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-36940311-7']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+</body>
+<script>
+  $(document).ready(function() {
+  // Make images center
+  $('p:has(img)').css('text-align', 'center');
+  });
+</script>
+
+
+<script type="text/javascript">
+(function(){
+  var twitterWidgets = document.createElement('script');
+  twitterWidgets.type = 'text/javascript';
+  twitterWidgets.async = true;
+  twitterWidgets.src = '//platform.twitter.com/widgets.js';
+  document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+})();
+</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</html>
