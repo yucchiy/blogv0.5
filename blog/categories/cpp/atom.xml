@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cpp | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/cpp/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-10-18T17:12:29+09:00</updated>
+  <updated>2014-10-18T17:49:17+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -12,5 +12,76 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[OpenCV3をSIFT・SURFを使えるようにインストールして使ってみる]]></title>
+    <link href="http://blog.yucchiy.com/2014/10/18/install-opencv3-with-contrib/"/>
+    <updated>2014-10-18T16:41:14+09:00</updated>
+    <id>http://blog.yucchiy.com/2014/10/18/install-opencv3-with-contrib</id>
+    <content type="html"><![CDATA[<p>OpenCV3-alphaが公開されて, せっかくだしアップデートして使ってみようと思ったらSIFT/SURFなどの局所特徴のモジュールが入っておらず,
+どうやらopencvのレポジトリとは別に<a href="https://github.com/Itseez/opencv_contrib">opencv_contrib</a>というレポジトリで管理されていたので,
+OpenCV3にopencv_contribモジュールを取り込んでインストールし, SURFを使うところまでを備忘録がわりにブログに書いた.</p>
+
+<p>検証環境はUbuntu14.04でgcc4.8.</p>
+
+<h2>インストール</h2>
+
+<p>まずはOpenCVをコンパイルする. OpenCV3のコンパイルにはCMakeの2.8.8以降が必要. Ubuntu14.04 だとデフォルトで2.8.8以降をaptでインストールできる.</p>
+
+<p>徐ろにgithubから<a href="https://github.com/Itseez/opencv/">Itseez/opencv</a>と<a href="https://github.com/Itseez/opencv_contrib/">Itseez/opencv_contrib</a>をダウンロードしてくる.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">mkdir tmp
+cd tmp
+git clone https://github.com/Itseez/opencv.git
+git clone https://github.com/Itseez/opencv_contrib.git
+</code></pre></div>
+<p>次にCMakeを使ってMakefileを生成, コンパイルしてインストール.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd opencv
+cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -DWITH_TBB=YES -DWITH_EIGEN=YES ../
+make -j5
+sudo make install
+</code></pre></div>
+<p>ポイントは<code>OPENCV_EXTRA_MODULES_PATH</code>に<code>opencv_contrib/modules</code>を指定しているところで, これで勝手にopencv_contribも取り込んでくれる. 便利.
+あとお好みに合わせてオプションを指定する. 上記だと, Intel TBBとEigenを利用できるようにしてる.</p>
+
+<h2>利用する</h2>
+
+<p>これでSIFTやSURFなどの局所特徴が利用できる. 注意点として, OpenCVにある<code>opencv2/features2d.hpp</code>をインクルードするだけではSIFTやSURFを利用できず,
+<code>opencv2/xfeatures2d/nonfree.hpp</code>をインクルードする必要がある. また, <code>cv::nonfree::initModule_xfeatures2d</code>を(<code>cv::initModule_features2d</code>ではなく)
+よんでやらないと, <code>cv::FeatureDetector::create</code>の呼び出しが失敗し, nullが返ってくるので注意.</p>
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;vector&gt;</span>
+
+<span class="cp">#include &lt;opencv2/core.hpp&gt;</span>
+<span class="cp">#include &lt;opencv2/imgcodecs.hpp&gt;</span>
+<span class="cp">#include &lt;opencv2/xfeatures2d.hpp&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">image</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">imread</span><span class="p">(</span><span class="s">&quot;lena.png&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;No image data&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">xfeatures2d</span><span class="o">::</span><span class="n">initModule_xfeatures2d</span><span class="p">();</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">&gt;</span> <span class="n">detector</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span><span class="err">↲</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">&gt;</span> <span class="n">extractor</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span><span class="err">↲</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">KeyPoint</span><span class="o">&gt;</span> <span class="n">keypoints</span><span class="p">;</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">descriptor</span><span class="p">;</span>
+
+    <span class="n">detector</span><span class="o">-&gt;</span><span class="n">detect</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">);</span>
+    <span class="n">extractor</span><span class="o">-&gt;</span><span class="n">compute</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptor</span><span class="p">);</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">output</span><span class="p">;</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">drawKeypoints</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">imwrite</span><span class="p">(</span><span class="s">&quot;output.png&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>]]></content>
+  </entry>
   
 </feed>
