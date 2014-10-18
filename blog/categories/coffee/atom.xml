@@ -4,7 +4,7 @@
   <title><![CDATA[Category: coffee | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/coffee/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-10-15T05:37:08+09:00</updated>
+  <updated>2014-10-18T17:12:29+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -31,30 +31,48 @@
 </ul>
 
 <p>Macの場合は, HomeBrewでインストールするのが楽.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">brew install node redis-server
-</code></pre></div>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install node redis-server</span></code></pre></td></tr></table></div></figure>
+
 <p><code>Hubot</code>は, npmからインストールできる.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">npm install -g coffee-script hubot
-</code></pre></div>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g coffee-script hubot</span></code></pre></td></tr></table></div></figure>
+
 <h2>Botを作成してみる</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">hubot --create mybot
-cd mybot
-npm install --save
-</code></pre></div>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>hubot --create mybot
+</span><span class='line'>cd mybot
+</span><span class='line'>npm install --save</span></code></pre></td></tr></table></div></figure>
+
 <h3>Gitでバージョン管理</h3>
 
 <p>はじめから<code>.gitignore</code>が用意されているので, おもむろにInitial commit.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">cd mybot
-git init
-git add .
-git commit -m &quot;Initial commit.&quot;
-</code></pre></div>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd mybot
+</span><span class='line'>git init
+</span><span class='line'>git add .
+</span><span class='line'>git commit -m "Initial commit."</span></code></pre></td></tr></table></div></figure>
+
 <h3>動作確認</h3>
-<div class="highlight"><pre><code class="language-text" data-lang="text">./bin/hubot
-Hubot&gt; hubot hi
-Hubot&gt; hi
-Hubot&gt; exit
-</code></pre></div>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./bin/hubot
+</span><span class='line'>Hubot&gt; hubot hi
+</span><span class='line'>Hubot&gt; hi
+</span><span class='line'>Hubot&gt; exit</span></code></pre></td></tr></table></div></figure>
+
 <h2>自作スクリプトを書く</h2>
 
 <p><code>scripts</code>ディレクトリ以下にスクリプトを設置する.</p>
@@ -65,25 +83,42 @@ Hubot&gt; exit
 この時関数に, <code>msg</code>オブジェクトが渡ってくるので, <code>msg.send</code>でBotを喋らせることができる.</p>
 
 <p>以下, <code>hoge</code>とつぶやいたら<code>piyo</code>とつぶやくBotの例.</p>
-<div class="highlight"><pre><code class="language-coffee" data-lang="coffee"><span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span><span class="err">↲</span>
-<span class="err">↲</span>
-<span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span><span class="err">↲</span>
-  <span class="nx">robot</span><span class="p">.</span><span class="nx">hear</span> <span class="sr">/hoge/i</span><span class="p">,</span> <span class="nf">(msg) -&gt;</span><span class="err">↲</span>
-    <span class="nx">msg</span><span class="p">.</span><span class="nx">send</span> <span class="s">&#39;piyo&#39;</span>
-</code></pre></div>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span><span class="err">↲</span>
+</span><span class='line'><span class="err">↲</span>
+</span><span class='line'><span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span><span class="err">↲</span>
+</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">hear</span> <span class="sr">/hoge/i</span><span class="p">,</span> <span class="nf">(msg) -&gt;</span><span class="err">↲</span>
+</span><span class='line'>    <span class="nx">msg</span><span class="p">.</span><span class="nx">send</span> <span class="s">&#39;piyo&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 <h3>特定の時間につぶやく(Cron)</h3>
 
 <p>node-cronモジュールを用いると, 簡単に定期実行処理をHubotに行わせることができる.
 node-cronはnpmからインストールできる.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">npm install cron --save
-</code></pre></div>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">cron</span> <span class="o">--</span><span class="nx">save</span>
+</span></code></pre></td></tr></table></div></figure>
+
 <p>以下, 日本時間の8時に, <code>おはよう朝だYo</code>とつぶやくスクリプト例.</p>
-<div class="highlight"><pre><code class="language-coffee" data-lang="coffee"><span class="nv">cron = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;cron&#39;</span><span class="p">).</span><span class="nx">CronJob</span>
-<span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
-  <span class="k">new</span> <span class="nx">cron</span><span class="p">(</span><span class="s">&#39;0 0 8 * * *&#39;</span><span class="p">,</span> <span class="nf">() -&gt;</span>
-    <span class="nx">robot</span><span class="p">.</span><span class="nx">messageRoom</span> <span class="s">&quot;#general&quot;</span><span class="p">,</span> <span class="s">&quot;おはよう朝だYo&quot;</span>
-  <span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="s">&#39;Asia/Tokyo&#39;</span><span class="p">).</span><span class="nx">start</span><span class="p">()</span>
-</code></pre></div>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nv">cron = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;cron&#39;</span><span class="p">).</span><span class="nx">CronJob</span>
+</span><span class='line'><span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
+</span><span class='line'>  <span class="k">new</span> <span class="nx">cron</span><span class="p">(</span><span class="s">&#39;0 0 8 * * *&#39;</span><span class="p">,</span> <span class="nf">() -&gt;</span>
+</span><span class='line'>    <span class="nx">robot</span><span class="p">.</span><span class="nx">messageRoom</span> <span class="s">&quot;#general&quot;</span><span class="p">,</span> <span class="s">&quot;おはよう朝だYo&quot;</span>
+</span><span class='line'>  <span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="s">&#39;Asia/Tokyo&#39;</span><span class="p">).</span><span class="nx">start</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
 <h3>環境変数の受け取り方</h3>
 
 <p><code>process.env</code>を使う</p>
@@ -94,25 +129,40 @@ node-cronはnpmからインストールできる.</p>
 Herokuが気軽で良いと判断し, Herokuをホスティングサーバーとしてみた.</p>
 
 <p>まずHerokuを利用するの必要なツールをbrewインストールする.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">brew install heroku-toolbelt
-</code></pre></div>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">brew</span> <span class="nx">install</span> <span class="nx">heroku</span><span class="o">-</span><span class="nx">toolbelt</span>
+</span></code></pre></td></tr></table></div></figure>
+
 <h4>HerokuにHubotをデプロイ</h4>
 
 <p><code>git push</code>でデプロイを行う.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">heroku create --stack cedar
-git push heroku master
-heroku addons:add rediscloud # Heroku上でVerifyしていないとエラー
-heroku ps:scale web=1
-</code></pre></div>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">heroku</span> <span class="nx">create</span> <span class="o">--</span><span class="nx">stack</span> <span class="nx">cedar</span>
+</span><span class='line'><span class="nx">git</span> <span class="nx">push</span> <span class="nx">heroku</span> <span class="nx">master</span>
+</span><span class='line'><span class="nx">heroku</span> <span class="nx">addons</span><span class="o">:</span><span class="nx">add</span> <span class="nx">rediscloud</span> <span class="c1"># Heroku上でVerifyしていないとエラー</span>
+</span><span class='line'><span class="nx">heroku</span> <span class="nx">ps</span><span class="o">:</span><span class="nx">scale</span> <span class="nx">web</span><span class="o">=</span><span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
 <h4>Herokuで運用してるHubotとSlackを連携</h4>
 
 <p>まず, SlackのIntegrationsからHubot連携して, <code>HUBOT_SLACK_TOKEN</code>を控えておく.
 次に, herokuコマンドで設定.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">heroku config:add HUBOT_SLACK_TOKEN=xxxx
-heroku config:add HUBOT_SLACK_TEAM=yucchiy
-heroku config:add HUBOT_SLACK_BOTNAME=yucchiy-bot
-heroku config:add HEROKU_URL=http://yucchiy.herokuapp.com/
-</code></pre></div>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nx">heroku</span> <span class="nx">config</span><span class="o">:</span><span class="nx">add</span> <span class="nx">HUBOT_SLACK_TOKEN</span><span class="o">=</span><span class="nx">xxxx</span>
+</span><span class='line'><span class="nx">heroku</span> <span class="nx">config</span><span class="o">:</span><span class="nx">add</span> <span class="nx">HUBOT_SLACK_TEAM</span><span class="o">=</span><span class="nx">yucchiy</span>
+</span><span class='line'><span class="nx">heroku</span> <span class="nx">config</span><span class="o">:</span><span class="nx">add</span> <span class="nx">HUBOT_SLACK_BOTNAME</span><span class="o">=</span><span class="nx">yucchiy</span><span class="o">-</span><span class="nx">bot</span>
+</span><span class='line'><span class="nx">heroku</span> <span class="nx">config</span><span class="o">:</span><span class="nx">add</span> <span class="nx">HEROKU_URL</span><span class="o">=</span><span class="nx">http</span><span class="o">:/</span><span class="sr">/yucchiy.herokuapp.com/</span>
+</span></code></pre></td></tr></table></div></figure>
+
 <p>他にも, 監視チャンネルを制御する設定もある.</p>
 
 <ul>
@@ -132,8 +182,11 @@ heroku config:add HEROKU_URL=http://yucchiy.herokuapp.com/
 <p>詳細は<a href="https://github.com/tinyspeck/hubot-slack">https://github.com/tinyspeck/hubot-slack</a>より確認できる.</p>
 
 <p>次に, <code>Procfile</code>をslackのアダプタをロードするように変更する.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">web: bin/hubot --adapter slack
-</code></pre></div>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="nv">web: </span><span class="nx">bin</span><span class="o">/</span><span class="nx">hubot</span> <span class="o">--</span><span class="nx">adapter</span> <span class="nx">slack</span>
+</span></code></pre></td></tr></table></div></figure>
+
 <p>上記を設定の上, herokuのmasterブランチにデプロイすることで, slack連携が行われるようになる.</p>
 
 <h2>参考URL</h2>
