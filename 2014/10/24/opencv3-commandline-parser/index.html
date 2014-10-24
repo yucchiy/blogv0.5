@@ -1,0 +1,412 @@
+
+<!DOCTYPE HTML>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8">
+	<title>OpenCV3のCommandLineParserを使って簡単にコマンドライン引数を受け取る  | Yucchiy's blog</title>
+
+	<meta name="author" content="yucchiy">
+
+<meta name="description" content="ゆっち〜の個人技術ブログです。日々学んだことについて書きます。"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yucchiy's blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	
+
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Yucchiy's blog</a></h1>
+<span class="tagline">日々学んだことについて書きます。</span>
+<!-- <nav id="main-nav"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</nav> -->
+<!-- <nav id="mobile-nav"> -->
+<!-- 	<div class="alignleft menu"> -->
+<!-- 		<a class="button">Menu</a> -->
+<!-- 		<div class="container"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</div> -->
+<!-- 	</div> -->
+<!-- </nav> -->
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+  <header>
+    
+      <h1 class="entry-title">OpenCV3のCommandLineParserを使って簡単にコマンドライン引数を受け取る</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-24T06:00:02+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>OpenCVには<code>CommandLineParser</code>というクラスが2.3.0以降から実装されており, これを用いることで特にオプション引数を簡単にパースすることができる.
+ただOpenCVの<code>CommandLineParser</code>は, <em>頻繁にその仕様が変わっており</em>, 特に日本語で調べると2.3, 2.4系の仕様について出てくるので,
+今回はOpenCV3の<code>CommandLineParser</code>を紹介する.</p>
+
+<h2>使い方</h2>
+
+<p><code>cv::CommandLineParser</code>は, <code>opencv2/core.hpp</code>で定義されているのでインクルードするようにする. (ただ, ほぼ確実にインクルードするファイルなのでまず忘れないと思う.)</p>
+
+<p>サンプルは以下のとおり.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;opencv2/core.hpp&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">keys</span> <span class="o">=</span>
+</span><span class='line'>    <span class="s">&quot;{help h usage |      | print this message   }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{@image1      |      | image1 for compare   }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{@image2      |      | image2 for compare   }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{@repeat      |1     | number               }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{path         |.     | path to file         }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{fps          | -1.0 | fps for output video }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{N count      |100   | count of objects     }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{ts timestamp |      | use time stamp       }&quot;</span>
+</span><span class='line'>    <span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">CommandLineParser</span> <span class="n">parser</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">keys</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">parser</span><span class="p">.</span><span class="n">about</span><span class="p">(</span><span class="s">&quot;A Sample of CommandLineParser&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">&quot;h&quot;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">parser</span><span class="p">.</span><span class="n">printMessage</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;N&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">double</span> <span class="n">fps</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;fps&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">path</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;path&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">bool</span> <span class="n">use_time_stamp</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">&quot;timestamp&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">img1</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">img2</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">parser</span><span class="p">.</span><span class="n">check</span><span class="p">())</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">parser</span><span class="p">.</span><span class="n">printErrors</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>以下のように使う.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="o">/</span><span class="n">app</span> <span class="o">-</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span> <span class="mf">1.</span><span class="n">png</span> <span class="mf">2.</span><span class="n">jpg</span> <span class="mi">19</span> <span class="o">-</span><span class="n">ts</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3>引数の指定</h3>
+
+<p>引数の指定は, <code>cv::String</code>で特定のフォーマットでコンストラクタに渡してやることで行う.
+フォーマットは以下のとおり.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="s">&quot;{ オプション名 | デフォルト引数 | オプションの説明 }&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>オプション名には, スペース区切りでオプションを複数指定できる. <code>cv::CommandLineParser</code>にはショートオプションとロングオプションの
+区別はなく, 例えば上の例だと<code>-h</code>でも<code>--h</code>でもヘルプが呼び出される.</p>
+
+<p>オプション名の先頭の@をつけると普通の引数として解釈される.</p>
+
+<p>デフォルト引数はそのままで, 何も指定しないとこの値が返却される.</p>
+
+<p>オプションの説明は, <code>printMessage</code>メソッドを呼び出した時に表示される説明. 例えば上記の例で<code>printMessage</code>を呼び出すと以下のようなメッセージが表示される.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">A</span> <span class="n">Sample</span> <span class="n">of</span> <span class="n">CommandLineParser</span>
+</span><span class='line'><span class="nl">Usage</span><span class="p">:</span> <span class="n">cmd</span> <span class="p">[</span><span class="n">params</span><span class="p">]</span> <span class="n">image1</span> <span class="n">image2</span> <span class="n">repeat</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="o">-</span><span class="n">N</span><span class="p">,</span> <span class="o">--</span><span class="n">count</span> <span class="p">(</span><span class="nl">value</span><span class="p">:</span><span class="mi">100</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">count</span> <span class="n">of</span> <span class="n">objects</span>
+</span><span class='line'>        <span class="o">--</span><span class="n">fps</span> <span class="p">(</span><span class="nl">value</span><span class="p">:</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">fps</span> <span class="k">for</span> <span class="n">output</span> <span class="n">video</span>
+</span><span class='line'>        <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span><span class="p">,</span> <span class="o">--</span><span class="n">usage</span> <span class="p">(</span><span class="nl">value</span><span class="p">:</span><span class="nb">true</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">print</span> <span class="k">this</span> <span class="n">message</span>
+</span><span class='line'>        <span class="o">--</span><span class="n">path</span> <span class="p">(</span><span class="nl">value</span><span class="p">:.)</span>
+</span><span class='line'>                <span class="n">path</span> <span class="n">to</span> <span class="n">file</span>
+</span><span class='line'>        <span class="o">--</span><span class="n">timestamp</span><span class="p">,</span> <span class="o">--</span><span class="n">ts</span>
+</span><span class='line'>                <span class="n">use</span> <span class="n">time</span> <span class="n">stamp</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">image1</span>
+</span><span class='line'>                <span class="n">image1</span> <span class="k">for</span> <span class="n">compare</span>
+</span><span class='line'>        <span class="n">image2</span>
+</span><span class='line'>                <span class="n">image2</span> <span class="k">for</span> <span class="n">compare</span>
+</span><span class='line'>        <span class="n">repeat</span> <span class="p">(</span><span class="nl">value</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">number</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3>引数の受け取り</h3>
+
+<p>引数の受け取りは, <code>get</code>メソッドを用いて行う. 引数に文字列を渡すと, それに対応したオプション引数の値を, int値を渡すと対応した引数を取得できる.
+テンプレート引数には受け取りたい型を指定する.</p>
+
+<p>オプション引数が指定されたかどうかを確認したい場合は, <code>has</code>メソッドを用いる事もできる. これはオプション引数が存在するかどうかをbool値で返すメソッドである.</p>
+
+<h3>引数のチェック</h3>
+
+<p><code>check</code>メソッドを実行すると, <code>get</code>メソッドで指定した型について, 正しい引数の値を渡したかどうかをチェックして, その結果をbool値で受け取ることができる.</p>
+
+<p>例えば上記のプログラムを, 以下のように実行した場合(つまり, 本来はint値を渡すところを文字列を渡した)</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="p">.</span><span class="o">/</span><span class="n">cmd</span> <span class="o">-</span><span class="n">N</span><span class="o">=</span><span class="n">hoge</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>以下の様なエラーを, <code>printErrors</code>メソッドにより出力することができる.</p>
+
+<p>このメソッドには1点注意が必要で, <strong>必ず<code>get</code>メソッドを呼び終わったあとに実行</strong>しないとチェックの結果が正しく返却されない.</p>
+
+<h3>まとめ</h3>
+
+<p><code>cv::CommandLineParser</code>を用いると, 簡単にコマンドライン引数を解析することができる.
+もちろんこれよりも高機能(?)なライブラリは存在するが, OpenCVのみの環境でコマンドラインツールを開発する際は手軽で良い.</p>
+
+<p>ただ個人的に, 引数の指定の際に必須であるかというチェックを行えて, かつ<code>check</code>メソッドでチェックできると良いなーと思った.</p>
+
+<h3>参考</h3>
+
+<ul>
+<li><a href="http://docs.opencv.org/trunk/modules/core/doc/command_line_parser.html">http://docs.opencv.org/trunk/modules/core/doc/command<em>line</em>parser.html</a></li>
+</ul>
+</div>
+
+</article>
+
+  
+<div class="share">
+  <ul>
+    <li>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser/" data-via="yucchiy_" data-counturl="http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser/" >Tweet</a>
+</li>
+
+    <li>
+  <div class="g-plusone" data-size="medium"></div>
+</li>
+
+    <li>
+  <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="simple-balloon" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</li>
+
+    <li>
+  <div class="fb-like" data-href="http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+</li>
+
+  </ul>
+</div>
+
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+	<footer id="footer" class="inner"><div class="about">
+  <a href="https://twitter.com/yucchiy_"><img src="https://s.gravatar.com/avatar/f218bd83250eeb22337db1ee6a45cccb?s=300"></img></a>
+  <h4>yucchiy</h4>
+  <p>和歌山大学でWebエンジニアとコンピュータビジョンの研究をしています.</p>
+  <ul class="social">
+    <li>
+      <a href="https://twitter.com/yucchiy_" target="_blank">
+        <i class="fa fa-twitter-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/yucchiy" target="_blank">
+        <i class="fa fa-facebook-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/yucchiy" target="_blank">
+        <i class="fa fa-github-square"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="copy">
+  &copy; 2014
+  <a href="http://yucchiy.com" target="_blank">
+    
+    yucchiy
+    
+  </a>
+</div>
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/hyphenator.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'yucchiysblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser/';
+        var disqus_url = 'http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-36940311-7']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+</body>
+<script>
+  $(document).ready(function() {
+  // Make images center
+  $('p:has(img)').css('text-align', 'center');
+  });
+</script>
+
+
+<script type="text/javascript">
+(function(){
+  var twitterWidgets = document.createElement('script');
+  twitterWidgets.type = 'text/javascript';
+  twitterWidgets.async = true;
+  twitterWidgets.src = '//platform.twitter.com/widgets.js';
+  document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+})();
+</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: cpp | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/cpp/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-10-18T17:49:17+09:00</updated>
+  <updated>2014-10-24T09:05:29+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -14,74 +14,113 @@
 
   
   <entry>
-    <title type="html"><![CDATA[OpenCV3をSIFT・SURFを使えるようにインストールして使ってみる]]></title>
-    <link href="http://blog.yucchiy.com/2014/10/18/install-opencv3-with-contrib/"/>
-    <updated>2014-10-18T16:41:14+09:00</updated>
-    <id>http://blog.yucchiy.com/2014/10/18/install-opencv3-with-contrib</id>
-    <content type="html"><![CDATA[<p>OpenCV3-alphaが公開されて, せっかくだしアップデートして使ってみようと思ったらSIFT/SURFなどの局所特徴のモジュールが入っておらず,
-どうやらopencvのレポジトリとは別に<a href="https://github.com/Itseez/opencv_contrib">opencv_contrib</a>というレポジトリで管理されていたので,
-OpenCV3にopencv_contribモジュールを取り込んでインストールし, SURFを使うところまでを備忘録がわりにブログに書いた.</p>
+    <title type="html"><![CDATA[OpenCV3のCommandLineParserを使って簡単にコマンドライン引数を受け取る]]></title>
+    <link href="http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser/"/>
+    <updated>2014-10-24T06:00:02+09:00</updated>
+    <id>http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser</id>
+    <content type="html"><![CDATA[<p>OpenCVには<code>CommandLineParser</code>というクラスが2.3.0以降から実装されており, これを用いることで特にオプション引数を簡単にパースすることができる.
+ただOpenCVの<code>CommandLineParser</code>は, <em>頻繁にその仕様が変わっており</em>, 特に日本語で調べると2.3, 2.4系の仕様について出てくるので,
+今回はOpenCV3の<code>CommandLineParser</code>を紹介する.</p>
 
-<p>検証環境はUbuntu14.04でgcc4.8.</p>
+<h2>使い方</h2>
 
-<h2>インストール</h2>
+<p><code>cv::CommandLineParser</code>は, <code>opencv2/core.hpp</code>で定義されているのでインクルードするようにする. (ただ, ほぼ確実にインクルードするファイルなのでまず忘れないと思う.)</p>
 
-<p>まずはOpenCVをコンパイルする. OpenCV3のコンパイルにはCMakeの2.8.8以降が必要. Ubuntu14.04 だとデフォルトで2.8.8以降をaptでインストールできる.</p>
+<p>サンプルは以下のとおり.</p>
 
-<p>徐ろにgithubから<a href="https://github.com/Itseez/opencv/">Itseez/opencv</a>と<a href="https://github.com/Itseez/opencv_contrib/">Itseez/opencv_contrib</a>をダウンロードしてくる.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mkdir tmp
-cd tmp
-git clone https://github.com/Itseez/opencv.git
-git clone https://github.com/Itseez/opencv_contrib.git
-</code></pre></div>
-<p>次にCMakeを使ってMakefileを生成, コンパイルしてインストール.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">cd opencv
-cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -DWITH_TBB=YES -DWITH_EIGEN=YES ../
-make -j5
-sudo make install
-</code></pre></div>
-<p>ポイントは<code>OPENCV_EXTRA_MODULES_PATH</code>に<code>opencv_contrib/modules</code>を指定しているところで, これで勝手にopencv_contribも取り込んでくれる. 便利.
-あとお好みに合わせてオプションを指定する. 上記だと, Intel TBBとEigenを利用できるようにしてる.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;opencv2/core.hpp&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">keys</span> <span class="o">=</span>
+</span><span class='line'>    <span class="s">&quot;{help h usage |      | print this message   }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{@image1      |      | image1 for compare   }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{@image2      |      | image2 for compare   }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{@repeat      |1     | number               }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{path         |.     | path to file         }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{fps          | -1.0 | fps for output video }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{N count      |100   | count of objects     }&quot;</span>
+</span><span class='line'>    <span class="s">&quot;{ts timestamp |      | use time stamp       }&quot;</span>
+</span><span class='line'>    <span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">CommandLineParser</span> <span class="n">parser</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">keys</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">parser</span><span class="p">.</span><span class="n">about</span><span class="p">(</span><span class="s">&quot;A Sample of CommandLineParser&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">&quot;h&quot;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">parser</span><span class="p">.</span><span class="n">printMessage</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;N&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">double</span> <span class="n">fps</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;fps&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">path</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;path&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">bool</span> <span class="n">use_time_stamp</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">has</span><span class="p">(</span><span class="s">&quot;timestamp&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">img1</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">String</span> <span class="n">img2</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">String</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">parser</span><span class="p">.</span><span class="n">check</span><span class="p">())</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">parser</span><span class="p">.</span><span class="n">printErrors</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2>利用する</h2>
+<p>まず<code>cv::CommandLineParser</code>を利用するには, <code>opencv2/core.hpp</code>をインクルードする.(ただほぼ必ずインクルードするので忘れないと思う.)</p>
 
-<p>これでSIFTやSURFなどの局所特徴が利用できる. 注意点として, OpenCVにある<code>opencv2/features2d.hpp</code>をインクルードするだけではSIFTやSURFを利用できず,
-<code>opencv2/xfeatures2d/nonfree.hpp</code>をインクルードする必要がある. また, <code>cv::nonfree::initModule_xfeatures2d</code>を(<code>cv::initModule_features2d</code>ではなく)
-よんでやらないと, <code>cv::FeatureDetector::create</code>の呼び出しが失敗し, nullが返ってくるので注意.</p>
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &lt;iostream&gt;</span>
-<span class="cp">#include &lt;vector&gt;</span>
+<p>引数の指定は, <code>cv::String</code>で特定のフォーマットでコンストラクタに渡してやることで行う.
+フォーマットは以下のとおり.</p>
 
-<span class="cp">#include &lt;opencv2/core.hpp&gt;</span>
-<span class="cp">#include &lt;opencv2/imgcodecs.hpp&gt;</span>
-<span class="cp">#include &lt;opencv2/xfeatures2d.hpp&gt;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-
-    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">image</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">imread</span><span class="p">(</span><span class="s">&quot;lena.png&quot;</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;No image data&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">cv</span><span class="o">::</span><span class="n">xfeatures2d</span><span class="o">::</span><span class="n">initModule_xfeatures2d</span><span class="p">();</span>
-
-    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">&gt;</span> <span class="n">detector</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span><span class="err">↲</span>
-    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">&gt;</span> <span class="n">extractor</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span><span class="err">↲</span>
-
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">KeyPoint</span><span class="o">&gt;</span> <span class="n">keypoints</span><span class="p">;</span>
-    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">descriptor</span><span class="p">;</span>
-
-    <span class="n">detector</span><span class="o">-&gt;</span><span class="n">detect</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">);</span>
-    <span class="n">extractor</span><span class="o">-&gt;</span><span class="n">compute</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptor</span><span class="p">);</span>
-
-    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">output</span><span class="p">;</span>
-    <span class="n">cv</span><span class="o">::</span><span class="n">drawKeypoints</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
-
-    <span class="n">cv</span><span class="o">::</span><span class="n">imwrite</span><span class="p">(</span><span class="s">&quot;output.png&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>]]></content>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="s">&quot;{ オプション名 | デフォルト引数 | オプションの説明 }&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+]]></content>
   </entry>
   
 </feed>

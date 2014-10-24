@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://blog.yucchiy.com/2014/10/24/opencv3-commandline-parser/</loc>
+    <lastmod>2014-10-24T06:00:02+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.yucchiy.com/2014/10/18/install-opencv3-with-contrib/</loc>
     <lastmod>2014-10-18T16:41:14+09:00</lastmod>
     <priority>0.8</priority>
@@ -77,21 +83,21 @@
   
   <url>
     <loc>http://blog.yucchiy.com/blog/archives/</loc>
-    <lastmod>2014-10-18T17:49:17+09:00</lastmod>
+    <lastmod>2014-10-24T09:05:29+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/blog/</loc>
-    <lastmod>2014-10-18T17:49:17+09:00</lastmod>
+    <lastmod>2014-10-24T09:05:29+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/</loc>
-    <lastmod>2014-10-18T17:49:17+09:00</lastmod>
+    <lastmod>2014-10-24T09:05:29+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
