@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clion | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/clion/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-10-24T09:05:29+09:00</updated>
+  <updated>2014-10-24T09:50:45+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -29,117 +29,64 @@
 <h3>OpenCVのインストール</h3>
 
 <p>OpenCVは, ビルドにCMakeを要するので, Homebrewとかでインストールしておく. 最近だと3.0.xが入るっぽい.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>brew install cmake</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">brew install cmake
+</code></pre></div>
 <p>次にOpenCVをインストールする.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir tmp
-</span><span class='line'>git clone git@github.com:Itseez/opencv.git
-</span><span class='line'>cd opencv
-</span><span class='line'>git checkout 2.4.9
-</span><span class='line'>mkdir release
-</span><span class='line'>cd release
-</span><span class='line'>cmake  ../
-</span><span class='line'>make
-</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">mkdir tmp
+git clone git@github.com:Itseez/opencv.git
+cd opencv
+git checkout 2.4.9
+mkdir release
+cd release
+cmake  ../
+make
+make install
+</code></pre></div>
 <h2>CLionからOpenCVを利用する</h2>
 
 <p>まずおもむろにCLionからNew Projectを作成する. すると, <code>CMakeLists.txt</code>と<code>main.cpp</code>が作成される. OpenCVを上記の通りにビルドしている場合は,
 <code>CMakeLists.txt</code>で, <code>find_package(OpenCV)</code>を呼び出し, <code>target_link_libraries</code>で, OpenCVのライブラリを読み込むことで利用できる.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">cmake_minimum_required(VERSION 3.0.0)
+project(sample_clion_opencv)
 
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cmake_minimum_required(VERSION 3.0.0)
-</span><span class='line'>project(sample_clion_opencv)
-</span><span class='line'>
-</span><span class='line'>find_package(OpenCV REQUIRED)
-</span><span class='line'>
-</span><span class='line'>set(SOURCE_FILES main.cpp)
-</span><span class='line'>add_executable(sample_clion_opencv ${SOURCE_FILES})
-</span><span class='line'>target_link_libraries(sample_clion_opencv ${OpenCV_LIBS})</span></code></pre></td></tr></table></div></figure></notextile></div>
+find_package(OpenCV REQUIRED)
 
+set(SOURCE_FILES main.cpp)
+add_executable(sample_clion_opencv ${SOURCE_FILES})
+target_link_libraries(sample_clion_opencv ${OpenCV_LIBS})
+</code></pre></div>
 <p>試しに, SURF特徴を抽出して表示するサンプルを書いてみた.</p>
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;opencv2/opencv.hpp&gt;</span>
+<span class="cp">#include &lt;opencv2/nonfree/nonfree.hpp&gt;</span>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;opencv2/opencv.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &lt;opencv2/nonfree/nonfree.hpp&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">image</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">imread</span><span class="p">(</span><span class="s">&quot;lena.png&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;No image data&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">initModule_features2d</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">&gt;</span> <span class="n">detector</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">&gt;</span> <span class="n">extractor</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">vector</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">KeyPoint</span><span class="o">&gt;</span> <span class="n">keypoints</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">descriptor</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">detector</span><span class="o">-&gt;</span><span class="n">detect</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">extractor</span><span class="o">-&gt;</span><span class="n">compute</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptor</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">output</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">drawKeypoints</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">imwrite</span><span class="p">(</span><span class="s">&quot;output.png&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-]]></content>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">image</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">imread</span><span class="p">(</span><span class="s">&quot;lena.png&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;No image data&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">initModule_features2d</span><span class="p">();</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">&gt;</span> <span class="n">detector</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">FeatureDetector</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">&gt;</span> <span class="n">extractor</span> <span class="o">=</span> <span class="n">cv</span><span class="o">::</span><span class="n">DescriptorExtractor</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SURF&quot;</span><span class="p">);</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">cv</span><span class="o">::</span><span class="n">KeyPoint</span><span class="o">&gt;</span> <span class="n">keypoints</span><span class="p">;</span>
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">descriptor</span><span class="p">;</span>
+
+    <span class="n">detector</span><span class="o">-&gt;</span><span class="n">detect</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">);</span>
+    <span class="n">extractor</span><span class="o">-&gt;</span><span class="n">compute</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">descriptor</span><span class="p">);</span>
+
+    <span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="n">output</span><span class="p">;</span>
+    <span class="n">drawKeypoints</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">keypoints</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+
+    <span class="n">imwrite</span><span class="p">(</span><span class="s">&quot;output.png&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>]]></content>
   </entry>
   
 </feed>
