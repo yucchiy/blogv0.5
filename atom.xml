@@ -4,13 +4,21 @@
   <title><![CDATA[Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-10-24T09:50:45+09:00</updated>
+  <updated>2014-10-28T04:41:46+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ChefのMySQLクックブックでNoMethodError: undefined method `sensitive' for Chef::Resource::Executeの対処]]></title>
+    <link href="http://blog.yucchiy.com/2014/10/28/chef-solo-mysql/"/>
+    <updated>2014-10-28T04:38:37+09:00</updated>
+    <id>http://blog.yucchiy.com/2014/10/28/chef-solo-mysql</id>
+    <content type="html"><![CDATA[]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OpenCV3のCommandLineParserを使って簡単にコマンドライン引数を受け取る]]></title>

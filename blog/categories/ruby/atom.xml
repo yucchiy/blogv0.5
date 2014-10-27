@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-10-24T09:50:45+09:00</updated>
+  <updated>2014-10-28T04:41:46+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -23,27 +23,49 @@
 
 <p>その時に同じプログラムに異なるパラメータを投げて, そのバッチ実行を並列化したい, ということをRubyだと簡単にできるので紹介.
 ちなみに動作環境は, Mac OS X Mavericksで, Rubyは2.1.3を利用している.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#!/usr/bin/env ruby</span>
 
-<span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
-<span class="nb">require</span> <span class="s1">&#39;parallel&#39;</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;parallel&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">num_process</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">ps1</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
+</span><span class='line'><span class="n">ps2</span> <span class="o">=</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span>
+</span><span class='line'><span class="n">ps3</span> <span class="o">=</span> <span class="o">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Parallel</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">ps1</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">ps2</span><span class="p">,</span> <span class="n">ps3</span><span class="p">),</span> <span class="ss">:in_processes</span> <span class="o">=&gt;</span> <span class="n">num_thread</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">e</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">p1</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">p2</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">p3</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./hoge </span><span class="si">#{</span><span class="n">p1</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p2</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p3</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="n">cmd</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<span class="n">num_process</span> <span class="o">=</span> <span class="mi">4</span>
-
-
-<span class="n">ps1</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
-<span class="n">ps2</span> <span class="o">=</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span>
-<span class="n">ps3</span> <span class="o">=</span> <span class="o">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="o">]</span>
-
-<span class="no">Parallel</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">ps1</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">ps2</span><span class="p">,</span> <span class="n">ps3</span><span class="p">),</span> <span class="ss">:in_processes</span> <span class="o">=&gt;</span> <span class="n">num_thread</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">e</span><span class="o">|</span>
-  <span class="n">p1</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
-  <span class="n">p2</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
-  <span class="n">p3</span> <span class="o">=</span> <span class="n">e</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span>
-
-  <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./hoge </span><span class="si">#{</span><span class="n">p1</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p2</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">p3</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="nb">system</span> <span class="n">cmd</span>
-<span class="k">end</span>
-</code></pre></div>
 <p>ポイントは, <code>Parallel#each</code>に渡す配列を<code>Array#product</code>メソッドを用いて組み合わせを生成しているところで, こうすると, <code>ps1</code>, <code>ps2</code>, <code>ps3</code>のパラメータの組み合わせを簡単に列挙できる.</p>
 ]]></content>
   </entry>
@@ -85,55 +107,103 @@
 <p>上記に上げたとおり, コントローラ内でモデルのCRUDなどの<strong>処理が失敗した場合</strong>は例外を投げてApplicationControllerに処理を渡す.</p>
 
 <p>例えば<code>show</code>メソッドでは以下のように処理する.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">show</span>
-  <span class="vi">@piyo</span> <span class="o">=</span> <span class="no">Piyo</span><span class="o">.</span><span class="n">find_by!</span><span class="p">(</span><span class="ss">:id</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre></div>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>  <span class="vi">@piyo</span> <span class="o">=</span> <span class="no">Piyo</span><span class="o">.</span><span class="n">find_by!</span><span class="p">(</span><span class="ss">:id</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <h2>ApplicationControllerでのエラー処理</h2>
 
 <p>以下のようなConcernを定義し, ApplicationControllerから読み込むことでエラー処理を行う.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Api::ErrorHandlers</span>
-  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
 
-  <span class="kp">attr_accessor</span> <span class="ss">:status</span><span class="p">,</span> <span class="ss">:message</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Api::ErrorHandlers</span>
+</span><span class='line'>  <span class="kp">extend</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Concern</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:status</span><span class="p">,</span> <span class="ss">:message</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">included</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before_filter</span> <span class="ss">:setup</span>
+</span><span class='line'>    <span class="n">rescue_from</span> <span class="no">StandardError</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:rescue_exception</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">rescue_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">rescuable?</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">re</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="no">Api</span><span class="o">::</span><span class="no">Exceptions</span><span class="o">::</span><span class="no">RescuableException</span><span class="p">)</span> <span class="p">?</span> <span class="n">e</span> <span class="p">:</span> <span class="no">RESCUABLE_EXCEPTIONS</span><span class="o">[</span><span class="n">e</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@status</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">status</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="vi">@status</span> <span class="o">=</span> <span class="mi">500</span>
+</span><span class='line'>      <span class="vi">@message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">render</span> <span class="s1">&#39;api/errors/base&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">rescuable?</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="no">Api</span><span class="o">::</span><span class="no">Exceptions</span><span class="o">::</span><span class="no">RescuableException</span><span class="p">)</span> <span class="o">||</span> <span class="no">RESCUABLE_EXCEPTIONS</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">setup</span>
+</span><span class='line'>    <span class="vi">@status</span> <span class="o">=</span> <span class="mi">200</span>
+</span><span class='line'>    <span class="vi">@message</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-  <span class="n">included</span> <span class="k">do</span>
-    <span class="n">before_filter</span> <span class="ss">:setup</span>
-    <span class="n">rescue_from</span> <span class="no">StandardError</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:rescue_exception</span>
-  <span class="k">end</span>
-
-  <span class="kp">private</span>
-
-  <span class="k">def</span> <span class="nf">rescue_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="vi">@message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span>
-    <span class="k">if</span> <span class="n">rescuable?</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-      <span class="n">re</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="no">Api</span><span class="o">::</span><span class="no">Exceptions</span><span class="o">::</span><span class="no">RescuableException</span><span class="p">)</span> <span class="p">?</span> <span class="n">e</span> <span class="p">:</span> <span class="no">RESCUABLE_EXCEPTIONS</span><span class="o">[</span><span class="n">e</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span>
-      <span class="vi">@status</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">status</span>
-    <span class="k">else</span>
-      <span class="vi">@status</span> <span class="o">=</span> <span class="mi">500</span>
-      <span class="vi">@message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span>
-    <span class="k">end</span>
-
-    <span class="n">render</span> <span class="s1">&#39;api/errors/base&#39;</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">rescuable?</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="no">Api</span><span class="o">::</span><span class="no">Exceptions</span><span class="o">::</span><span class="no">RescuableException</span><span class="p">)</span> <span class="o">||</span> <span class="no">RESCUABLE_EXCEPTIONS</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">setup</span>
-    <span class="vi">@status</span> <span class="o">=</span> <span class="mi">200</span>
-    <span class="vi">@message</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
 <p>ポイントはすべての例外処理を<code>rescue_exception</code>で受け取るところである. この<code>rescue_exception</code>は投げられた例外によって, 適切なステータスコードとエラーメッセージをビューに渡すメソッドで, それらはEnvelopeとして出力される. 例えばRablのLayoutsで以下のように定義することでエラー出力する.</p>
-<div class="highlight"><pre><code class="language-erb" data-lang="erb"><span class="x">{</span>
-<span class="x">  &quot;status&quot;: </span><span class="cp">&lt;%=</span> <span class="vi">@status</span><span class="o">.</span><span class="n">to_json</span><span class="o">.</span><span class="n">html_safe</span> <span class="cp">%&gt;</span><span class="x">,</span>
-<span class="x">  &quot;message&quot;: </span><span class="cp">&lt;%=</span> <span class="vi">@message</span><span class="o">.</span><span class="n">to_json</span><span class="o">.</span><span class="n">html_safe</span> <span class="cp">%&gt;</span><span class="x">,</span>
-<span class="x">  &quot;data&quot;: </span><span class="cp">&lt;%=</span> <span class="k">yield</span> <span class="cp">%&gt;</span><span class="x"></span>
-<span class="x">}</span>
-</code></pre></div>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">{</span>
+</span><span class='line'><span class="x">  &quot;status&quot;: </span><span class="cp">&lt;%=</span> <span class="vi">@status</span><span class="o">.</span><span class="n">to_json</span><span class="o">.</span><span class="n">html_safe</span> <span class="cp">%&gt;</span><span class="x">,</span>
+</span><span class='line'><span class="x">  &quot;message&quot;: </span><span class="cp">&lt;%=</span> <span class="vi">@message</span><span class="o">.</span><span class="n">to_json</span><span class="o">.</span><span class="n">html_safe</span> <span class="cp">%&gt;</span><span class="x">,</span>
+</span><span class='line'><span class="x">  &quot;data&quot;: </span><span class="cp">&lt;%=</span> <span class="k">yield</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <p>ここで, 例外に対応するステータスコードを以下のように引く.</p>
 
 <ol>
@@ -143,28 +213,51 @@
 </ol>
 
 <p>1の場合は, <code>Api::Exceptions::RescuableException</code>を作成して, それを継承した独自の例外クラスを投げて対応する.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Api::Exceptions</span>
-  <span class="k">class</span> <span class="nc">RescuableException</span> <span class="o">&lt;</span> <span class="no">StandardError</span>
-    <span class="kp">attr_accessor</span> <span class="ss">:status</span>
 
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">status</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Error&quot;</span><span class="p">)</span>
-      <span class="k">super</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-      <span class="vi">@status</span> <span class="o">=</span> <span class="n">status</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Api::Exceptions</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">RescuableException</span> <span class="o">&lt;</span> <span class="no">StandardError</span>
+</span><span class='line'>    <span class="kp">attr_accessor</span> <span class="ss">:status</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">status</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Error&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">super</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@status</span> <span class="o">=</span> <span class="n">status</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">UnAuthenticationException</span> <span class="o">&lt;</span> <span class="no">RescuableException</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">super</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-  <span class="k">class</span> <span class="nc">UnAuthenticationException</span> <span class="o">&lt;</span> <span class="no">RescuableException</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
-      <span class="k">super</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
 <p>2の場合は, <code>RESCUEABLE_EXCEPTIONS</code>みたいなハッシュを作って対応する.</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">RESCUABLE_EXCEPTIONS</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotFound</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span> <span class="o">=&gt;</span> <span class="no">Api</span><span class="o">::</span><span class="no">Exceptions</span><span class="o">::</span><span class="no">RescuableException</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Record Not Found&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">RESCUABLE_EXCEPTIONS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotFound</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span> <span class="o">=&gt;</span> <span class="no">Api</span><span class="o">::</span><span class="no">Exceptions</span><span class="o">::</span><span class="no">RescuableException</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Record Not Found&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <p>3の場合は, 上に2つの条件を満たさない場合に500を返すように<code>rescue_exception</code>メソッドを書くことで対応する.</p>
 
 <h2>まとめ</h2>

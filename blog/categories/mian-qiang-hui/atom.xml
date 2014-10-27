@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 勉強会 | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/mian-qiang-hui/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-10-24T09:50:45+09:00</updated>
+  <updated>2014-10-28T04:41:46+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -151,7 +151,7 @@
 
 <p>XMLをデザイナが書くといろいろ開発が幸せになる話.</p>
 
-<p><script async="true" class="speakerdeck-embed" data-id="dd195b300fbd0132c8492abbbf00bf60" src="//speakerdeck.com/assets/embed.js"> </script></p>
+<script async="true" class="speakerdeck-embed" data-id="dd195b300fbd0132c8492abbbf00bf60" src="//speakerdeck.com/assets/embed.js"> </script>
 
 <h3>UIをつくる</h3>
 
@@ -200,7 +200,7 @@
 
 <p>Javaの黒魔術: Annotationについて</p>
 
-<p><script async="true" class="speakerdeck-embed" data-id="45f2eb000cd301321e865e226fb19d76" src="//speakerdeck.com/assets/embed.js"> </script></p>
+<script async="true" class="speakerdeck-embed" data-id="45f2eb000cd301321e865e226fb19d76" src="//speakerdeck.com/assets/embed.js"> </script>
 
 <h3>良さ</h3>
 
@@ -229,7 +229,7 @@
 
 <p>Gradleについての知見.</p>
 
-<p><iframe src="http://www.slideshare.net/slideshow/embed_code/38432268 " width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="margin-top: 0px !important; border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen></iframe> </p>
+<iframe src="http://www.slideshare.net/slideshow/embed_code/38432268 " width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="margin-top: 0px !important; border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen></iframe> 
 
 <h3>GradleとAndroid アプリ開発</h3>
 
