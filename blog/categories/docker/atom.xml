@@ -4,7 +4,7 @@
   <title><![CDATA[Category: docker | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-12-30T19:55:36+09:00</updated>
+  <updated>2014-12-31T09:42:15+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -46,8 +46,6 @@
 
 <p>サンプルコードは, <a href="https://github.com/yucchiy/dockerized-rails-app">https://github.com/yucchiy/dockerized-rails-app</a> より確認できる.</p>
 
-<p>(<a href="https://twitter.com/y_uuk1">@y_uuki1</a>さんの<a href="https://github.com/y-uuki/dockerized-perl-app">サンプル</a>を参考（というかパクリ）にさせていただきました. ありがとうございます.)</p>
-
 <h2>準備</h2>
 
 <p>Railsアプリを開発するときにRedisやMySQLなどのミドルウェアが必要になった時, Railsアプリケーションのはいったコンテナに
@@ -59,57 +57,32 @@
 
 <p>まず, dockerでRailsの実行環境を構築する. 上記のサンプルを動作させるには, ruby 2.0.0 の実行環境が必要である.
 Ubuntu14.04上でそのような環境を構築するために, 以下の<code>Dockerfile</code>を用意し, ベースとなるイメージを用意する.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">FROM ubuntu:14.04
+ENV DEBIAN_FRONTEND noninteractive
 
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>FROM ubuntu:14.04
-</span><span class='line'>ENV DEBIAN_FRONTEND noninteractive
-</span><span class='line'>
-</span><span class='line'>RUN apt-get update && \
-</span><span class='line'>    apt-get install -yq --force-yes build-essential wget curl git ssh
-</span><span class='line'>
-</span><span class='line'>RUN apt-get install -yq --force-yes zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev && \
-</span><span class='line'>    apt-get clean
-</span><span class='line'>
-</span><span class='line'>RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
-</span><span class='line'>RUN git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build
-</span><span class='line'>RUN /root/.rbenv/plugins/ruby-build/install.sh
-</span><span class='line'>ENV PATH /root/.rbenv/bin:$PATH
-</span><span class='line'>RUN echo 'eval "$(rbenv init -)"' &gt;&gt; /etc/profile.d/rbenv.sh # or /etc/profile
-</span><span class='line'>RUN echo 'eval "$(rbenv init -)"' &gt;&gt; .bashrc
-</span><span class='line'>
-</span><span class='line'>ENV CONFIGURE_OPTS --disable-install-doc
-</span><span class='line'>ENV RUBY_VERSION 2.0.0-p598
-</span><span class='line'>
-</span><span class='line'>RUN rbenv install $RUBY_VERSION
-</span><span class='line'>RUN echo 'gem: --no-rdoc --no-ri' &gt;&gt; /.gemrc
-</span><span class='line'>RUN bash -l -c 'rbenv global $RUBY_VERSION; gem install bundler;'</span></code></pre></td></tr></table></div></figure></notextile></div>
+RUN apt-get update &amp;&amp; \
+    apt-get install -yq --force-yes build-essential wget curl git ssh
 
+RUN apt-get install -yq --force-yes zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev &amp;&amp; \
+    apt-get clean
+
+RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
+RUN git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build
+RUN /root/.rbenv/plugins/ruby-build/install.sh
+ENV PATH /root/.rbenv/bin:$PATH
+RUN echo &#39;eval &quot;$(rbenv init -)&quot;&#39; &gt;&gt; /etc/profile.d/rbenv.sh # or /etc/profile
+RUN echo &#39;eval &quot;$(rbenv init -)&quot;&#39; &gt;&gt; .bashrc
+
+ENV CONFIGURE_OPTS --disable-install-doc
+ENV RUBY_VERSION 2.0.0-p598
+
+RUN rbenv install $RUBY_VERSION
+RUN echo &#39;gem: --no-rdoc --no-ri&#39; &gt;&gt; /.gemrc
+RUN bash -l -c &#39;rbenv global $RUBY_VERSION; gem install bundler;&#39;
+</code></pre></div>
 <p>以下のコマンドでビルドを行う.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ docker build --tag=yucchiy/ruby:2.0.0 .</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ docker build --tag=yucchiy/ruby:2.0.0 .
+</code></pre></div>
 <p>このような用途のイメージは使いまわしやすいので, 上記のようにして, イメージを分割しておくと良い(更にいうと ベースとなるOSに
 gitやsshといった, どこでも使いそうなパッケージをインストールしたベースパッケージを用意しておくとGood).
 この時, <a href="https://github.com/y-uuki/dockerfiles/blob/master/perl/5.20.1/Dockerfile">イメージサイズを小さくする工夫しておく</a>
@@ -121,38 +94,22 @@ gitやsshといった, どこでも使いそうなパッケージをインスト
 <h3>アプリケーションを実行するためのコンテナの作成</h3>
 
 <p>上記のRubyコンテナを用いて, サンプルの実行環境を構築する. 具体的には以下の<code>Dockerfile</code>を用意する.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">FROM yucchiy/ruby:2.0.0
 
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>FROM yucchiy/ruby:2.0.0
-</span><span class='line'>
-</span><span class='line'>RUN \
-</span><span class='line'>    apt-get install -yq --force-yes mysql-client-5.5 libmysqlclient-dev libssl-dev nodejs && \
-</span><span class='line'>    apt-get clean
-</span><span class='line'>
-</span><span class='line'>RUN mkdir -p /app
-</span><span class='line'>WORKDIR /app
-</span><span class='line'>COPY ./sample_app_rails_4/Gemfile /app/Gemfile
-</span><span class='line'>RUN bash -l -c 'bundle install'
-</span><span class='line'>
-</span><span class='line'>COPY ./sample_app_rails_4 /app
-</span><span class='line'>
-</span><span class='line'>EXPOSE 3000
-</span><span class='line'>CMD bash -l -c 'bundle exec rails s'</span></code></pre></td></tr></table></div></figure></notextile></div>
+RUN \
+    apt-get install -yq --force-yes mysql-client-5.5 libmysqlclient-dev libssl-dev nodejs &amp;&amp; \
+    apt-get clean
 
+RUN mkdir -p /app
+WORKDIR /app
+COPY ./sample_app_rails_4/Gemfile /app/Gemfile
+RUN bash -l -c &#39;bundle install&#39;
+
+COPY ./sample_app_rails_4 /app
+
+EXPOSE 3000
+CMD bash -l -c &#39;bundle exec rails s&#39;
+</code></pre></div>
 <p>ポイントは<code>COPY ./sample_app_rails_4/Gemfile /app/Gemfile</code>で, 先に<code>Gemfile</code>をCOPYすることで,
 <code>Gemfile</code>に変更がない時は, <code>bundle install</code>のフルインストールを行わない
 <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">テクニック</a>を利用している.</p>
@@ -161,43 +118,24 @@ gitやsshといった, どこでも使いそうなパッケージをインスト
 
 <p>Figを用いて, 複数コンテナの管理をする. 具体的には<code>fig.yml</code>を用意する. 以下に, サンプルソースを, MySQLを用いて
 実行するための<code>fig.yml</code>の例を示す.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.6</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=himitsunopassword</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;3306&quot;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/storage/mysql:/var/lib/mysql</span>
-</span><span class='line'><span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">bash -l -c &#39;bundle exec rails server --port=3000 --binding=0.0.0.0&#39;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;3000:3000&quot;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./sample_app_rails_4:/app</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.6</span>
+  <span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=himitsunopassword</span>
+  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="s">&quot;3306&quot;</span>
+  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/storage/mysql:/var/lib/mysql</span>
+<span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">bash -l -c &#39;bundle exec rails server --port=3000 --binding=0.0.0.0&#39;</span>
+  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="s">&quot;3000:3000&quot;</span>
+  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./sample_app_rails_4:/app</span>
+  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
+</code></pre></div>
 <p><a href="http://www.fig.sh/yml.html">公式ドキュメント</a>と, <a href="http://www.fig.sh/rails.html">公式のRails環境の構築方法</a>を参考にした.</p>
 
 <p>今回, MySQLのコンテナとして, <a href="https://registry.hub.docker.com/_/mysql/">https://registry.hub.docker.com/_/mysql/</a>を用いた.
@@ -206,50 +144,30 @@ gitやsshといった, どこでも使いそうなパッケージをインスト
 ごっそり設定ファイルを入れ替えることができる.</p>
 
 <p>次に, 以下のコマンドでコンテナのビルドを行う.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ fig build</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ fig build
+</code></pre></div>
 <h3>データベースの設定</h3>
 
 <p>figで管理しているデータベースの設定は, <a href="https://docs.docker.com/userguide/dockerlinks/">環境変数を介して取得できる</a>.
 アプリケーションのコンテナに設定されている環境変数は, 以下のコマンドで確認できる.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ fig run web env</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ fig run web env
+</code></pre></div>
 <p>これを用いてデータベースの接続先を設定するには, 以下のように記述する.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql2</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sample_app_rails_4_development</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;DB_ENV_MYSQL_ROOT_PASSWORD&#39;] %&gt;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;DB_PORT_3306_TCP_ADDR&#39;] %&gt;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;DB_PORT_3306_TCP_PORT&#39;] %&gt;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5000</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql2</span>
+  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">sample_app_rails_4_development</span>
+  <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
+  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;DB_ENV_MYSQL_ROOT_PASSWORD&#39;] %&gt;</span>
+  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;DB_PORT_3306_TCP_ADDR&#39;] %&gt;</span>
+  <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%= ENV[&#39;DB_PORT_3306_TCP_PORT&#39;] %&gt;</span>
+  <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5000</span>
+</code></pre></div>
 <h3>データベースの作成・マイグレーション</h3>
 
 <p><code>fig run</code>を用いて, 以下のように行う.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ fig run web bash -l -c &#39;bundle exec rake db:create db:migrate&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ fig run web bash -l -c &#39;bundle exec rake db:create db:migrate&#39;
+</code></pre></div>
 <h3>Figによるコンテナの起動</h3>
 
 <p><code>fig up</code>で, 管理しているコンテナをまとめて起動できる. また, 個別に起動をすることも可能である.</p>
@@ -263,36 +181,23 @@ gitやsshといった, どこでも使いそうなパッケージをインスト
 <h3>Homebrewによるツールのインストール</h3>
 
 <p>今回想定する環境では, 今回利用するDocker・Boot2docker・Figは, いずれもHomebrewでインストールできる.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ brew install docker boot2docker fig</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ brew install docker boot2docker fig
+</code></pre></div>
 <h3>Boot2dockerのセットアップ</h3>
 
 <p>boot2dockerを利用するためには, まず初期化を行う.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ boot2docker init</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ boot2docker init
+</code></pre></div>
 <p>次に, boot2dockerに環境変数を設定する. 以下のコマンドを実行することで, 一括で設定を行うことができる.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$(boot2docker initshell)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$(boot2docker initshell)
+</code></pre></div>
 <p>以下を実行することで出力される設定をそのまま<code>.bashrc</code>に書いても良いが,
 <a href="http://qiita.com/deeeet/items/518704402e9bc5995ecc">このコマンドをシェル起動時都度実行する</a>ほうが良い.</p>
 
 <p>設定後は, 以下のコマンドでboot2dockerを操作できる.</p>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ boot2docker start</span> <span class="c1"># 起動</span>
-</span><span class='line'><span class="l-Scalar-Plain">$ boot2docker stop</span>  <span class="c1"># 終了</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ boot2docker start # 起動
+$ boot2docker stop  # 終了
+</code></pre></div>
 <h3>参考ページ</h3>
 
 <ul>

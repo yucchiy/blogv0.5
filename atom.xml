@@ -4,7 +4,7 @@
   <title><![CDATA[Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-12-30T19:55:36+09:00</updated>
+  <updated>2014-12-31T09:42:15+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -44,8 +44,6 @@
 <a href="https://github.com/yucchiy/sample_app_rails_4">いくつか変更を加えたもの</a>を用いた.</p>
 
 <p>サンプルコードは, <a href="https://github.com/yucchiy/dockerized-rails-app">https://github.com/yucchiy/dockerized-rails-app</a> より確認できる.</p>
-
-<p>(<a href="https://twitter.com/y_uuk1">@y_uuki1</a>さんの<a href="https://github.com/y-uuki/dockerized-perl-app">サンプル</a>を参考（というかパクリ）にさせていただきました. ありがとうございます.)</p>
 
 <h2>準備</h2>
 
