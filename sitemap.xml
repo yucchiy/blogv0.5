@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://blog.yucchiy.com/2015/01/12/shibathon-in-arima/</loc>
+    <lastmod>2015-01-12T19:07:22+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.yucchiy.com/2014/12/30/rails-docker-fig/</loc>
     <lastmod>2014-12-30T13:27:47+09:00</lastmod>
     <priority>0.8</priority>
@@ -95,21 +101,21 @@
   
   <url>
     <loc>http://blog.yucchiy.com/blog/archives/</loc>
-    <lastmod>2014-12-31T09:42:15+09:00</lastmod>
+    <lastmod>2015-01-13T12:12:55+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/blog/</loc>
-    <lastmod>2014-12-31T09:42:15+09:00</lastmod>
+    <lastmod>2015-01-13T12:12:55+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/</loc>
-    <lastmod>2014-12-31T09:42:15+09:00</lastmod>
+    <lastmod>2015-01-13T12:12:55+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

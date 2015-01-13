@@ -4,13 +4,38 @@
   <title><![CDATA[Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-12-31T09:42:15+09:00</updated>
+  <updated>2015-01-13T12:12:55+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
     
   </author>
 
+  
+  <entry>
+    <title type="html"><![CDATA[シバソンin有馬温泉に参加してきた]]></title>
+    <link href="http://blog.yucchiy.com/2015/01/12/shibathon-in-arima/"/>
+    <updated>2015-01-12T19:07:22+09:00</updated>
+    <id>http://blog.yucchiy.com/2015/01/12/shibathon-in-arima</id>
+    <content type="html"><![CDATA[<p>３連休を利用して, シバソンin有馬に参加した.</p>
+
+<h2>成果</h2>
+
+<p>修士論文の提出があったので, 基本は論文を進めつつ小さめの成果を出してた.</p>
+
+<p>ひとつは, <a href="https://mackerel.io/">Mackerel</a>というパフォーマンス管理サービスのPHP OPcacheプラグインを書いた.</p>
+
+<blockquote class="twitter-tweet"><p><a href="https://t.co/IMTjGFsKnv">https://t.co/IMTjGFsKnv</a> PRチャンスっぽい</p>&mdash; ゆ(の)っち〜 (@yucchiy_) <a href="https://twitter.com/yucchiy_/status/549141349207785473">2014, 12月 28</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet"><p><a href="https://t.co/IMTjGFsKnv">https://t.co/IMTjGFsKnv</a> PRチャンスっぽい</p>&mdash; ゆ(の)っち〜 (@yucchiy_) <a href="https://twitter.com/yucchiy_/status/549141349207785473">December 28, 2014</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>こんなことを年末につぶやいてたら, <a href="https://twitter.com/y_uuk1">@y_uuki1</a>さんにリプライいただいていたのを思い出して, チャンスだと思って書いた.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[FigでRailsの開発環境を構築する]]></title>
@@ -2143,7 +2168,7 @@ OpenGraph, Twitter Cards, などのタグもサポートしてくれている.
     <link href="http://blog.yucchiy.com/2014/06/23/hello-octopress/"/>
     <updated>2014-06-23T01:39:12+09:00</updated>
     <id>http://blog.yucchiy.com/2014/06/23/hello-octopress</id>
-    <content type="html"><![CDATA[<p>なんとなくOctopressに引っ越ししてみた. これからはこちらでブログを書く.</p>
+    <content type="html"><![CDATA[<p>なんとなくOctopressに引っ越ししてみた. これからはこちらでブログを書く. :beer:</p>
 ]]></content>
   </entry>
   

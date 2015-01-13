@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2014-12-31T09:42:15+09:00</updated>
+  <updated>2015-01-13T12:12:55+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -29,8 +29,10 @@
 <h2>解決法</h2>
 
 <p>knife-soloでは, bootstrap時に<code>--bootstrap-version</code>が指定できる. 以下のようにすることでバージョンを指定できた.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">bundle exec knife solo bootstrap hoge@piyo --bootstrap-version 11.16.4
-</code></pre></div>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec knife solo bootstrap hoge@piyo --bootstrap-version 11.16.4</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <h2>参考URL</h2>
 
 <ul>
