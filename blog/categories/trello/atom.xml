@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: trello | Yucchiy's blog]]></title>
+  <link href="http://blog.yucchiy.com/blog/categories/trello/atom.xml" rel="self"/>
+  <link href="http://blog.yucchiy.com/"/>
+  <updated>2015-01-14T08:53:13+09:00</updated>
+  <id>http://blog.yucchiy.com/</id>
+  <author>
+    <name><![CDATA[yucchiy]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[覚えておくと便利なTrelloのショートカット]]></title>
+    <link href="http://blog.yucchiy.com/2015/01/14/usefull-trello-shortcut/"/>
+    <updated>2015-01-14T08:45:06+09:00</updated>
+    <id>http://blog.yucchiy.com/2015/01/14/usefull-trello-shortcut</id>
+    <content type="html"><![CDATA[<p>仕事でTrelloを使う機会が多く, 最近では個人の用事もTrelloを使って管理し始めた.</p>
+
+<p>ところで, Trelloには<a href="https://trello.com/shortcuts">様々なショートカット</a>が用意されていて便利なのだが, 意外に知られて無くて, 覚えるとすぐに使える便利なショートカットがいくつか存在するので紹介する.</p>
+
+<h2>メンバーの自動補完</h2>
+
+<p>Trelloでは, <code>@username</code>と記述することで, メンバーの自動補完を行ってくれる機能が存在する.</p>
+
+<p>これはよく, コメントの記入時にメンション機能として使うことが多いが, 新しいカードを追加するときにこの機能を使うと,
+<strong>そのカードに指定したメンバーをアサインすることができる</strong>. 以下に使用例を示す.</p>
+]]></content>
+  </entry>
+  
+</feed>
