@@ -4,7 +4,7 @@
   <title><![CDATA[Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2015-01-14T08:53:13+09:00</updated>
+  <updated>2015-01-19T07:01:10+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -13,20 +13,392 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Laravel5をDockerで動かす]]></title>
+    <link href="http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/"/>
+    <updated>2015-01-16T07:53:58+09:00</updated>
+    <id>http://blog.yucchiy.com/2015/01/16/dockerized-laravel5</id>
+    <content type="html"><![CDATA[<p>Laravel5で構築したアプリケーションの開発環境をDocker化するための方法を紹介する.</p>
+
+<h2>準備</h2>
+
+<p>以下の環境でLaravel5が動作するように, 環境を構築する.</p>
+
+<ul>
+<li>OS
+
+<ul>
+<li>Ubuntu 14.04</li>
+</ul></li>
+<li>ミドルウェア
+
+<ul>
+<li>Nginx</li>
+<li>php-fpm 5.5</li>
+<li>MySQL 5.5</li>
+</ul></li>
+</ul>
+
+<h3>Laravel5のインストール</h3>
+
+<p>まず, laravel5をインストールする. インストールにはcomposerを用いる. create-projectの時に, <code>dev-develop</code>を指定するとインストールできる.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir dockerized-laravel5
+</span><span class='line'>cd dockerized-laravel5
+</span><span class='line'>composer create-project laravel/laravel application dev-develop</span></code></pre></td></tr></table></div></figure>
+
+<h2>PHPコンテナ</h2>
+
+<p>nginx+php-fpmな環境で, laravelが動作するようにDockerfileを記述する.</p>
+
+<p>Dockerでは, １コンテナ１プロセスにするのが好ましいが, 今回はnginxとphp-fpmを１コンテナで動かすために, <code>supervisord</code>をもちいる.</p>
+
+<p>Dockerfileは以下のとおり.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FROM ubuntu:14.04
+</span><span class='line'>
+</span><span class='line'>ENV DEBIAN_FRONTEND noninteractive
+</span><span class='line'>
+</span><span class='line'>RUN apt-get update
+</span><span class='line'>
+</span><span class='line'>RUN apt-get install -yq --force-yes build-essential wget curl git ssh nginx nodejs-legacy npm mysql-client supervisor
+</span><span class='line'>
+</span><span class='line'>RUN apt-get install -yq --force-yes  php5-cli php5 php5-fpm php5-mysql php5-curl php5-mcrypt php5-memcached && \
+</span><span class='line'>    apt-get clean && \
+</span><span class='line'>    rm -rf /var/lib/apt/lists/*
+</span><span class='line'>
+</span><span class='line'>RUN php5enmod mcrypt
+</span><span class='line'>
+</span><span class='line'>RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+</span><span class='line'>
+</span><span class='line'>RUN mkdir -p /app
+</span><span class='line'>WORKDIR /app
+</span><span class='line'>
+</span><span class='line'>ADD ./application/database /app/database
+</span><span class='line'>ADD ./application/tests /app/tests
+</span><span class='line'>ADD ./application/composer.json /app/composer.json
+</span><span class='line'>ADD ./application/composer.lock /app/composer.lock
+</span><span class='line'>RUN composer install --no-scripts
+</span><span class='line'>
+</span><span class='line'>ADD ./application /app
+</span><span class='line'>RUN php artisan clear-compiled
+</span><span class='line'>RUN php artisan optimize
+</span><span class='line'>
+</span><span class='line'>RUN usermod -u 1000 www-data
+</span><span class='line'>RUN groupmod -g 1000 www-data
+</span><span class='line'>
+</span><span class='line'>RUN chown -R www-data:www-data /app
+</span><span class='line'>
+</span><span class='line'>RUN echo "daemon off;" &gt;&gt; /etc/nginx/nginx.conf
+</span><span class='line'>ADD docker/nginx-site.conf /etc/nginx/sites-available/default
+</span><span class='line'>
+</span><span class='line'>ADD docker/supervisord.conf /etc/supervisord.conf
+</span><span class='line'>
+</span><span class='line'>EXPOSE 80
+</span><span class='line'>
+</span><span class='line'>CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]</span></code></pre></td></tr></table></div></figure>
+
+<p>supervisord.conf</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[unix_http_server]
+</span><span class='line'>file=/tmp/supervisor.sock
+</span><span class='line'>
+</span><span class='line'>[supervisord]
+</span><span class='line'>logfile=/tmp/supervisord.log
+</span><span class='line'>pidfile=/tmp/supervisord.pid
+</span><span class='line'>nodaemon=false
+</span><span class='line'>
+</span><span class='line'>[rpcinterface:supervisor]
+</span><span class='line'>supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+</span><span class='line'>
+</span><span class='line'>[supervisorctl]
+</span><span class='line'>serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL  for a unix socket
+</span><span class='line'>
+</span><span class='line'>[program:php5-fpm]
+</span><span class='line'>command=/usr/sbin/php5-fpm -c /etc/php5/fpm --nodaemonize
+</span><span class='line'>
+</span><span class='line'>[program:nginx]
+</span><span class='line'>command=/usr/sbin/nginx</span></code></pre></td></tr></table></div></figure>
+
+<p>このDockerfileのポイントについて説明する.</p>
+
+<h3>composer.jsonを先にADDする</h3>
+
+<p><code>ADD ./application /app</code>として, <code>RUN composer install</code>とすると, <code>composer.json</code>の変更の有無にかかわらず, <strong><code>./application</code>内のどれかのファイルが変更されるごとに</strong> <code>composer install</code>が走る.
+そこで, 先に<code>ADD ./application/composer.json /app/composer.json</code>と<code>RUN composer install</code>を行って, その後に<code>/application</code>を<code>ADD</code>することで, <code>composer.json</code>に変更がない場合は, その行がキャッシュされる.
+これは, <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">RubyのBundlerで紹介されているテクニック</a>をそのまま用いている.</p>
+
+<p>ただし, composerの場合はそのままではうまくいかない. 問題は２つある.</p>
+
+<ul>
+<li><code>composer.json</code>の<code>autoload</code>に指定された<code>classmap</code>に対応するクラスは, <code>composer install</code>時に存在する必要がある.</li>
+<li><code>composer install</code>後に, <code>composer.json</code>内の<code>scripts</code>に対応する処理が走る.</li>
+</ul>
+
+<p>この対処方法について述べる.</p>
+
+<h4>composerのautoloadに対応する</h4>
+
+<p>まず, <code>composer.json</code>のautoloadに対応する. といっても, <code>composer install</code>時に, autoloadが必要とするクラスが存在するだけでOKなので,
+<code>application</code>内の, <strong><code>database</code>と<code>tests</code>ディレクトリをADD</strong>すれば良い.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ADD ./application/database /app/database
+</span><span class='line'>ADD ./application/tests /app/tests</span></code></pre></td></tr></table></div></figure>
+
+<h4>composerのscriptsに対応する</h4>
+
+<p>comopserは, 各処理を実行後に, 処理を実行するためのフックが存在する. 具体的には<code>composer.json</code>内の<code>scripts</code>の項目の処理が実行される.</p>
+
+<p>laravelでは, <code>composer install</code>後に, 以下の処理が実行される.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>php artisan clear-compiled
+</span><span class='line'>php artisan optimize</span></code></pre></td></tr></table></div></figure>
+
+<p><code>artisan</code>は, laravelのコマンドラインツールだが, これは<strong>アプリケーションのレポジトリが存在しないと実行できない</strong>.
+上記のテクニックでは, <code>composer install</code>時には<code>./application</code>が存在しないため, <code>artisan</code>が正常に実行できず, エラーとなる.</p>
+
+<p>この問題を回避するには, composerの<code>--no-scripts</code>オプションを利用する. これは, scriptsの項目を実行しないオプションである.</p>
+
+<p>つまり, <code>composer install</code>を<code>--no-scripts</code>付きで実行し, <code>./application</code>をADDした後に, scriptsの項目の処理を実行すれば良い.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>RUN composer install --no-scripts
+</span><span class='line'>
+</span><span class='line'>ADD ./application /app
+</span><span class='line'>RUN php artisan clear-compiled
+</span><span class='line'>RUN php artisan optimize</span></code></pre></td></tr></table></div></figure>
+
+<h3>.dockerignore</h3>
+
+<h3>supervisord</h3>
+
+<p>特筆すべき点は無いが, nginxとphp-fpmをnodaemonで実行するように設定し, supervisordでプロセスを管理する.</p>
+
+<h3>fig.yml</h3>
+
+<p>以上のDockerfileからPHPコンテナを立ち上げるためのFigの設定を示す. <code>dockerized-laravel5</code>ディレクトリ直下に, 以下の様な内容の<code>fig.yml</code>を設置する.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;8080:80&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./application:/app</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>開発用途で利用するために, <code>volumes</code>項目に, <code>./application:/app</code>と記述する. こうすることで, ローカルでファイルを編集した内容が即座にDockerコンテナ内に反映される.</p>
+
+<h2>MySQLコンテナ</h2>
+
+<p><a href="http://blog.yucchiy.com/2014/12/30/rails-docker-fig/">この記事</a>と同様に, Docker Hub公式の<a href="https://registry.hub.docker.com/_/mysql/">https://registry.hub.docker.com/_/mysql/</a>を用いる.</p>
+
+<p><code>dockerized-laravel5</code>直下に<code>fig.xml</code>を用意し, 以下のように記述する.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.5</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=himitsunopassword</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;3306&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/storage/yucchiy/dockerized-laravel5/mysql:/var/lib/mysql</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>環境変数を<code>environment:</code>に設定することで, MySQLの設定を変更することができる. </p>
+
+<p>また, <code>my.cnf</code>などの設定を変更したい場合は, Dockerコンテナ内の<code>/etc/mysql</code>に, <strong>ローカルのディレクトリをマウントする</strong>ことで設定を置き換える方法もある(<code>/path/to/mysql:/etc/mysql</code>をvolumesに追記する).</p>
+
+<h3>PHPコンテナとMySQLコンテナのリンクと設定</h3>
+
+<p>Dockerのlink機能を用いて, PHPコンテナからMySQLコンテナ内のデータベースを利用できるようにする.</p>
+
+<p><code>fig.yml</code>に以下のように記述する.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>また, LaravelからMySQLコンテナのDBに接続するための設定は, 環境変数を経由して取得できる.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ docker exec -it dockerizedlaravel5_web_1 env</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_PORT_3306_TCP_ADDR=172.17.0.13</span>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_PORT_3306_TCP_PORT=3306</span>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_NAME=/dockerizedlaravel5_web_1/db_1</span>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_ENV_MYSQL_ROOT_PASSWORD=himitsunopassword</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>laravelのデータベースの設定は, <code>env</code>関数を利用して行う.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="s1">&#39;mysql&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s1">&#39;driver&#39;</span>    <span class="o">=&gt;</span> <span class="s1">&#39;mysql&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;host&#39;</span>      <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_1_PORT_3306_TCP_ADDR&#39;</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;database&#39;</span>  <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_DATABASE&#39;</span><span class="p">,</span> <span class="s1">&#39;forge&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;username&#39;</span>  <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_USERNAME&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;password&#39;</span>  <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_1_ENV_MYSQL_ROOT_PASSWORD&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;charset&#39;</span>   <span class="o">=&gt;</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;collation&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;utf8_unicode_ci&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;prefix&#39;</span>    <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;strict&#39;</span>    <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
+</span><span class='line'><span class="p">],</span>
+</span></code></pre></td></tr></table></div></figure>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[覚えておくと便利なTrelloのショートカット]]></title>
     <link href="http://blog.yucchiy.com/2015/01/14/usefull-trello-shortcut/"/>
     <updated>2015-01-14T08:45:06+09:00</updated>
     <id>http://blog.yucchiy.com/2015/01/14/usefull-trello-shortcut</id>
     <content type="html"><![CDATA[<p>仕事でTrelloを使う機会が多く, 最近では個人の用事もTrelloを使って管理し始めた.</p>
 
-<p>ところで, Trelloには<a href="https://trello.com/shortcuts">様々なショートカット</a>が用意されていて便利なのだが, 意外に知られて無くて, 覚えるとすぐに使える便利なショートカットがいくつか存在するので紹介する.</p>
+<p>ところで, Trelloには<a href="https://trello.com/shortcuts">様々なショートカット</a>が用意されていて便利である.</p>
 
-<h2>メンバーの自動補完</h2>
+<p>しかし, 意外に知られてないが, 覚えるとすぐに使える便利なショートカットがいくつか存在するので紹介する.</p>
+
+<h2>メンバーの補完</h2>
 
 <p>Trelloでは, <code>@username</code>と記述することで, メンバーの自動補完を行ってくれる機能が存在する.</p>
 
-<p>これはよく, コメントの記入時にメンション機能として使うことが多いが, 新しいカードを追加するときにこの機能を使うと,
-<strong>そのカードに指定したメンバーをアサインすることができる</strong>. 以下に使用例を示す.</p>
+<p>これは, コメントの記入時にメンション機能として使うことが多いが, 
+新しいカードを追加するときにこの機能を使うと, <strong>そのカードに指定したメンバーを割り当てることができる</strong>. 以下に使用例を示す.</p>
+
+<p><img src="http://blog.yucchiy.com/images/5e2218d93f687b3de6744ffed8157204.gif"></p>
+
+<h2>ラベルの補完</h2>
+
+<p>新しいカードを追加するときに, <code>#labelname</code>と記述することで, <strong>名前が<code>labelname</code>のラベルを割り当てる事ができる</strong>.</p>
+
+<p>もちろん, 複数ラベルを割り当てることも可能である.</p>
+
+<p><img src="http://blog.yucchiy.com/images/ee82851e5e27096456c158c268690272.gif"></p>
+
+<h2>場所の補完</h2>
+
+<p>新しいカードの追加の際に, <code>^position</code>と入力することで, <strong>カードを追加する位置を変更できる.</strong></p>
+
+<p><code>position</code>には, <code>top</code>や<code>bottom</code>などに加えて, <code>2nd</code>や<code>3rd</code>, <code>4th</code>などが指定できる.</p>
+
+<p>文字では説明しづらいので, 以下に使用例を示す.</p>
+
+<p><img src="http://blog.yucchiy.com/images/8722522bcda9d400e6d8d6b562a5c56b.gif"></p>
+
+<p>優先度の高いタスクを上において管理する事が多いと思うが, Trelloでは, <strong>新しいカードが下に追加されてしまうため</strong>,
+カードを追加した後に上にドラッグアンドドロップで持っていくorカードの詳細画面を開いて移動させることになるが,
+このショートカットを覚えておくと, わざわざそのような手間が省けて良い.</p>
+
+<h2>まとめ</h2>
+
+<p>カードを新しく追加する際に, 覚えておくと便利なショートカットを３つ紹介した.</p>
+
+<p>これらのショートカットは, 覚えるのが容易で, 覚えるとわざわざ<strong>カードの詳細画面を開くことなくカードの操作ができる</strong>
+ため, よりスムーズなカード追加を行うことが可能になる.</p>
 ]]></content>
   </entry>
   

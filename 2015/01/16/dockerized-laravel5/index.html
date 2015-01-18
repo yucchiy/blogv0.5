@@ -1,0 +1,631 @@
+
+<!DOCTYPE HTML>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8">
+	<title>Laravel5をDockerで動かす  | Yucchiy's blog</title>
+
+	<meta name="author" content="yucchiy">
+
+<meta name="description" content="ゆっち〜の個人技術ブログです。日々学んだことについて書きます。"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yucchiy's blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	
+
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Yucchiy's blog</a></h1>
+<span class="tagline">日々学んだことについて書きます。</span>
+<!-- <nav id="main-nav"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</nav> -->
+<!-- <nav id="mobile-nav"> -->
+<!-- 	<div class="alignleft menu"> -->
+<!-- 		<a class="button">Menu</a> -->
+<!-- 		<div class="container"><ul>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archives</a></li>
+	<li><a href="/contact">Contact</a></li>
+</ul>
+</div> -->
+<!-- 	</div> -->
+<!-- </nav> -->
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+  <header>
+    
+      <h1 class="entry-title">Laravel5をDockerで動かす</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-16T07:53:58+09:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Laravel5で構築したアプリケーションの開発環境をDocker化するための方法を紹介する.</p>
+
+<p>サンプルアプリケーションは<a href="https://github.com/yucchiy/dockerized-laravel5">こちら</a>で確認できる.</p>
+
+<h2>準備</h2>
+
+<p>以下の環境でLaravel5が動作するように, 環境を構築する.</p>
+
+<ul>
+<li>OS
+
+<ul>
+<li>Ubuntu 14.04</li>
+</ul></li>
+<li>ミドルウェア
+
+<ul>
+<li>Nginx</li>
+<li>php-fpm 5.5</li>
+<li>MySQL 5.5</li>
+</ul></li>
+</ul>
+
+<h3>Laravel5のインストール</h3>
+
+<p>まず, laravel5をインストールする. インストールにはcomposerを用いる. create-projectの時に, <code>dev-develop</code>を指定するとインストールできる.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir dockerized-laravel5
+</span><span class='line'>cd dockerized-laravel5
+</span><span class='line'>composer create-project laravel/laravel application dev-develop</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2>PHPコンテナ</h2>
+
+<p>nginx+php-fpmな環境で, laravelが動作するようにDockerfileを記述する.</p>
+
+<p>Dockerでは, １コンテナ１プロセスにするのが好ましいが, 今回はnginxとphp-fpmを１コンテナで動かすために, <code>supervisord</code>をもちいる.</p>
+
+<p>Dockerfileは以下のとおり.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FROM ubuntu:14.04
+</span><span class='line'>
+</span><span class='line'>ENV DEBIAN_FRONTEND noninteractive
+</span><span class='line'>
+</span><span class='line'>RUN apt-get update
+</span><span class='line'>
+</span><span class='line'>RUN apt-get install -yq --force-yes build-essential wget curl git ssh nginx nodejs-legacy npm mysql-client supervisor
+</span><span class='line'>
+</span><span class='line'>RUN apt-get install -yq --force-yes  php5-cli php5 php5-fpm php5-mysql php5-curl php5-mcrypt php5-memcached && \
+</span><span class='line'>    apt-get clean && \
+</span><span class='line'>    rm -rf /var/lib/apt/lists/*
+</span><span class='line'>
+</span><span class='line'>RUN php5enmod mcrypt
+</span><span class='line'>
+</span><span class='line'>RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+</span><span class='line'>
+</span><span class='line'>RUN mkdir -p /app
+</span><span class='line'>WORKDIR /app
+</span><span class='line'>
+</span><span class='line'>ADD ./application/database /app/database
+</span><span class='line'>ADD ./application/tests /app/tests
+</span><span class='line'>ADD ./application/composer.json /app/composer.json
+</span><span class='line'>ADD ./application/composer.lock /app/composer.lock
+</span><span class='line'>RUN composer install --no-scripts
+</span><span class='line'>
+</span><span class='line'>ADD ./application /app
+</span><span class='line'>RUN php artisan clear-compiled
+</span><span class='line'>RUN php artisan optimize
+</span><span class='line'>
+</span><span class='line'>RUN usermod -u 1000 www-data
+</span><span class='line'>RUN groupmod -g 1000 www-data
+</span><span class='line'>
+</span><span class='line'>RUN chown -R www-data:www-data /app
+</span><span class='line'>
+</span><span class='line'>RUN echo "daemon off;" &gt;&gt; /etc/nginx/nginx.conf
+</span><span class='line'>ADD docker/nginx-site.conf /etc/nginx/sites-available/default
+</span><span class='line'>
+</span><span class='line'>ADD docker/supervisord.conf /etc/supervisord.conf
+</span><span class='line'>
+</span><span class='line'>EXPOSE 80
+</span><span class='line'>
+</span><span class='line'>CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>supervisord.conf</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[unix_http_server]
+</span><span class='line'>file=/tmp/supervisor.sock
+</span><span class='line'>
+</span><span class='line'>[supervisord]
+</span><span class='line'>logfile=/tmp/supervisord.log
+</span><span class='line'>pidfile=/tmp/supervisord.pid
+</span><span class='line'>nodaemon=false
+</span><span class='line'>
+</span><span class='line'>[rpcinterface:supervisor]
+</span><span class='line'>supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+</span><span class='line'>
+</span><span class='line'>[supervisorctl]
+</span><span class='line'>serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL  for a unix socket
+</span><span class='line'>
+</span><span class='line'>[program:php5-fpm]
+</span><span class='line'>command=/usr/sbin/php5-fpm -c /etc/php5/fpm --nodaemonize
+</span><span class='line'>
+</span><span class='line'>[program:nginx]
+</span><span class='line'>command=/usr/sbin/nginx</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>このDockerfileのポイントについて説明する.</p>
+
+<h3>composer.jsonを先にADDする</h3>
+
+<p><code>ADD ./application /app</code>を行ったあとに<code>RUN composer install</code>とすると, <code>composer.json</code>の変更の有無にかかわらず, <strong><code>./application</code>内のどれかのファイルが変更されるごとに</strong> <code>composer install</code>が走る.
+そこで, 先に<code>ADD ./application/composer.json /app/composer.json</code>と<code>RUN composer install</code>を行って, その後に<code>/application</code>を<code>ADD</code>することで, <code>composer.json</code>に変更がない場合は, その行がキャッシュされる.
+これは, <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">RubyのBundlerで紹介されているテクニック</a>をそのまま用いている.</p>
+
+<p>ただし, composerの場合はそのままではうまくいかない. 問題は２つある.</p>
+
+<ul>
+<li><code>composer.json</code>の<code>autoload</code>に指定された<code>classmap</code>に対応するクラスは, <code>composer install</code>時に存在する必要がある.</li>
+<li><code>composer install</code>後に, <code>composer.json</code>内の<code>scripts</code>に記述された処理が実行される.</li>
+</ul>
+
+<p>この対処方法について述べる.</p>
+
+<h4>composerのautoloadに対応する</h4>
+
+<p>まず, <code>composer.json</code>のautoloadに対応する. といっても, <code>composer install</code>時にautoloadが必要とするクラスが存在するだけでOKなので,
+<code>application</code>内の, <strong><code>database</code>と<code>tests</code>ディレクトリをADD</strong>すれば良い.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ADD ./application/database /app/database
+</span><span class='line'>ADD ./application/tests /app/tests</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4>composerのscriptsに対応する</h4>
+
+<p>comopserは, 実行後に特定の処理を実行するためのフックが存在する. 具体的には<code>composer.json</code>内の<code>scripts</code>の項目の処理が実行される.</p>
+
+<p>laravelでは, <code>composer install</code>後に, 以下の処理が実行される.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>php artisan clear-compiled
+</span><span class='line'>php artisan optimize</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><code>artisan</code>は, laravelのコマンドラインツールだが, これは<strong>laravelのアプリケーションディレクトリが存在しないと実行できない</strong>.
+上記のテクニックでは, <code>composer install</code>時には<code>./application</code>内のすべてのファイルが存在しないため, <code>artisan</code>が正常に実行できずにエラーとなる.</p>
+
+<p>この問題は, <code>composer install</code>実行後に, <code>scripts</code>に記述された処理を行わず, <strong>laravelのアプリケーションディレクトリを追加後に, <code>scripts</code>の処理を行う</strong>ことで対処できる.</p>
+
+<p>具体的には, <code>composer install</code>を<code>--no-scripts</code>付きで実行し, <code>./application</code>をADDした後に, scriptsの項目の処理を実行する.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>RUN composer install --no-scripts
+</span><span class='line'>
+</span><span class='line'>ADD ./application /app
+</span><span class='line'>RUN php artisan clear-compiled
+</span><span class='line'>RUN php artisan optimize</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3>.dockerignore</h3>
+
+<p>Dockerfileとは直接は関係ないが, Dockerコンテナに含める必要のないファイルやディレクトリは, <code>.dockerignore</code>に記述することで, ADDやCOPYの対象から外れる.</p>
+
+<p><code>.git</code>などは省いておくのと, laravelアプリケーションディレクトリ内の, <strong><code>vendor</code>と<code>composer.lock</code>も対象から省いて</strong>おかないと, Dockerコンテナ側でビルドした内容と, Dockerホスト側のディレクトリには差異が生じて, アプリケーションが動かない可能性がある.</p>
+
+<h2>MySQLコンテナ</h2>
+
+<p><a href="http://blog.yucchiy.com/2014/12/30/rails-docker-fig/">この記事</a>と同様に, Docker Hub公式の<a href="https://registry.hub.docker.com/_/mysql/">https://registry.hub.docker.com/_/mysql/</a>を用いる.</p>
+
+<p><code>dockerized-laravel5</code>直下に<code>fig.xml</code>を用意し, 以下のように記述する.</p>
+
+<p>環境変数を<code>environment:</code>に設定することで, MySQLの設定を変更することができる. </p>
+
+<p>また, <code>my.cnf</code>などの設定を変更したい場合は, Dockerコンテナ内の<code>/etc/mysql</code>に, <strong>ローカルのディレクトリをマウントする</strong>ことで設定を置き換える方法もある(<code>/path/to/mysql:/etc/mysql</code>をvolumesに追記する).</p>
+
+<h2>fig.yml</h2>
+
+<p>以上のDockerfileからPHPコンテナを立ち上げるためのFigの設定を示す. <code>dockerized-laravel5</code>ディレクトリ直下に, 以下の様な内容の<code>fig.yml</code>を設置する.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:5.5</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=himitsunopassword</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;3306&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">/var/lib/mysql</span>
+</span><span class='line'><span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;8080:80&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./application:/app</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>開発用途で利用するために, <code>volumes</code>項目に, <code>./application:/app</code>と記述する. こうすることで, ローカルでファイルを編集した内容が即座にDockerコンテナ内に反映される.</p>
+
+<h3>PHPコンテナとMySQLコンテナのリンクと設定</h3>
+
+<p>上記の設定では, Dockerのlink機能を用いて, PHPコンテナからMySQLコンテナ内のデータベースを利用できるようになっている.</p>
+
+<p>アプリケーションからMySQLコンテナのDBに接続するための設定は, 環境変数を経由して取得できる.</p>
+
+<p>環境変数の一覧は, 以下のように確認できる.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ docker exec -it dockerizedlaravel5_web_1 env</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_PORT_3306_TCP_ADDR=172.17.0.13</span>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_PORT_3306_TCP_PORT=3306</span>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_NAME=/dockerizedlaravel5_web_1/db_1</span>
+</span><span class='line'><span class="l-Scalar-Plain">DB_1_ENV_MYSQL_ROOT_PASSWORD=himitsunopassword</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>laravelのデータベースの設定は, <code>env</code>関数を利用して行う.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="s1">&#39;mysql&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s1">&#39;driver&#39;</span>    <span class="o">=&gt;</span> <span class="s1">&#39;mysql&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;host&#39;</span>      <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_1_PORT_3306_TCP_ADDR&#39;</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;database&#39;</span>  <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_DATABASE&#39;</span><span class="p">,</span> <span class="s1">&#39;forge&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;username&#39;</span>  <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_USERNAME&#39;</span><span class="p">,</span> <span class="s1">&#39;root&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;password&#39;</span>  <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;DB_1_ENV_MYSQL_ROOT_PASSWORD&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="s1">&#39;charset&#39;</span>   <span class="o">=&gt;</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;collation&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;utf8_unicode_ci&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;prefix&#39;</span>    <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;strict&#39;</span>    <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
+</span><span class='line'><span class="p">],</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2>開発環境として利用する</h2>
+
+<p>figで管理しているコンテナの状態は, <code>fig ps</code>で確認できる.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="err">$</span> <span class="nx">fig</span> <span class="nx">ps</span>
+</span><span class='line'>          <span class="nx">Name</span>                        <span class="nx">Command</span>               <span class="nx">State</span>             <span class="nx">Ports</span>
+</span><span class='line'><span class="o">--------------------------------------------------------------------------------------------</span>
+</span><span class='line'><span class="nx">dockerizedlaravel5_db_1</span>    <span class="o">/</span><span class="nx">entrypoint</span><span class="o">.</span><span class="nx">sh</span> <span class="nx">mysqld</span>            <span class="k">Exit</span> <span class="mi">0</span>   <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">:</span><span class="mi">49153</span><span class="o">-&gt;</span><span class="mi">3306</span><span class="o">/</span><span class="nx">tcp</span>
+</span><span class='line'><span class="nx">dockerizedlaravel5_web_1</span>   <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">supervisord</span> <span class="o">-</span><span class="nx">n</span> <span class="o">-</span><span class="nx">c</span> <span class="o">...</span>   <span class="k">Exit</span> <span class="mi">0</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>起動は, <code>fig up</code>で行う.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="err">$</span> <span class="nx">fig</span> <span class="nx">up</span>
+</span><span class='line'><span class="nx">Recreating</span> <span class="nx">dockerizedlaravel5<em>db</em>1</span><span class="o">...</span>
+</span><span class='line'><span class="nx">Recreating</span> <span class="nx">dockerizedlaravel5<em>web</em>1</span><span class="o">...</span>
+</span><span class='line'><span class="nx">Attaching</span> <span class="nx">to</span> <span class="nx">dockerizedlaravel5<em>db</em>1</span><span class="p">,</span> <span class="nx">dockerizedlaravel5<em>web</em>1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>起動中のコンテナでコマンドを実行するには<code>docker exec</code>を利用する.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="err">$</span> <span class="nx">docker</span> <span class="nb">exec</span> <span class="nx">dockerizedlaravel5_web_1</span> <span class="o">./</span><span class="nx">artisan</span> <span class="nx">route</span><span class="o">:</span><span class="k">list</span>
+</span><span class='line'><span class="o">+--------+--------------------------------+-------------------------------------------------------+------+------------------------------------------------------------+------------+</span>
+</span><span class='line'><span class="o">|</span> <span class="nx">Domain</span> <span class="o">|</span> <span class="nx">Method</span>                         <span class="o">|</span> <span class="nx">URI</span>                                                   <span class="o">|</span> <span class="nx">Name</span> <span class="o">|</span> <span class="nx">Action</span>                                                     <span class="o">|</span> <span class="nx">Middleware</span> <span class="o">|</span>
+</span><span class='line'><span class="o">+--------+--------------------------------+-------------------------------------------------------+------+------------------------------------------------------------+------------+</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span>                       <span class="o">|</span> <span class="o">/</span>                                                     <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\WelcomeController</span><span class="o">@</span><span class="nx">index</span>               <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span>                       <span class="o">|</span> <span class="nx">home</span>                                                  <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\HomeController</span><span class="o">@</span><span class="nx">index</span>                  <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span>                       <span class="o">|</span> <span class="nx">auth</span><span class="o">/</span><span class="nx">register</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span>  <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\AuthController</span><span class="o">@</span><span class="nx">getRegister</span>       <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">POST</span>                           <span class="o">|</span> <span class="nx">auth</span><span class="o">/</span><span class="nx">register</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span>  <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\AuthController</span><span class="o">@</span><span class="nx">postRegister</span>      <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span>                       <span class="o">|</span> <span class="nx">auth</span><span class="o">/</span><span class="nx">login</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span>     <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\AuthController</span><span class="o">@</span><span class="nx">getLogin</span>          <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">POST</span>                           <span class="o">|</span> <span class="nx">auth</span><span class="o">/</span><span class="nx">login</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span>     <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\AuthController</span><span class="o">@</span><span class="nx">postLogin</span>         <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span>                       <span class="o">|</span> <span class="nx">auth</span><span class="o">/</span><span class="nx">logout</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span>    <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\AuthController</span><span class="o">@</span><span class="nx">getLogout</span>         <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span><span class="o">|</span><span class="nx">POST</span><span class="o">|</span><span class="nx">PUT</span><span class="o">|</span><span class="nx">PATCH</span><span class="o">|</span><span class="nx">DELETE</span> <span class="o">|</span> <span class="nx">auth</span><span class="o">/</span><span class="p">{</span><span class="nx">_missing</span><span class="p">}</span>                                       <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\AuthController</span><span class="o">@</span><span class="nx">missingMethod</span>     <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span>                       <span class="o">|</span> <span class="nx">password</span><span class="o">/</span><span class="nx">email</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span> <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\PasswordController</span><span class="o">@</span><span class="nx">getEmail</span>      <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">POST</span>                           <span class="o">|</span> <span class="nx">password</span><span class="o">/</span><span class="nx">email</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span> <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\PasswordController</span><span class="o">@</span><span class="nx">postEmail</span>     <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span>                       <span class="o">|</span> <span class="nx">password</span><span class="o">/</span><span class="nb">reset</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span> <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\PasswordController</span><span class="o">@</span><span class="nx">getReset</span>      <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">POST</span>                           <span class="o">|</span> <span class="nx">password</span><span class="o">/</span><span class="nb">reset</span><span class="o">/</span><span class="p">{</span><span class="nx">one</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">two</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">three</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">four</span><span class="o">?</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="nx">five</span><span class="o">?</span><span class="p">}</span> <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\PasswordController</span><span class="o">@</span><span class="nx">postReset</span>     <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">|</span>        <span class="o">|</span> <span class="nx">GET</span><span class="o">|</span><span class="nx">HEAD</span><span class="o">|</span><span class="nx">POST</span><span class="o">|</span><span class="nx">PUT</span><span class="o">|</span><span class="nx">PATCH</span><span class="o">|</span><span class="nx">DELETE</span> <span class="o">|</span> <span class="nx">password</span><span class="o">/</span><span class="p">{</span><span class="nx">_missing</span><span class="p">}</span>                                   <span class="o">|</span>      <span class="o">|</span> <span class="nx">App\Http\Controllers\Auth\PasswordController</span><span class="o">@</span><span class="nx">missingMethod</span> <span class="o">|</span>            <span class="o">|</span>
+</span><span class='line'><span class="o">+--------+--------------------------------+-------------------------------------------------------+------+------------------------------------------------------------+------------+</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>また, コンテナ内にログインしたい場合は, <code>docker exec</code>で, <code>/bin/bash</code>などを実行する.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="err">$</span> <span class="nx">docker</span> <span class="nb">exec</span> <span class="o">-</span><span class="nx">it</span> <span class="nx">dockerizedlaravel5_web_1</span> <span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">bash</span>
+</span><span class='line'><span class="nx">root</span><span class="o">@</span><span class="nx">c489f074bb66</span><span class="o">:/</span><span class="nx">app</span><span class="c1"># ls</span>
+</span><span class='line'><span class="nx">app</span>  <span class="nx">artisan</span>  <span class="nx">bootstrap</span>  <span class="nx">composer</span><span class="o">.</span><span class="nx">json</span>  <span class="nx">composer</span><span class="o">.</span><span class="nx">lock</span>  <span class="nx">config</span>  <span class="nx">database</span>  <span class="nx">gulpfile</span><span class="o">.</span><span class="nx">js</span>  <span class="nx">package</span><span class="o">.</span><span class="nx">json</span>  <span class="nx">phpspec</span><span class="o">.</span><span class="nx">yml</span>  <span class="nx">phpunit</span><span class="o">.</span><span class="nx">xml</span>  <span class="k">public</span>  <span class="nx">readme</span><span class="o">.</span><span class="nx">md</span>  <span class="nx">resources</span>  <span class="nx">storage</span>  <span class="nx">tests</span>  <span class="nx">vendor</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2>まとめ</h2>
+
+<p>LaravelをDockerで動かすための方法を紹介した.</p>
+
+<p>また <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">このテクニック</a>をcomposerに応用するためのテクニックをいくつか示した.</p>
+
+<p>次に, 用意したDockerfileを用いて, テスト・CI・デプロイについて紹介していきたい.</p>
+</div>
+
+</article>
+
+  
+<div class="share">
+  <ul>
+    <li>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/" data-via="yucchiy_" data-counturl="http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/" >Tweet</a>
+</li>
+
+    <li>
+  <div class="g-plusone" data-size="medium"></div>
+</li>
+
+    <li>
+  <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="simple-balloon" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</li>
+
+    <li>
+  <div class="fb-like" data-href="http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+</li>
+
+  </ul>
+</div>
+
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+	<footer id="footer" class="inner"><div class="about">
+  <a href="https://twitter.com/yucchiy_"><img src="https://s.gravatar.com/avatar/f218bd83250eeb22337db1ee6a45cccb?s=300"></img></a>
+  <h4>yucchiy</h4>
+  <p>和歌山大学でWebエンジニアとコンピュータビジョンの研究をしています.</p>
+  <ul class="social">
+    <li>
+      <a href="https://twitter.com/yucchiy_" target="_blank">
+        <i class="fa fa-twitter-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/yucchiy" target="_blank">
+        <i class="fa fa-facebook-square"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/yucchiy" target="_blank">
+        <i class="fa fa-github-square"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="copy">
+  &copy; 2015
+  <a href="http://yucchiy.com" target="_blank">
+    
+    yucchiy
+    
+  </a>
+</div>
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/hyphenator.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'yucchiysblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/';
+        var disqus_url = 'http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-36940311-7']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+</body>
+<script>
+  $(document).ready(function() {
+  // Make images center
+  $('p:has(img)').css('text-align', 'center');
+  });
+</script>
+
+
+<script type="text/javascript">
+(function(){
+  var twitterWidgets = document.createElement('script');
+  twitterWidgets.type = 'text/javascript';
+  twitterWidgets.async = true;
+  twitterWidgets.src = '//platform.twitter.com/widgets.js';
+  document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+})();
+</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</html>

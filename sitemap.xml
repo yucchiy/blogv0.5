@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/</loc>
+    <lastmod>2015-01-16T07:53:58+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.yucchiy.com/2015/01/14/usefull-trello-shortcut/</loc>
     <lastmod>2015-01-14T08:45:06+09:00</lastmod>
     <priority>0.8</priority>
@@ -107,21 +113,21 @@
   
   <url>
     <loc>http://blog.yucchiy.com/blog/archives/</loc>
-    <lastmod>2015-01-14T08:53:13+09:00</lastmod>
+    <lastmod>2015-01-19T07:01:10+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/blog/</loc>
-    <lastmod>2015-01-14T08:53:13+09:00</lastmod>
+    <lastmod>2015-01-19T07:01:10+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://blog.yucchiy.com/</loc>
-    <lastmod>2015-01-14T08:53:13+09:00</lastmod>
+    <lastmod>2015-01-19T07:01:10+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
