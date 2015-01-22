@@ -4,7 +4,7 @@
   <title><![CDATA[Category: vim | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/vim/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2015-01-19T07:01:10+09:00</updated>
+  <updated>2015-01-22T23:15:44+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -23,23 +23,14 @@
 <p>最近ではghqとpecoを使って便利ってなってたところに, たまたまTL上で<a href="https://github.com/sorah/unite-ghq">unite-ghq</a>の存在を知って, 使ってみたらしっくりきたのでブログ書いた.</p>
 
 <p>.vimrcに以下のように記述する. ただし<a href="https://github.com/motemen/ghq">ghq</a>のインストールは予め済ませておき, .vimrcに<a href="https://github.com/sorah/unite-ghq/issues/1">ghqへのパスを通す必要がある</a>.</p>
+<div class="highlight"><pre><code class="language-vim" data-lang="vim">NeoBundle <span class="s1">&#39;sorah/unite-ghq&#39;</span>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='vim'><span class='line'>NeoBundle <span class="s1">&#39;sorah/unite-ghq&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">noremap</span> [unite] <span class="p">&lt;</span>Nop<span class="p">&gt;</span>
-</span><span class='line'>map     <span class="p">&lt;</span>Leader<span class="p">&gt;</span><span class="k">u</span> [unite]
-</span><span class='line'>
-</span><span class='line'><span class="nb">nnoremap</span> <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span>[unite]<span class="k">p</span>         :<span class="p">&lt;</span>C<span class="p">-</span><span class="k">u</span><span class="p">&gt;</span>Unite file_rec/async<span class="p">&lt;</span>CR<span class="p">&gt;</span>
-</span><span class='line'><span class="nb">nnoremap</span> <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span>[unite]<span class="k">g</span>         :<span class="p">&lt;</span>C<span class="p">-</span><span class="k">u</span><span class="p">&gt;</span>Unite ghq<span class="p">&lt;</span>CR<span class="p">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<span class="nb">noremap</span> [unite] <span class="p">&lt;</span>Nop<span class="p">&gt;</span>
+map     <span class="p">&lt;</span>Leader<span class="p">&gt;</span><span class="k">u</span> [unite]
 
+<span class="nb">nnoremap</span> <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span>[unite]<span class="k">p</span>         :<span class="p">&lt;</span>C<span class="p">-</span><span class="k">u</span><span class="p">&gt;</span>Unite file_rec/async<span class="p">&lt;</span>CR<span class="p">&gt;</span>
+<span class="nb">nnoremap</span> <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span>[unite]<span class="k">g</span>         :<span class="p">&lt;</span>C<span class="p">-</span><span class="k">u</span><span class="p">&gt;</span>Unite ghq<span class="p">&lt;</span>CR<span class="p">&gt;</span>
+</code></pre></div>
 <p>プロジェクトディレクトリ移動は<code>,ug</code>で行って, プロジェクト内でのファイル検索は<code>,up</code>で行う. 便利.</p>
 
 <p>今までは<a href="https://github.com/yucchiy/dotfiles/blob/master/zsh/zsh/sources/peco/src.zsh">ghqとpecoを組み合わせて</a>プロジェクトディレクトリに移動し, そこでvimを開くみたいな感じだったが, これだとすべてvimで完結してよいと思った.</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: trello | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/trello/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2015-01-19T07:01:10+09:00</updated>
+  <updated>2015-01-22T23:15:44+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -31,7 +31,7 @@
 <p>これは, コメントの記入時にメンション機能として使うことが多いが, 
 新しいカードを追加するときにこの機能を使うと, <strong>そのカードに指定したメンバーを割り当てることができる</strong>. 以下に使用例を示す.</p>
 
-<p><img src="http://blog.yucchiy.com/images/5e2218d93f687b3de6744ffed8157204.gif"></p>
+<p><img src="/images/5e2218d93f687b3de6744ffed8157204.gif"></p>
 
 <h2>ラベルの補完</h2>
 
@@ -39,7 +39,7 @@
 
 <p>もちろん, 複数ラベルを割り当てることも可能である.</p>
 
-<p><img src="http://blog.yucchiy.com/images/ee82851e5e27096456c158c268690272.gif"></p>
+<p><img src="/images/ee82851e5e27096456c158c268690272.gif"></p>
 
 <h2>場所の補完</h2>
 
@@ -49,7 +49,7 @@
 
 <p>文字では説明しづらいので, 以下に使用例を示す.</p>
 
-<p><img src="http://blog.yucchiy.com/images/8722522bcda9d400e6d8d6b562a5c56b.gif"></p>
+<p><img src="/images/8722522bcda9d400e6d8d6b562a5c56b.gif"></p>
 
 <p>優先度の高いタスクを上において管理する事が多いと思うが, Trelloでは, <strong>新しいカードが下に追加されてしまうため</strong>,
 カードを追加した後に上にドラッグアンドドロップで持っていくorカードの詳細画面を開いて移動させることになるが,
