@@ -4,7 +4,7 @@
   <title><![CDATA[Category: php | Yucchiy's blog]]></title>
   <link href="http://blog.yucchiy.com/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://blog.yucchiy.com/"/>
-  <updated>2015-01-22T23:19:08+09:00</updated>
+  <updated>2015-01-22T23:30:50+09:00</updated>
   <id>http://blog.yucchiy.com/</id>
   <author>
     <name><![CDATA[yucchiy]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Laravel5をDockerで動かす]]></title>
-    <link href="http://blog.yucchiy.com/2015/01/19/dockerized-laravel5/"/>
-    <updated>2015-01-19T09:00:00+09:00</updated>
-    <id>http://blog.yucchiy.com/2015/01/19/dockerized-laravel5</id>
+    <link href="http://blog.yucchiy.com/2015/01/16/dockerized-laravel5/"/>
+    <updated>2015-01-16T09:00:00+09:00</updated>
+    <id>http://blog.yucchiy.com/2015/01/16/dockerized-laravel5</id>
     <content type="html"><![CDATA[<p>Laravel5で構築したアプリケーションの開発環境をDocker化するための方法を紹介する.</p>
 
 <p>サンプルアプリケーションは<a href="https://github.com/yucchiy/dockerized-laravel5">こちら</a>で確認できる.</p>
